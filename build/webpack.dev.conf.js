@@ -35,7 +35,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         // host: HOST || config.dev.host,
         host: utils.localIp(),
         // host: 'xstpdev.baidu.com',
-        disableHostCheck : true,
+        disableHostCheck: true,
         port: PORT || config.dev.port,
         open: config.dev.autoOpenBrowser,
         overlay: config.dev.errorOverlay ? {
@@ -79,6 +79,7 @@ module.exports = new Promise((resolve, reject) => {
         if (err) {
             reject(err)
         } else {
+
             // publish the new Port, necessary for e2e tests
             process.env.PORT = port
             // add port to devServer config
