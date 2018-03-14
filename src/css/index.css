@@ -13,8 +13,16 @@ a {
     fill: currentColor;
     overflow: hidden;
 }
-
+em, i{
+    font-style: normal;
+    font-weight: 400;
+}
 body {
     /* -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale; */
+    font-size: 12px;
 }
+.el-scrollbar__wrap{
+    /* height:300px!important; */
+}
+

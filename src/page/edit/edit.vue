@@ -1,45 +1,40 @@
 <template>
-    <header>
-        <div class="creat-logo">
-            <router-link to="list">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-logo"></use>
-                </svg>
-            </router-link>
+    <div>
+        <v-header></v-header>
+        <div class="main">
+            <div class="create_right">
+                <div class="top" style="height:50px;">
+                    <ul>
+                        <li>
+                            <i>+</i>
+                            <span>常规页</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <el-scrollbar class="page-component__nav">
+                    <ul class="page_ul">
+                        <li v-for="(item, index) in list">
+                            <span>
+                                <em class="ng-binding">{{index + 1}}</em>
+                            </span>
+                            <span>
+                                <i class="icon iconfont icon-more"></i>
+                            </span>
+                        </li>
+                    </ul>
+                </el-scrollbar>
+                <div class="bottom">
+                    <ul>
+                        <li>
+                            <i>+</i>
+                            <span>常规页</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="creat_con">
-            <ul>
-                <li>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-logo"></use>
-                    </svg>
-                    <span>文本</span>
-                </li>
-                <li>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-logo"></use>
-                    </svg>
-                    <span>背景</span>
-                </li>
-            </ul>
-        </div>
-        <div class="create-action">
-            <ul>
-                <li>
-                    <span>预览和设置</span>
-                </li>
-                <li>
-                    <span>保存</span>
-                </li>
-                <li>
-                    <span>发布</span>
-                </li>
-                <li class="quit">
-                    <span>退出</span>
-                </li>
-            </ul>
-        </div>
-    </header>
+    </div>
 </template>
 
 <script>
@@ -50,98 +45,94 @@
     import Header from '@/components/header/header.vue'
     import * as api from '@/api/index'
     import $ from 'jquery'
+    import vHeader from './header'
     export default {
-        components: {},
+        components: {
+            'v-header': vHeader
+        },
         computed: {},
         methods: {},
         mounted() {},
         data() {
             return {
-
+                list: [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1]
             }
         }
     }
 
 </script>
 <style lang="scss" scoped>
-    $headerHeight:56px;
-    header {
-        display: flex;
-        justify-content: space-between;
-        height: $headerHeight;
-        position: fixed;
-        width: 100%;
+    .icon {
+        font-size: 20px;
+    }
+
+    .main {
+        background-color: #d0cfd8;
+        position: absolute;
         left: 0;
         right: 0;
+        bottom: 0;
         top: 0;
-        z-index: 1000;
-        box-shadow: 0 0 16px rgba(0, 0, 0, .16);
-        align-items: center;
-        .creat-logo {
-            width: 72px;
-            border-right: 1px solid #e6ebed;
-            a {
-                font-size: 45px;
-                display: block;
-                width: 100%;
-                height: 100%;
-                text-align: center;
-                color: #1593ff;
+        margin-top: 56px;
+        .create_right {
+            position: fixed;
+            right: 0;
+            top: 56px;
+            bottom: 0;
+            width: 260px;
+            z-index: 999;
+            background-color: #fff;
+            box-shadow: 0 0 0px rgba(0, 0, 0, .16);
+            .page-component__nav {
+                height: calc(100vh - 56px - 50px - 46px - 10px);
             }
-        }
-        .creat_con {
-            ul {
-                display: flex;
-                align-items: center;
+            .page_ul {
                 li {
-                    height: $headerHeight;
-                    justify-content: center;
-                    width: 60px;
+                    height: 70px;
+                    color: #76838f;
                     cursor: pointer;
-                    text-align: center;
+                    font-size: 12px;
                     position: relative;
+                    border-bottom: 1px solid #e6ebed;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
-                    color: #333;
-                    font-size: 13px;
-                    svg {
-                        font-size: 20px;
-                    }
-                    &:hover {
-                        background: #2495fc;
-                        color: #fff;
-                    }
-                }
-
-            }
-        }
-        .create-action {
-            ul {
-                display: flex;
-                li {
-                    padding: 0 8px;
-                    margin-right: 8px;
-                    cursor: pointer;
-                    text-align: center;
-                    border-radius: 3px;
-                    color: #fff;
-                    background-color: #1593ff;
-                    transition: .3s;
+                    justify-content: space-around;
                     span {
-                        font-size: 12px;
-                        line-height: 32px;
-                    }
-                    &:hover {
-                        background: #258ce4;
-                    }
-                    &.quit {
-                        background: #666;
-                        &:hover {
-                            background: #fc2f6c;
+                        em {
+                            display: inline-block;
+                            width: 24px;
+                            height: 24px;
+                            line-height: 24px;
+                            text-align: center;
+                            border-radius: 12px;
+                            background-color: #ccc;
+                            color: #fff;
                         }
                     }
-
+                }
+            }
+            .bottom {
+                position: absolute;
+                width: 100%;
+                bottom: 10px;
+                height: 36px;
+                ul {
+                    display: flex;
+                    justify-content: center;
+                    li {
+                        height: 36px;
+                        width: 106px;
+                        text-align: center;
+                        border-radius: 3px;
+                        top: 0;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: all .3s;
+                        background-color: #1593ff;
+                        color: #fff;
+                    }
                 }
             }
         }
