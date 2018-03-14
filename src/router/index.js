@@ -12,6 +12,10 @@ let routes = new Router({
         path: '/list',
         name: 'list',
         component: r => require.ensure([], () => r(require('../page/list/list.vue')), 'list'),
+    }, {
+        path: '/edit',
+        name: 'edit',
+        component: r => require.ensure([], () => r(require('../page/edit/edit.vue')), 'edit'),
     }]
 });
 

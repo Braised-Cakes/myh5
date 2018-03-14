@@ -8,21 +8,21 @@
                     <div class="image">
                         <div class="front"></div>
                         <div class="overlay">
-                            <a class="edit">
+                            <router-link class="edit" to="edit">
                                 <div>
                                     <svg class="icon" aria-hidden="true">
-                                        <use xlink:href="#icon-bianji"></use>
+                                        <use xlink:href="#icon-logo"></use>
                                     </svg>
                                 </div>
-                                <span>详情</span>
-                            </a>
+                                <span>编辑</span>
+                            </router-link>
                             <a class="edit" @click="del(item)">
                                 <div>
                                     <svg class="icon" aria-hidden="true">
-                                        <use xlink:href="#icon-bianji"></use>
+                                        <use xlink:href="#icon-logo"></use>
                                     </svg>
                                 </div>
-                                <span>详情</span>
+                                <span>删除</span>
                             </a>
                         </div>
                     </div>
@@ -86,17 +86,25 @@
             return {
                 list: [],
                 currentPage: 1,
-                total : 0
+                total: 0
             }
         }
     }
 
 </script>
 <style lang="scss" scoped>
+    .contain {
+        width: 1180px;
+        position: relative;
+        margin: 0 auto; // display: flex;
+        // justify-content: center;
+    }
+
     ul {
         display: flex;
         flex-wrap: wrap;
         li {
+
             position: relative;
             font-size: 12px;
             background-color: #fff;
@@ -106,6 +114,7 @@
             overflow: hidden;
             margin-right: 20px;
             margin-bottom: 20px;
+
             .image {
                 width: 280px;
                 height: 260px;
@@ -171,6 +180,9 @@
                     height: 220px;
                 }
 
+            }
+            &:nth-child(4n) {
+                margin-right: 0;
             }
         }
     }

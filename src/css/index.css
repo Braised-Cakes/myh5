@@ -15,13 +15,6 @@ a {
 }
 
 body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /* position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #f4f5f2; */
-    /* overflow: hidden; */
-    /* zoom: 1; */
-    /* height: 100%; */
+    /* -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; */
 }
