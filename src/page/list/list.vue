@@ -2,6 +2,7 @@
     <div>
         <v-header></v-header>
         <div class="contain">
+            <button @click="add">新增一页</button>
             <ul>
                 <li v-for="item in list">
                     <div class="image">
@@ -15,7 +16,7 @@
                                 </div>
                                 <span>详情</span>
                             </a>
-                            <a class="edit">
+                            <a class="edit" @click="del(item)">
                                 <div>
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#icon-bianji"></use>
@@ -31,6 +32,7 @@
                 </li>
             </ul>
         </div>
+        <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
     </div>
 </template>
 
@@ -41,6 +43,7 @@
     } from 'vuex'
     import Header from '@/components/header/header.vue'
     import Sidebar from '@/components/sidebar/sidebar.vue'
+    import * as api from '@/api/index'
     import $ from 'jquery'
     export default {
         components: {
@@ -52,10 +55,38 @@
                 'aabbb'
             ]),
         },
-        mounted() {},
+        methods: {
+            get(page) {
+                api.getJobList({
+                    limit: 12,
+                    page: page || 1
+                }).then(res => {
+                    console.log(res);
+                    this.list = res.result.data;
+                    this.total = res.result.info.total;
+                })
+            },
+            add() {
+                api.addList({}).then(res => {
+                    console.log(res);
+                })
+            },
+            del(item) {
+                api.delList({
+                    work_id: item.work_id
+                }).then(res => {
+                    console.log(res);
+                })
+            }
+        },
+        mounted() {
+            this.get();
+        },
         data() {
             return {
-                list: [1, 2, 3]
+                list: [],
+                currentPage: 1,
+                total : 0
             }
         }
     }

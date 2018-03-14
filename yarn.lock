@@ -2542,9 +2542,9 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.30:
   version "1.3.36"
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.36.tgz#0eabf71a9ebea9013fb1cc35a390e068624f27e8"
 
-element-ui@^2.0.11:
-  version "2.2.1"
-  resolved "https://registry.npmjs.org/element-ui/-/element-ui-2.2.1.tgz#9efb17a37d161b5cbca9998f3f217ccb4fa7da55"
+element-ui@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.npmjs.org/element-ui/-/element-ui-2.2.2.tgz#40935d55e2eb007e6a5d2e766fc4bcc2266eb571"
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-    import * as api from './api/index'
-    import $ from 'jquery'
+    // import * as api from './api/index'
+    // import $ from 'jquery'
     export default {
         data() {
             return {
