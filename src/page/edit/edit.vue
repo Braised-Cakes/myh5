@@ -7,18 +7,18 @@
                     <ul>
                         <li>
                             <i>+</i>
-                            <span>常规页</span>
+                            <span @click="phoneData.push(123)">常规页</span>
                         </li>
                     </ul>
                 </div>
 
                 <el-scrollbar class="page-component__nav">
                     <ul class="page_ul">
-                        <li v-for="(item, index) in list">
+                        <li :class="{'active': index == currentPage}" @click="selectPage(index)" v-for="(item, index) in phoneData.data">
                             <span>
                                 <em class="ng-binding">{{index + 1}}</em>
                             </span>
-                            <span>
+                            <span @click.stop="delPage(index)">
                                 <i class="icon iconfont icon-more"></i>
                             </span>
                         </li>
@@ -28,9 +28,15 @@
                     <ul>
                         <li>
                             <i>+</i>
-                            <span>常规页</span>
+                            <span @click="addPage">常规页{{currentPage}}</span>
                         </li>
                     </ul>
+                </div>
+            </div>
+            <div class="workspace">
+                <div class="container">
+                    <div class="phone-bg"></div>
+                    <div class="phone-area"></div>
                 </div>
             </div>
         </div>
@@ -39,8 +45,8 @@
 
 <script>
     import {
-        mapState,
-        mapActions
+        mapActions,
+        mapGetters
     } from 'vuex'
     import Header from '@/components/header/header.vue'
     import * as api from '@/api/index'
@@ -50,24 +56,58 @@
         components: {
             'v-header': vHeader
         },
-        computed: {},
-        methods: {},
+        computed: {
+            ...mapGetters(['phoneData', 'currentPage'])
+        },
+        methods: {
+            ...mapActions(['addPage', 'selectPage', 'delPage'])
+        },
         mounted() {},
         data() {
             return {
-                list: [1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1]
+                list: [1, 2, 3]
             }
         }
     }
 
 </script>
 <style lang="scss" scoped>
-    .icon {
-        font-size: 20px;
+    .workspace {
+        position: absolute;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        left: 333px;
+        right: 260px;
+        z-index: 1000;
+        .container {
+            width: 328px;
+            height: 560px;
+            position: absolute;
+            left: 50%;
+            margin-left: -164px;
+            top: 50%;
+            margin-top: -280px;
+            .phone-bg {
+                background: url(~@/img/phonewhite.svg);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+                border-radius: 40px;
+                width: 328px;
+                height: 560px;
+            }
+            .phone-area {
+                position: absolute;
+                height: 486px;
+                width: 320px;
+                top: 37px;
+                left: 4px;
+                background: #fff;
+            }
+        }
     }
 
     .main {
-        background-color: #d0cfd8;
+        background-color: #eee;
         position: absolute;
         left: 0;
         right: 0;
@@ -97,6 +137,21 @@
                     display: flex;
                     align-items: center;
                     justify-content: space-around;
+                    &:first-child {
+                        border-top: 1px solid #e6ebed;
+                    }
+                    &:hover {
+                        background: #fafafa;
+                    }
+                    &.active {
+                        background: #fafafa;
+                        em {
+                            background: #2495fc;
+                        }
+                        .icon {
+                            color: #666;
+                        }
+                    }
                     span {
                         em {
                             display: inline-block;
@@ -108,6 +163,9 @@
                             background-color: #ccc;
                             color: #fff;
                         }
+                    }
+                    .icon {
+                        font-size: 20px;
                     }
                 }
             }

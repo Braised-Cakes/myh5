@@ -14,7 +14,7 @@ module.exports = {
         proxyTable: {
             '/': {
                 // target: 'http://172.24.164.116:3000', // 你接口的域名
-                target: 'http://192.168.0.100:3000', // 你接口的域名
+                target: 'http://172.24.166.43:3000', // 你接口的域名
                 secure: true,
                 changeOrigin: true
             }

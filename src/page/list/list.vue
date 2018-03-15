@@ -38,7 +38,6 @@
 
 <script>
     import {
-        mapState,
         mapActions
     } from 'vuex'
     import Header from '@/components/header/header.vue'
@@ -51,9 +50,6 @@
             'vSidebar': Sidebar
         },
         computed: {
-            ...mapState([
-                'aabbb'
-            ]),
         },
         methods: {
             get(page) {

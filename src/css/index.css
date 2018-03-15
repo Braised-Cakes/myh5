@@ -21,8 +21,5 @@ body {
     /* -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale; */
     font-size: 12px;
+    user-select: none;
 }
-.el-scrollbar__wrap{
-    /* height:300px!important; */
-}
-
