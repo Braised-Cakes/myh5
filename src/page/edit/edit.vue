@@ -1,15 +1,42 @@
 <template>
-    <div>
+    <div style="height:100%;">
         <v-header></v-header>
-        <div class="main">
-            <v-page></v-page>
-            <div class="workspace">
-                <div class="container">
-                    <div class="phone-bg"></div>
-                    <div class="phone-area"></div>
+        <el-scrollbar class="page-component__nav" style="height:100%;">
+            <div class="main">
+                <v-page></v-page>
+                <div class="workspace">
+                    <div class="container">
+                        <div class="phone-bg"></div>
+                        <div class="phone-area"></div>
+                    </div>
+                </div>
+                <div class="help">
+                    <ul>
+                        <li>
+                            <el-tooltip class="item" content="Right Center 提示文字" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-more"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <li>
+                            <el-tooltip class="item" content="Right Center 提示文字" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-more"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <li>
+                            <el-tooltip class="item" content="Right Center 提示文字" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-more"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </el-scrollbar>
     </div>
 </template>
 
@@ -44,23 +71,46 @@
 
 </script>
 <style lang="scss" scoped>
+    .help {
+        width: 40px;
+        box-shadow: 0 0 16px 0 rgba(0, 0, 0, .16);
+        background: #fff;
+        position: absolute;
+        z-index: 99999;
+        left: 770px;
+        top: 200px;
+        ul {
+            li {
+                color: #999;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+                cursor: pointer;
+                .item {
+                    width: 40px;
+                    height: 40px;
+                }
+                &:hover {
+                    background: #2495fc;
+                }
+            }
+        }
+    }
+
     .workspace {
         position: absolute;
-        height: 100%; // height: calc(100vh - 50px);
-        // height: 700px;
+        height: 100%;
         top: 0;
         bottom: 0;
-        left: 333px;
+        left: 200px;
         right: 260px;
         z-index: 1000;
         .container {
             width: 328px;
             height: 560px;
             position: absolute;
-            left: 50%;
-            margin-left: -164px;
-            top: 50%;
-            margin-top: -280px;
+            top: 5%;
+            left: 20%;
             .phone-bg {
                 background: url(~@/img/phonewhite.svg);
                 box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
@@ -87,6 +137,7 @@
         bottom: 0;
         top: 0;
         margin-top: 56px;
+        min-width: 1180px;
 
     }
 

@@ -9,8 +9,6 @@ const types = {
 }
 import app from '@/index'
 
-// console.log(Vue.prototype);
-
 /**
  * 空白页模版
  */
@@ -107,8 +105,7 @@ const actions = {
         } else {
             app.$alert('最少保留一页内容', {
                 closeOnClickModal: true
-            })
-            // console.log('最少1页， 是否清空该页内容')
+            });
         }
     },
 }

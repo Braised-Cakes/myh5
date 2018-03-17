@@ -13,9 +13,14 @@ a {
     fill: currentColor;
     overflow: hidden;
 }
-em, i{
+
+em,
+i {
     font-style: normal;
     font-weight: 400;
+}
+html{
+    height: 100%;
 }
 body {
     /* -webkit-font-smoothing: antialiased;
@@ -23,4 +28,20 @@ body {
     font-size: 12px;
     user-select: none;
     overflow: hidden;
+    height: 100%;
+    zoom: 1;
+}
+
+body>div {
+    /* height: 100%; */
+}
+#app{
+    height: 100%;
+}
+
+.el-scrollbar__view{
+    height: 100%;
+}
+.el-scrollbar__bar{
+    z-index: 999999!important;
 }

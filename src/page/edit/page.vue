@@ -87,9 +87,11 @@
 </script>
 <style lang="scss" scoped>
     .create_right {
-        position: fixed;
+        // position: fixed;
+        // top: 56px;
+        position: absolute;
+        top: 0;
         right: 0;
-        top: 56px;
         bottom: 0;
         width: 260px;
         z-index: 999;
