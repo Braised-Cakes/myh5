@@ -45,3 +45,8 @@ body>div {
 .el-scrollbar__bar{
     z-index: 999999!important;
 }
+
+.drag-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;
+}

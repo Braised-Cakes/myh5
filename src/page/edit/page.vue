@@ -1,11 +1,13 @@
 <template>
     <div class="create_right">
-        <div class="top" style="height:50px;"></div>
-        <el-scrollbar class="page-component__nav">
+        <div class="top" style="height:50px">
+            你好哇
+        </div>
+        <!-- <el-scrollbar class="page-component__nav"> -->
             <ul class="page_ul">
-                <draggable v-model="myList" :move="move" @start="start" @end="end">
+                <!-- <draggable v-model="myList" :move="move" @start="start" @end="end">
                     <transition-group>
-                        <li @mousedown.stop="selectPage(index)" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
+                        <li :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
                             :key="index">
                             <div v-if="!(drag && index == oldIndex)">
                                 <span>
@@ -17,9 +19,31 @@
                             </div>
                         </li>
                     </transition-group>
-                </draggable>
+                </draggable> -->
+                <!-- <li class="item" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
+                    :key="index">
+                    <div v-if="!(drag && index == oldIndex)">
+                        <span>
+                            <em>{{index + 1}}</em>
+                        </span>
+                        <span @click.stop="delPage(index)">
+                            <i class="icon iconfont icon-more"></i>
+                        </span>
+                    </div>
+                </li> -->
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
+                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
             </ul>
-        </el-scrollbar>
+        <!-- </el-scrollbar> -->
         <div class="bottom">
             <ul>
                 <li @click="addPage">
@@ -41,6 +65,7 @@
     import $ from 'jquery'
     import vHeader from './header'
     import draggable from 'vuedraggable'
+    import Sortable from 'sortablejs'
     export default {
         components: {
             'v-header': vHeader,
@@ -50,6 +75,7 @@
             ...mapGetters(['phoneData', 'currentPage']),
             myList: {
                 get() {
+                    
                     return this.$store.getters.phoneData.data;
                 },
                 set(value) {
@@ -74,7 +100,13 @@
                 this.drag = false;
             }
         },
-        mounted() {},
+        mounted() {
+            var el = document.getElementsByClassName('page_ul')[0];
+            console.log(Sortable);
+            Sortable.create(el, {
+                // handle: ".drag-handle" 
+            });
+        },
         data() {
             return {
                 oldIndex: -1,
@@ -104,9 +136,10 @@
             li {
                 height: 70px;
                 color: #76838f;
-                cursor: pointer;
+                // cursor: pointer;
                 font-size: 12px;
                 position: relative;
+                cursor: move;
                 border-bottom: 1px solid #e6ebed;
                 &:first-child {
                     border-top: 1px solid #e6ebed;
