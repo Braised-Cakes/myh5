@@ -15,7 +15,7 @@ import '@/iconfont/iconfont.css'
 import store from '@/store'
 
 Vue.use(ElementUI);
-new Vue({
+export default new Vue({
     el: '#app',
     router,
     store,

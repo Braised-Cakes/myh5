@@ -28,8 +28,8 @@ export default new Vuex.Store({
             return state.phone
         }
     },
-    // actions,
-    // mutations,
+    actions,
+    mutations,
     modules: {
         page,
         // phone

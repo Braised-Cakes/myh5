@@ -22,4 +22,5 @@ body {
     -moz-osx-font-smoothing: grayscale; */
     font-size: 12px;
     user-select: none;
+    overflow: hidden;
 }

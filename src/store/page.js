@@ -7,6 +7,10 @@ const types = {
     SELECT_PAGE: 'SELECT_PAGE',
     EMPTY_PAGE: 'EMPTY_PAGE'
 }
+import app from '@/index'
+
+// console.log(Vue.prototype);
+
 /**
  * 空白页模版
  */
@@ -62,10 +66,25 @@ const actions = {
         getters,
         dispatch
     }) {
-        console.log(getters)
         commit(types.ADD_PAGE, {
             phoneData: getters.phoneData
         })
+    },
+    /**
+     * 排序
+     */
+    sortPage({
+        commit,
+        getters,
+        dispatch
+    }, data) {
+        commit(types.SORT_PAGE, {
+            oldVal: getters.phoneData.data,
+            newVal: data.value
+        });
+        commit(types.SELECT_PAGE, {
+            page: data.futureIndex
+        });
     },
     /**
      * 删除指定页
@@ -86,12 +105,24 @@ const actions = {
                 dispatch('selectPage', getters.phoneData.data.length - 1);
             }
         } else {
-            console.log('最少1页， 是否清空该页内容')
+            app.$alert('最少保留一页内容', {
+                closeOnClickModal: true
+            })
+            // console.log('最少1页， 是否清空该页内容')
         }
     },
 }
 // mutations
 const mutations = {
+    /**
+     * 页面排序
+     */
+    [types.SORT_PAGE](state, {
+        oldVal,
+        newVal
+    }) {
+        oldVal = newVal;
+    },
     /**
      * 选择一页
      * @param {Number} page 页码
