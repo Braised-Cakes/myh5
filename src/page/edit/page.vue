@@ -1,56 +1,39 @@
 <template>
     <div class="create_right">
-        <div class="top" style="height:50px">
-            你好哇
-        </div>
-        <!-- <el-scrollbar class="page-component__nav"> -->
-            <ul class="page_ul">
-                <!-- <draggable v-model="myList" :move="move" @start="start" @end="end">
-                    <transition-group>
-                        <li :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
-                            :key="index">
-                            <div v-if="!(drag && index == oldIndex)">
-                                <span>
-                                    <em>{{index + 1}}</em>
-                                </span>
-                                <span @click.stop="delPage(index)">
-                                    <i class="icon iconfont icon-more"></i>
-                                </span>
-                            </div>
-                        </li>
-                    </transition-group>
-                </draggable> -->
-                <!-- <li class="item" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
-                    :key="index">
-                    <div v-if="!(drag && index == oldIndex)">
-                        <span>
-                            <em>{{index + 1}}</em>
-                        </span>
-                        <span @click.stop="delPage(index)">
-                            <i class="icon iconfont icon-more"></i>
-                        </span>
-                    </div>
-                </li> -->
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-                <li><span class="drag-handle">&#9776;</span>Select text freely</li>
-            </ul>
-        <!-- </el-scrollbar> -->
-        <div class="bottom">
+        <div class="top">
             <ul>
-                <li @click="addPage">
-                    <i>+</i>
-                    <span>常规页</span>
-                </li>
+                <li @click="nav=0" :class="{active:nav==0}">元素属性</li>
+                <li @click="nav=1" :class="{active:nav==1}">页面管理</li>
             </ul>
+        </div>
+        <div>
+            <el-scrollbar class="page-component__nav">
+                <ul class="page_ul">
+                    <draggable v-model="myList" :move="move" @start="start" @end="end">
+                        <transition-group>
+                            <li @mousedown.stop="selectPage(index)" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
+                                :key="index">
+                                <div v-if="!(drag && index == oldIndex)">
+                                    <span>
+                                        <em>{{index + 1}}</em>
+                                    </span>
+                                    <span @click.stop="delPage(index)">
+                                        <i class="icon iconfont icon-more"></i>
+                                    </span>
+                                </div>
+                            </li>
+                        </transition-group>
+                    </draggable>
+                </ul>
+            </el-scrollbar>
+            <div class="bottom" draggable="false">
+                <ul>
+                    <li @click="addPage">
+                        <i>+</i>
+                        <span>常规页</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
@@ -75,7 +58,7 @@
             ...mapGetters(['phoneData', 'currentPage']),
             myList: {
                 get() {
-                    
+
                     return this.$store.getters.phoneData.data;
                 },
                 set(value) {
@@ -101,26 +84,52 @@
             }
         },
         mounted() {
-            var el = document.getElementsByClassName('page_ul')[0];
-            console.log(Sortable);
-            Sortable.create(el, {
-                // handle: ".drag-handle" 
-            });
+            // var el = document.getElementsByClassName('page_ul')[0];
+            // console.log(Sortable);
+            // Sortable.create(el, {
+            //     // handle: ".drag-handle" 
+            // });
         },
         data() {
             return {
                 oldIndex: -1,
                 futureIndex: -1,
-                drag: false
+                drag: false,
+                nav: 0
             }
         }
     }
 
 </script>
 <style lang="scss" scoped>
+    .top {
+        ul {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            li {
+                text-align: center;
+                flex: 1;
+                background: #e0e0e0;
+                font-size: 14px;
+                color: #000;
+                height: 50px;
+                line-height: 50px;
+                transition: .3s;
+                cursor: pointer;
+                &.active {
+                    background: #fff;
+                    font-weight: 700;
+                }
+                &:hover {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
     .create_right {
-        // position: fixed;
-        // top: 56px;
         position: absolute;
         top: 0;
         right: 0;
@@ -136,10 +145,9 @@
             li {
                 height: 70px;
                 color: #76838f;
-                // cursor: pointer;
+                cursor: pointer;
                 font-size: 12px;
                 position: relative;
-                cursor: move;
                 border-bottom: 1px solid #e6ebed;
                 &:first-child {
                     border-top: 1px solid #e6ebed;
