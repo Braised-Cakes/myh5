@@ -12,7 +12,7 @@ export default {
             class: types.TXT.toLowerCase(),
             style: {
                 position:'absolute',
-                left: '50px',
+                left: '0',
                 top: '50px',
                 color: '#666666'
             }
