@@ -63,6 +63,7 @@ const actions = {
         key,
         val
     }) {
+        console.log(val)
         commit(types.UPDATE_ITEM, {
             item: getters.currentItem,
             key: key,

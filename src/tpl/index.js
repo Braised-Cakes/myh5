@@ -14,7 +14,9 @@ export default {
                 position:'absolute',
                 left: '0',
                 top: '50px',
-                color: '#666666'
+                color: '#666666',
+                width : '200px',
+                height : '100px'
             }
         }
     }

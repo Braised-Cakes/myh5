@@ -128,6 +128,7 @@
 
     .create_right {
         position: absolute;
+        overflow: hidden;
         top: 0;
         right: 0;
         bottom: 0;
