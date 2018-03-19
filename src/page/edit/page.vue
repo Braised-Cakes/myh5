@@ -6,7 +6,7 @@
                 <li @click="nav=1" :class="{active:nav==1}">页面管理</li>
             </ul>
         </div>
-        <div>
+        <div v-if="nav==1">
             <el-scrollbar class="page-component__nav">
                 <ul class="page_ul">
                     <draggable v-model="myList" :move="move" @start="start" @end="end">
@@ -35,6 +35,7 @@
                 </ul>
             </div>
         </div>
+        <edit-dom v-if="nav==0"></edit-dom>
     </div>
 </template>
 
@@ -44,14 +45,16 @@
         mapGetters
     } from 'vuex'
     import Header from '@/components/header/header.vue'
+    import EditDom from './edit-dom'
     import * as api from '@/api/index'
     import $ from 'jquery'
     import vHeader from './header'
     import draggable from 'vuedraggable'
-    import Sortable from 'sortablejs'
+
     export default {
         components: {
             'v-header': vHeader,
+            'edit-dom': EditDom,
             draggable,
         },
         computed: {
@@ -83,13 +86,7 @@
                 this.drag = false;
             }
         },
-        mounted() {
-            // var el = document.getElementsByClassName('page_ul')[0];
-            // console.log(Sortable);
-            // Sortable.create(el, {
-            //     // handle: ".drag-handle" 
-            // });
-        },
+        mounted() {},
         data() {
             return {
                 oldIndex: -1,
@@ -188,8 +185,6 @@
                         }
                     }
                 }
-
-
             }
         }
         .bottom {

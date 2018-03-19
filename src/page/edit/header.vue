@@ -9,7 +9,7 @@
         </div>
         <div class="creat_con">
             <ul>
-                <li>
+                <li @click="addItem">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-logo"></use>
                     </svg>
@@ -44,16 +44,20 @@
 
 <script>
     import {
-        mapState,
-        mapActions
+        mapActions,
+        mapGetters
     } from 'vuex'
     import Header from '@/components/header/header.vue'
     import * as api from '@/api/index'
     import $ from 'jquery'
     export default {
         components: {},
-        computed: {},
-        methods: {},
+        computed: {
+            ...mapGetters(['phoneData'])
+        },
+        methods: {
+            ...mapActions(['addItem'])
+        },
         mounted() {},
         data() {
             return {

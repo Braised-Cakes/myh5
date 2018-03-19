@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import mutations from './mutations'
 import actions from './action'
 import page from './page'
-// import m_phone from './phone'
+import m_phone from './phone'
 import $ from 'jquery'
 Vue.use(Vuex)
 const BASE_BLANK = {
@@ -23,17 +23,13 @@ const state = {
 export default new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
     state,
-    getters: {
-        phoneData(state, getters, rootState) {
-            return state.phone
-        }
-    },
+    getters: {},
     actions,
     mutations,
     modules: {
         page,
         // phone
-        // m_phone,
+        m_phone,
         // panel,
         // setting
     }

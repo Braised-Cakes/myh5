@@ -7,7 +7,9 @@
                 <div class="workspace">
                     <div class="container">
                         <div class="phone-bg"></div>
-                        <div class="phone-area"></div>
+                        <div class="phone-area">
+                            <div :style="item.style" v-for="item in currentPhone.data" v-html="item.content.replace(/\n/g, '<br>')"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="help">
@@ -56,7 +58,7 @@
             'v-page': vPage
         },
         computed: {
-            ...mapGetters(['phoneData', 'currentPage'])
+            ...mapGetters(['phoneData', 'currentPage', 'currentPhone'])
         },
         methods: {
             ...mapActions(['addPage', 'selectPage', 'delPage'])
