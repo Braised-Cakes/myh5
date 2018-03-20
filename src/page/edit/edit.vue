@@ -8,10 +8,10 @@
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area">
-                            <div class="phone-item" :style="item.style | fff" v-for="item in currentPhone.data">
-                                <!-- <div> -->
-                                <div :style="item.style | fff2" v-html="item.content.replace(/\n/g, '<br>')"></div>
-                                <!-- </div> -->
+                            <div class="phone-item" :style="item.style | filterItemWrap" v-for="item in currentPhone.data">
+
+                                <div :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div>
+
                                 <div style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                                     <div class="circle circle-nw"></div>
                                     <div class="circle circle-ne"></div>
@@ -68,8 +68,7 @@
             'v-page': vPage
         },
         filters: {
-
-            fff(res) {
+            filterItemWrap(res) {
                 var json = {};
                 for (let attr in res) {
                     if (attr == 'position' || attr == 'left' || attr == 'width' || attr == 'height' || attr == 'top') {
@@ -78,11 +77,10 @@
                 }
                 return json
             },
-            fff2(res) {
+            filterItem(res) {
                 var json = {};
                 for (let attr in res) {
-                    if (attr == 'position' || attr == 'left' || attr == 'top') {
-                    } else {
+                    if (attr == 'position' || attr == 'left' || attr == 'top') {} else {
                         json[attr] = res[attr];
                     }
                 }

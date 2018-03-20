@@ -99,6 +99,10 @@
 
 </script>
 <style lang="scss" scoped>
+    @import '~@/css/variables.scss';
+    $panelNavHeight:50px;
+    $bottomHeight:36px;
+    $bottomBottom:10px;
     .top {
         ul {
             display: flex;
@@ -111,8 +115,8 @@
                 background: #e0e0e0;
                 font-size: 14px;
                 color: #000;
-                height: 50px;
-                line-height: 50px;
+                height: $panelNavHeight;
+                line-height: $panelNavHeight;
                 transition: .3s;
                 cursor: pointer;
                 &.active {
@@ -137,7 +141,7 @@
         background-color: #fff;
         box-shadow: 0 0 0px rgba(0, 0, 0, .16);
         .page-component__nav {
-            height: calc(100vh - 56px - 50px - 46px - 10px);
+            height: calc(100vh - #{$headerHeight + $panelNavHeight + $bottomHeight + $bottomBottom});
         }
         .page_ul {
             li {
@@ -191,13 +195,13 @@
         .bottom {
             position: absolute;
             width: 100%;
-            bottom: 10px;
-            height: 36px;
+            bottom: $bottomBottom;
+            height: $bottomHeight;
             ul {
                 display: flex;
                 justify-content: center;
                 li {
-                    height: 36px;
+                    height: $bottomHeight;
                     width: 106px;
                     text-align: center;
                     border-radius: 3px;

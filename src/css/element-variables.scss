@@ -15,3 +15,7 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 .el-collapse-item__arrow {
     line-height: 32px !important;
 }
+
+.el-select--mini {
+    width: 130px;
+}

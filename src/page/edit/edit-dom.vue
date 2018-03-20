@@ -1,6 +1,5 @@
 <template>
     <div v-if="currentItem.style">
-
         <ul @click="updateItem" class="nav">
             <li @click="navIndex = index" :class="{'active':index == navIndex}" v-for="(item, index) in nav">
                 {{item}}
@@ -74,6 +73,14 @@
                             <div class="tab-setting-line-title">边框</div>
                         </div>
                         <div class="style-item">
+                            <label>边框样式</label>
+                            <el-select @change="updateItem({key:'style', val:{'border-style': $event}})" size="mini" :value="currentItem.style['border-style'] || 'solid'"
+                                placeholder="请选择">
+                                <el-option v-for="item in options222" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div class="style-item">
                             <label>边框颜色</label>
                             <el-color-picker @active-change="updateItem({key:'style', val:{'border-color':$event}})" :value="currentItem.style['border-color'] || '#000'"
                                 show-alpha></el-color-picker>
@@ -95,10 +102,6 @@
                             <div class="tab-setting-line-title">阴影</div>
                         </div>
                     </div>
-                </el-collapse-item>
-                <el-collapse-item title="通用" name="2">
-                    <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-                    <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
                 </el-collapse-item>
             </el-collapse>
         </el-scrollbar>
@@ -141,7 +144,24 @@
                 colorList: ['#fff', 'rgb(255, 84, 72)', 'rgb(242, 166, 83)', 'rgb(255, 202, 40)', 'rgb(24, 207, 161)',
                     'rgb(89, 199, 249)', 'rgb(77, 143, 243)', 'rgb(113, 113, 239)', 'rgb(79, 89, 117)',
                     'rgb(0, 0, 0)'
-                ]
+                ],
+                options222: [{
+                    value: 'none',
+                    label: '--- 无 ---'
+                }, {
+                    value: 'solid',
+                    label: '直线'
+                }, {
+                    value: 'dashed',
+                    label: '破折线'
+                }, {
+                    value: 'dotted',
+                    label: '点状线'
+                }, {
+                    value: 'double',
+                    label: '双划线'
+                }],
+                value222: 'none'
             }
         }
     }

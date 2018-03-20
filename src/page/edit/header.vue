@@ -68,7 +68,7 @@
 
 </script>
 <style lang="scss" scoped>
-    $headerHeight:56px;
+    @import '~@/css/variables.scss';
     header {
         display: flex;
         justify-content: space-between;
