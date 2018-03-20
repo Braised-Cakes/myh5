@@ -51,3 +51,7 @@ body>div {
     cursor: move;
     cursor: -webkit-grabbing;
 }
+
+div{
+    border-width: 0;
+}

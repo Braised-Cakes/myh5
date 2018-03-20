@@ -8,7 +8,17 @@
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area">
-                            <div :style="item.style" v-for="item in currentPhone.data" v-html="item.content.replace(/\n/g, '<br>')"></div>
+                            <div class="phone-item" :style="item.style | fff" v-for="item in currentPhone.data">
+                                <!-- <div> -->
+                                <div :style="item.style | fff2" v-html="item.content.replace(/\n/g, '<br>')"></div>
+                                <!-- </div> -->
+                                <div style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+                                    <div class="circle circle-nw"></div>
+                                    <div class="circle circle-ne"></div>
+                                    <div class="circle circle-sw"></div>
+                                    <div class="circle circle-se"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,6 +67,28 @@
             'v-header': vHeader,
             'v-page': vPage
         },
+        filters: {
+
+            fff(res) {
+                var json = {};
+                for (let attr in res) {
+                    if (attr == 'position' || attr == 'left' || attr == 'width' || attr == 'height' || attr == 'top') {
+                        json[attr] = res[attr];
+                    }
+                }
+                return json
+            },
+            fff2(res) {
+                var json = {};
+                for (let attr in res) {
+                    if (attr == 'position' || attr == 'left' || attr == 'top') {
+                    } else {
+                        json[attr] = res[attr];
+                    }
+                }
+                return json;
+            }
+        },
         computed: {
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone'])
         },
@@ -65,9 +97,7 @@
         },
         mounted() {},
         data() {
-            return {
-                list: [1, 2, 3]
-            }
+            return {}
         }
     }
 
@@ -127,6 +157,34 @@
                 top: 37px;
                 left: 4px;
                 background: #fff;
+                .phone-item {
+                    $size: 12px;
+                    $position: -6px;
+                    .circle {
+                        width: $size;
+                        height: $size;
+                        background-color: #fff;
+                        border: 1px solid #59c7f9;
+                        border-radius: 12px;
+                        position: absolute;
+                        &.circle-nw {
+                            left: $position;
+                            top: $position;
+                        }
+                        &.circle-ne {
+                            right: $position;
+                            top: $position;
+                        }
+                        &.circle-sw {
+                            left: $position;
+                            bottom: $position;
+                        }
+                        &.circle-se {
+                            right: $position;
+                            bottom: $position;
+                        }
+                    }
+                }
             }
         }
     }

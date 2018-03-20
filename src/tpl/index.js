@@ -11,12 +11,14 @@ export default {
             content: '空白文本',
             class: types.TXT.toLowerCase(),
             style: {
-                position:'absolute',
+                position: 'absolute',
                 left: '0',
                 top: '50px',
                 color: '#666666',
-                width : '200px',
-                height : '100px'
+                width: '200px',
+                height: '100px',
+                padding: '5px',
+                'border-style': 'solid'
             }
         }
     }

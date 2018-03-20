@@ -70,6 +70,30 @@
                             <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'top': $event + 'px'}})" :value="parseInt(currentItem.style['top'])"
                                 :min="0"></el-input-number>
                         </div>
+                        <div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
+                            <div class="tab-setting-line-title">边框</div>
+                        </div>
+                        <div class="style-item">
+                            <label>边框颜色</label>
+                            <el-color-picker @active-change="updateItem({key:'style', val:{'border-color':$event}})" :value="currentItem.style['border-color'] || '#000'"
+                                show-alpha></el-color-picker>
+                            <ul class="color-list">
+                                <li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
+                            </ul>
+                        </div>
+                        <div class="style-item">
+                            <label>边框尺寸</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'border-width': $event + 'px'}})" :value="parseInt(currentItem.style['border-width'] || 0)"
+                                :min="0" :max="20"></el-input-number>
+                        </div>
+                        <div class="style-item">
+                            <label>边框弧度</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'border-radius': $event + '%'}})" :value="parseInt(currentItem.style['border-radius'] || 0)"
+                                :min="0" :max="50"></el-input-number>
+                        </div>
+                        <div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
+                            <div class="tab-setting-line-title">阴影</div>
+                        </div>
                     </div>
                 </el-collapse-item>
                 <el-collapse-item title="通用" name="2">
@@ -99,7 +123,7 @@
         mounted() {},
         data() {
             return {
-                activeName: '',
+                activeName: '1',
                 nav: ['样式', '动画'],
                 navIndex: 0,
                 options: [{
@@ -124,6 +148,21 @@
 
 </script>
 <style lang="scss" scoped>
+    .tab-setting-line {
+        width: 220px;
+        height: 1px;
+        background: #ccd5db;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 12px 0;
+        .tab-setting-line-title {
+            padding: 0 15px;
+            color: #333;
+            background-color: #fff;
+        }
+    }
+
     .color-list {
         width: 90px;
         display: flex;
