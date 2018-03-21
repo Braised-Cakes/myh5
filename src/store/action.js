@@ -12,11 +12,9 @@ export default {
     }, {
         id
     }) {
-        console.log(id)
         api.getEdit({
             id: id
         }).then((res) => {
-            console.log(res)
             if (!$.isEmptyObject(res.result.data.data)) {
                 commit(types.SET_PHONE, res.result.data.data);
             }

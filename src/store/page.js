@@ -74,10 +74,11 @@ const actions = {
     sortPage({
         commit,
         getters,
-        dispatch
+        dispatch,
+        rootState
     }, data) {
         commit(types.SORT_PAGE, {
-            oldVal: getters.phoneData.data,
+            phoneData: getters.phoneData,
             newVal: data.value
         });
         commit(types.SELECT_PAGE, {
@@ -115,10 +116,10 @@ const mutations = {
      * 页面排序
      */
     [types.SORT_PAGE](state, {
-        oldVal,
+        phoneData,
         newVal
     }) {
-        oldVal = newVal;
+        phoneData.data = newVal;
     },
     /**
      * 选择一页
