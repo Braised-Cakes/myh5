@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import tpl from '../tpl'
+import * as api from '@/api/index'
+import $ from 'jquery'
 const types = {
+    SET_PHONE: 'SET_PHONE',
     ADD_ITEM: 'ADD_ITEM',
     DEL_ITEM: 'DEL_ITEM',
     SELECT_ITEM: 'SELECT_ITEM',
@@ -41,6 +44,7 @@ const getters = {
 }
 // actions
 const actions = {
+    
     addItem({
         commit,
         state,

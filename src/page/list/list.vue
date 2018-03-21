@@ -8,7 +8,7 @@
                     <div class="image">
                         <div class="front"></div>
                         <div class="overlay">
-                            <router-link class="edit" to="edit">
+                            <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
                                 <div>
                                     <svg class="icon" aria-hidden="true">
                                         <use xlink:href="#icon-logo"></use>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="project-info">
-                        <p>场景</p>
+                        <p>场景{{item.id}}</p>
                     </div>
                 </li>
             </ul>
@@ -49,8 +49,7 @@
             'vHeader': Header,
             'vSidebar': Sidebar
         },
-        computed: {
-        },
+        computed: {},
         methods: {
             get(page) {
                 api.getJobList({
@@ -69,7 +68,7 @@
             },
             del(item) {
                 api.delList({
-                    work_id: item.work_id
+                    id: item.id
                 }).then(res => {
                     console.log(res);
                 })

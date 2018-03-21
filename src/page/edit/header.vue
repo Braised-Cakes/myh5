@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="creat-logo">
-            <router-link to="list">
+            <router-link to="/list">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-logo"></use>
                 </svg>
@@ -28,7 +28,7 @@
                 <li>
                     <span>预览和设置</span>
                 </li>
-                <li>
+                <li @click="save">
                     <span>保存</span>
                 </li>
                 <li>
@@ -56,9 +56,19 @@
             ...mapGetters(['phoneData'])
         },
         methods: {
-            ...mapActions(['addItem'])
+            ...mapActions(['addItem']),
+            save() {
+                api.saveEdit({
+                    id : this.$route.params.id,
+                    data : this.phoneData
+                }).then(res => {
+                    console.log(res);
+                })
+            }
         },
-        mounted() {},
+        mounted() {
+            // this.$route.params.id
+        },
         data() {
             return {
 
@@ -83,6 +93,7 @@
         align-items: center;
         .creat-logo {
             width: 72px;
+            height: 100%;
             border-right: 1px solid #e6ebed;
             a {
                 font-size: 45px;

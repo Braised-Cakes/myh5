@@ -5,6 +5,7 @@ import actions from './action'
 import page from './page'
 import m_phone from './phone'
 import $ from 'jquery'
+import * as api from '@/api/index'
 Vue.use(Vuex)
 const BASE_BLANK = {
     main: {
@@ -13,6 +14,7 @@ const BASE_BLANK = {
     },
     data: []
 };
+
 const state = {
     phone: {
         main: {},

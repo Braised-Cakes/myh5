@@ -1,11 +1,13 @@
-import {
-    SAVE_ADDRESS
-} from './mutation-types.js'
+import * as types from './mutation-types.js'
 
 
 export default {
     //删除地址列表
-    [SAVE_ADDRESS](state, newAdress) {
-        state.removeAddress = newAdress
-    }
+    [types.SET_PHONE](state, payload) {
+        state.phone = payload;
+        // currentPhone.data = currentPhone.data || [];
+        // currentPhone.data.push(item);
+        // Vue.set(currentPhone, 'data', currentPhone.data);
+        // state.currentItemId = currentPhone.data.length - 1;
+    },
 }

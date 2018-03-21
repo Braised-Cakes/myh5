@@ -14,7 +14,7 @@ let routes = new Router({
         name: 'list',
         component: r => require.ensure([], () => r(require('@/page/list/list.vue')), 'list'),
     }, {
-        path: '/edit',
+        path: '/edit/:id',
         name: 'edit',
         component: r => require.ensure([], () => r(require('@/page/edit/edit.vue')), 'edit'),
     }]

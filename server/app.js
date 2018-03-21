@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
@@ -37,6 +37,13 @@ app.use('/users', users);
 // 	next(err);
 // });
 
+
+
+// app.use(function (err, req, res) {
+// 	res.setHeader('Content-Type', 'text/plain')
+// 	res.write('you posted:\n')
+// 	res.end(JSON.stringify(req.body, null, 2))
+//   })
 // error handler
 app.use(function (err, req, res, next) {
 	// set locals, only providing error in development
@@ -46,6 +53,8 @@ app.use(function (err, req, res, next) {
 	// render the error page
 	res.status(err.status || 500);
 	res.render('error');
+	// res.end(JSON.stringify(req.body, null, 2))
 });
+
 
 module.exports = app;

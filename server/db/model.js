@@ -4,10 +4,10 @@ module.exports = {
 	},
 	"myh5": {
 		"type": { type: String, required: false },
-		"work_id": { type: Number, required: true },
+		"id": { type: Number, required: true },
 		"bg": { type: String, required: false },
 		"data": { type: Object, required: false},
-		"username": { type: String, required: true }
+		"username": { type: String, required: false }
 	},
 	'user': {
 		'password': { type: String, required: true },

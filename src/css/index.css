@@ -27,10 +27,11 @@ body {
     -moz-osx-font-smoothing: grayscale; */
     font-size: 12px;
     user-select: none;
-    overflow: hidden;
+    /* overflow: hidden; */
     height: 100%;
     zoom: 1;
     color: #76838f;
+    min-width: 1200px;
 }
 
 body>div {

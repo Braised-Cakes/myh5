@@ -91,9 +91,13 @@
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone'])
         },
         methods: {
-            ...mapActions(['addPage', 'selectPage', 'delPage'])
+            ...mapActions(['addPage', 'selectPage', 'delPage', 'setPhone'])
         },
-        mounted() {},
+        mounted() {
+            this.setPhone({
+                id : this.$route.params.id
+            });
+        },
         data() {
             return {}
         }

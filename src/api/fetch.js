@@ -5,11 +5,13 @@ export default async function (url, data, type = 'GET') {
         $.ajax({
             url: url,
             dataType: 'json',
-            data: data,
+            data: type == 'GET' ? data : JSON.stringify(data),
             type: type,
-            beforeSend: function (XMLHttpRequest) {
-                XMLHttpRequest.setRequestHeader("Content-Type", "application/json");
-            },
+            // beforeSend: function (XMLHttpRequest) {
+            //     XMLHttpRequest.setRequestHeader("Content-Type", "application/json");
+                
+            // },
+            contentType:'application/json; charset=UTF-8',
             success(rs) {
                 resolve(rs)
             }
