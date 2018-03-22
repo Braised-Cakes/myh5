@@ -7,7 +7,7 @@
                 <div class="workspace">
                     <div class="container">
                         <div class="phone-bg"></div>
-                        <div class="phone-area">
+                        <div class="phone-area" :style="{ 'background' : currentPhone.main.background }">
                             <div class="phone-item" :style="item.style | filterItemWrap" v-for="item in currentPhone.data">
                                 <div :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div>
                                 <div style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">

@@ -9,8 +9,7 @@ import * as api from '@/api/index'
 Vue.use(Vuex)
 const BASE_BLANK = {
     main: {
-        background: '#ffffff',
-        music: ''
+        background: '#ffffff'
     },
     data: []
 };

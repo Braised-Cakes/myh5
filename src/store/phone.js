@@ -8,7 +8,8 @@ const types = {
     DEL_ITEM: 'DEL_ITEM',
     SELECT_ITEM: 'SELECT_ITEM',
     CANCEL_SELECT: 'CANCEL_SELECT',
-    UPDATE_ITEM: 'UPDATE_ITEM'
+    UPDATE_ITEM: 'UPDATE_ITEM',
+    UPDATE_PHONE: 'UPDATE_PHONE'
 };
 /**
  * mutations 增， 删， 改
@@ -44,7 +45,7 @@ const getters = {
 }
 // actions
 const actions = {
-    
+
     addItem({
         commit,
         state,
@@ -74,9 +75,40 @@ const actions = {
             val: val
         });
     },
+
+    updatePhone({
+        commit,
+        state,
+        rootState,
+        getters,
+        dispatch
+    }, {
+        key,
+        val
+    }) {
+        console.log(val)
+        commit(types.UPDATE_PHONE, {
+            item: getters.currentPhone,
+            val:val
+        });
+    },
 }
 // mutations
 const mutations = {
+    [types.UPDATE_PHONE](state, {
+        item,
+        key,
+        val
+    }) {
+        Vue.set(item, 'main', val)
+        // if (typeof val == 'string') {
+        //     Vue.set(item, 'main', val);
+        // } else {
+        //     for (const attr in val) {
+        //         Vue.set(item[key], attr, val[attr]);
+        //     }
+        // }
+    },
     [types.ADD_ITEM](state, {
         currentPhone,
         item

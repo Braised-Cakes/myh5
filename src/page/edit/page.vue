@@ -2,6 +2,7 @@
     <div class="create_right">
         <div class="top">
             <ul>
+                <li @click="nav=2" :class="{active:nav==2}">页面属性</li>
                 <li @click="nav=0" :class="{active:nav==0}">元素属性</li>
                 <li @click="nav=1" :class="{active:nav==1}">页面管理</li>
             </ul>
@@ -36,6 +37,7 @@
             </div>
         </div>
         <edit-dom v-if="nav==0"></edit-dom>
+        <page-dom v-if="nav==2"></page-dom>
     </div>
 </template>
 
@@ -46,6 +48,7 @@
     } from 'vuex'
     import Header from '@/components/header/header.vue'
     import EditDom from './edit-dom'
+    import PageDom from './page-dom'
     import * as api from '@/api/index'
     import $ from 'jquery'
     import vHeader from './header'
@@ -55,6 +58,7 @@
         components: {
             'v-header': vHeader,
             'edit-dom': EditDom,
+            'page-dom': PageDom,
             draggable,
         },
         computed: {
@@ -92,7 +96,7 @@
                 oldIndex: -1,
                 futureIndex: -1,
                 drag: false,
-                nav: 0
+                nav: 2
             }
         }
     }

@@ -59,10 +59,13 @@
             ...mapActions(['addItem']),
             save() {
                 api.saveEdit({
-                    id : this.$route.params.id,
-                    data : this.phoneData
+                    id: this.$route.params.id,
+                    data: this.phoneData
                 }).then(res => {
                     console.log(res);
+                    this.$alert('保存成功', {
+                        closeOnClickModal: true
+                    });
                 })
             }
         },
