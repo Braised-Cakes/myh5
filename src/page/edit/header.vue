@@ -64,8 +64,14 @@
                 }).then(res => {
                     console.log(res);
                     this.$alert('保存成功', {
-                        closeOnClickModal: true
-                    });
+                        closeOnClickModal: true,
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `action: ${ action }`
+                            });
+                        }
+                    })
                 })
             }
         },

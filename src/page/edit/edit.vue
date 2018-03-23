@@ -23,6 +23,13 @@
                 <div class="help">
                     <ul>
                         <li>
+                            <el-tooltip class="item" content="复制当前页" placement="right">
+                                <div @click="copyPage">
+                                    <i class="icon iconfont icon-more"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <!-- <li>
                             <el-tooltip class="item" content="Right Center 提示文字" placement="right">
                                 <div>
                                     <i class="icon iconfont icon-more"></i>
@@ -35,14 +42,7 @@
                                     <i class="icon iconfont icon-more"></i>
                                 </div>
                             </el-tooltip>
-                        </li>
-                        <li>
-                            <el-tooltip class="item" content="Right Center 提示文字" placement="right">
-                                <div>
-                                    <i class="icon iconfont icon-more"></i>
-                                </div>
-                            </el-tooltip>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -89,7 +89,7 @@
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone'])
         },
         methods: {
-            ...mapActions(['addPage', 'selectPage', 'delPage', 'setPhone'])
+            ...mapActions(['addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage'])
         },
         mounted() {
             this.setPhone({
