@@ -89,7 +89,10 @@
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone'])
         },
         methods: {
-            ...mapActions(['addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage'])
+            ...mapActions(['reset', 'addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage'])
+        },
+        created() {
+            this.reset();
         },
         mounted() {
             this.setPhone({

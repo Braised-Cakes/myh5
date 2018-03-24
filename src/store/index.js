@@ -1,37 +1,53 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import mutations from './mutations'
-import actions from './action'
-import page from './page'
-import m_phone from './phone'
+import edit from './edit/edit.js'
 import $ from 'jquery'
 import * as api from '@/api/index'
 Vue.use(Vuex)
+// const BASE_BLANK = {
+//     main: {
+//         background: '#ffffff'
+//     },
+//     data: []
+// };
+const initState = {
+    phone: {
+        main: {},
+        data: [$.extend(true, {}, BASE_BLANK)]
+    },
+    currentPage: 0
+}
+const state = {
+
+}
 const BASE_BLANK = {
     main: {
         background: '#ffffff'
     },
     data: []
 };
-
-const state = {
-    phone: {
-        main: {},
-        data: [$.extend(true, {}, BASE_BLANK)]
-    }
+const getters = {}
+const actions = {}
+const mutations = {
+    ['RESET'](state) {
+        for (let attr in state) {
+            state[attr] = {
+                phone: {
+                    main: {},
+                    data: [$.extend(true, {}, BASE_BLANK)]
+                },
+                currentPage: 0
+            }
+        }
+    },
 }
-
 export default new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
     state,
-    getters: {},
+    getters,
     actions,
     mutations,
     modules: {
-        page,
-        // phone
-        m_phone,
-        // panel,
-        // setting
+        edit
     }
 })
