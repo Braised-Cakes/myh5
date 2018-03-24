@@ -66,10 +66,10 @@
                     this.$alert('保存成功', {
                         closeOnClickModal: true,
                         callback: action => {
-                            this.$message({
-                                type: 'info',
-                                message: `action: ${ action }`
-                            });
+                            // this.$message({
+                            //     type: 'info',
+                            //     message: `action: ${ action }`
+                            // });
                         }
                     })
                 })

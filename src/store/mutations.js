@@ -1,13 +1,21 @@
 import * as types from './mutation-types.js'
-
+import $ from 'jquery'
+const BASE_BLANK = {
+    main: {
+        background: '#ffffff'
+    },
+    data: []
+};
 
 export default {
-    //删除地址列表
     [types.SET_PHONE](state, payload) {
-        state.phone = payload;
-        // currentPhone.data = currentPhone.data || [];
-        // currentPhone.data.push(item);
-        // Vue.set(currentPhone, 'data', currentPhone.data);
-        // state.currentItemId = currentPhone.data.length - 1;
+        if (!$.isEmptyObject(payload)) {
+            state.phone = payload;
+        } else {
+            state.phone = {
+                main: {},
+                data: [$.extend(true, {}, BASE_BLANK)]
+            }
+        }
     },
 }
