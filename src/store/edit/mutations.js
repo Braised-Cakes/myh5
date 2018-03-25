@@ -1,34 +1,53 @@
 import Vue from 'vue'
 import $ from 'jquery'
 import * as types from './mutation-types.js'
+import * as constant from '@/constant'
 
 
-const BASE_BLANK = {
-    main: {
-        background: '#ffffff'
-    },
-    data: []
-};
-
+/**
+ * 修改作品数据,
+ * 修改某一页的数据
+ * 
+ * 如果page存在， 代表修改某页的数据
+ * 如果all存在， 代表修改整层数据
+ * this.changeData(newVal)
+ * this.changeData(newVal, page)
+ * 
+ * {
+ *  main : {},
+ *  data : [{
+ *      main : {},
+ *      data : []
+ *  },{
+ *      main : {},
+ *      data : []
+ *  }]
+ * }
+ * state.phone[type] = data;
+ */
 export default {
-    /**
-     * 页面排序
-     */
-    [types.UPDATE_PHONE_DATA](state, {
-        phoneData,
-        oldPage,
-        newPage
+    [types.CHANGE_DATA](state, {
+        data,
+        page,
+        all = false,
+        type
     }) {
-        Vue.set(phoneData.data, newPage, $.extend(true, {}, phoneData.data[oldPage]))
-    },
-    /**
-     * 页面排序
-     */
-    [types.SORT_PAGE](state, {
-        phoneData,
-        newVal
-    }) {
-        phoneData.data = newVal;
+        data = $.extend(true, {}, data);
+        
+
+        // if(type){
+        //     state.phone[type] = data;
+        // }else if(page >= 0){
+        //     state.phone.data[page] = data;
+        // }
+    
+        if (page >= 0) {
+            state.phone.data[page] = data;
+        } else if (all) {
+            state.phone = data;
+        } else {
+            state.phone.data = data;
+        }
     },
     /**
      * 选择一页
@@ -48,7 +67,7 @@ export default {
         index,
         phoneData
     }) {
-        phoneData.data.splice(index + 1, 0, $.extend(true, {}, BASE_BLANK));
+        phoneData.data.splice(index + 1, 0, $.extend(true, {}, constant.BASE_BLANK));
     },
     /**
      * 删除指定页
@@ -67,32 +86,10 @@ export default {
         } else {
             state.phone = {
                 main: {},
-                data: [$.extend(true, {}, BASE_BLANK)]
+                data: [$.extend(true, {}, constant.BASE_BLANK)]
             }
         }
     },
-    // [types.RESET](state, payload) {
-    //     for(let attr in state){
-    //         state[]
-    //     }
-    //     // state = $.extend(true, {}, {
-    //     //     phone: {
-    //     //         main: {},
-    //     //         data: [$.extend(true, {}, BASE_BLANK)]
-    //     //     },
-    //     //     currentPage: 0
-    //     // });
-    //     // console.log(state)
-    //     // state.phone = {
-    //     //     main: {},
-    //     //     data: [$.extend(true, {}, BASE_BLANK)]
-    //     // };
-    //     // state.currentPage = 0;
-    // },
-
-
-
-
 
     [types.UPDATE_PHONE](state, {
         item,

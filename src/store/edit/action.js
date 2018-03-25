@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import * as types from './mutation-types.js'
-import * as api from '@/api/index'
 import $ from 'jquery'
-import tpl from '../../tpl'
+import * as types from './mutation-types.js'
+import * as api from '@/api'
+import tpl from '@/tpl'
 export default {
     /**
      * 复制某一页
@@ -16,10 +16,9 @@ export default {
     }, page) {
         let oldPage = getters.currentPage;
         dispatch('addPage');
-        commit(types.UPDATE_PHONE_DATA, {
-            phoneData: getters.phoneData,
-            oldPage: oldPage,
-            newPage: getters.currentPage
+        commit(types.CHANGE_DATA, {
+            page : getters.currentPage,
+            data : state.phone.data[oldPage]
         });
     },
     /**
@@ -64,9 +63,8 @@ export default {
         dispatch,
         rootState
     }, data) {
-        commit(types.SORT_PAGE, {
-            phoneData: getters.phoneData,
-            newVal: data.value
+        commit(types.CHANGE_DATA, {
+            data: data.value
         });
         commit(types.SELECT_PAGE, {
             page: data.futureIndex
@@ -117,9 +115,6 @@ export default {
     }) {
         commit(types.RESET);
     },
-
-
-
     addItem({
         commit,
         state,
