@@ -8,9 +8,10 @@ import '@/css/index.css'
 import '@/css/element-variables.scss'
 import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
-
+import '@/directive/select'
 import '@/iconfont/iconfont'
 import '@/iconfont/iconfont.css'
+import '@/keycode'
 // Vue.config.productionTip = false
 /* eslint-disable no-new */
 import store from '@/store'

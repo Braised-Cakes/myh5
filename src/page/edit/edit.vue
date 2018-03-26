@@ -4,7 +4,7 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page></v-page>
-                <div class="workspace">
+                <div class="workspace" v-my-select>
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" :style="{ 'background' : currentPhone.main.background }">
@@ -136,8 +136,8 @@
         position: absolute;
         height: 100%;
         top: 0;
-        bottom: 0;
-        left: 200px;
+        bottom: 0; // left: 200px;
+        left: 0;
         right: 260px;
         z-index: 1000;
         .container {
