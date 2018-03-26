@@ -1,6 +1,13 @@
 import $ from 'jquery'
 import store from '@/store/index.js'
 
+const keyCode = {
+    up: 38,
+    down: 40,
+    left: 37,
+    right: 39,
+}
+
 $(window).keydown(function (ev) {
     if (document.activeElement != document.querySelector('body')) {
         return;
@@ -12,7 +19,7 @@ $(window).keydown(function (ev) {
      * right 39
      */
     switch (ev.keyCode) {
-        case 38:
+        case keyCode.up:
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
@@ -20,7 +27,7 @@ $(window).keydown(function (ev) {
                 }
             });
             break;
-        case 40:
+        case keyCode.down:
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
@@ -28,7 +35,7 @@ $(window).keydown(function (ev) {
                 }
             });
             break;
-        case 37:
+        case keyCode.left:
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
@@ -36,7 +43,7 @@ $(window).keydown(function (ev) {
                 }
             });
             break;
-        case 39:
+        case keyCode.right:
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {

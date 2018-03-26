@@ -12,6 +12,7 @@ import '@/directive/select'
 import '@/iconfont/iconfont'
 import '@/iconfont/iconfont.css'
 import '@/keycode'
+
 // Vue.config.productionTip = false
 /* eslint-disable no-new */
 import store from '@/store'
