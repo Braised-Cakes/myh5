@@ -38,7 +38,7 @@
                     <div style="padding:12px 20px;">
                         <div class="style-item">
                             <label>背景颜色</label>
-                            <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color']"
+                            <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'transparent'"
                                 show-alpha></el-color-picker>
                             <ul class="color-list">
                                 <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>

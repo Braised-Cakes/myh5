@@ -33,13 +33,13 @@ export default {
         type
     }) {
         data = $.extend(true, $.type(data) == 'array' ? [] : {}, data);
-        
+
         // if(type){
         //     state.phone[type] = data;
         // }else if(page >= 0){
         //     state.phone.data[page] = data;
         // }
-    
+
         if (page >= 0) {
             state.phone.data[page] = data;
         } else if (all) {
@@ -52,9 +52,7 @@ export default {
      * 选择一页
      * @param {Number} page 页码
      */
-    [types.SELECT_PAGE](state, {
-        page
-    }) {
+    [types.SELECT_PAGE](state, page) {
         state.currentPage = page;
     },
     /**
@@ -120,5 +118,11 @@ export default {
     },
     [types.SELECT_ITEM](state, index) {
         state.curItemId = index;
+    },
+    [types.DEL_ITEM](state, {
+        curItemId,
+        curPageId
+    }) {
+        state.phone.data[curPageId].data.splice(curItemId, 1)
     }
 }

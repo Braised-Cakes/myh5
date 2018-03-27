@@ -6,6 +6,7 @@ const keyCode = {
     down: 40,
     left: 37,
     right: 39,
+    delete: 8
 }
 
 $(window).keydown(function (ev) {
@@ -21,6 +22,7 @@ $(window).keydown(function (ev) {
     if (!store.getters.hasSelectedItems) {
         return;
     }
+
     switch (ev.keyCode) {
         case keyCode.up:
             store.dispatch('updateItem', {
@@ -53,6 +55,9 @@ $(window).keydown(function (ev) {
                     'left': parseInt(store.getters.curItem.style.left) + 1 + 'px'
                 }
             });
+            break;
+        case keyCode.delete:
+            store.dispatch('delItem', store.getters.curItemId)
             break;
     }
 });

@@ -21,3 +21,4 @@ export const CHANGE_DATA = 'CHANGE_DATA';
  * 
  */
 export const SELECT_ITEM = 'SELECT_ITEM';
+export const DEL_ITEM = 'DEL_ITEM';

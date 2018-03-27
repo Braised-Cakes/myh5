@@ -41,7 +41,7 @@ export default {
         return state.curItemId >= 0 ? true : false;
     },
     /**
-     * 是否有被选中元素
+     * 被选中元素的id
      */
     curItemId(state) {
         return state.curItemId;

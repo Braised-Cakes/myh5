@@ -17,8 +17,8 @@ export default {
         let oldPage = getters.currentPage;
         dispatch('addPage');
         commit(types.CHANGE_DATA, {
-            page : getters.currentPage,
-            data : state.phone.data[oldPage]
+            page: getters.currentPage,
+            data: state.phone.data[oldPage]
         });
     },
     /**
@@ -34,9 +34,8 @@ export default {
         if (getters.currentPage == page) {
             return;
         }
-        commit(types.SELECT_PAGE, {
-            page: page
-        });
+        dispatch('cancelSelect');
+        commit(types.SELECT_PAGE, page);
     },
     /**
      * 页尾增加一页
@@ -50,9 +49,7 @@ export default {
             index: getters.currentPage,
             phoneData: getters.phoneData
         })
-        commit(types.SELECT_PAGE, {
-            page: getters.currentPage + 1
-        })
+        dispatch('selectPage', getters.currentPage + 1);
     },
     /**
      * 排序
@@ -66,9 +63,7 @@ export default {
         commit(types.CHANGE_DATA, {
             data: data.value
         });
-        commit(types.SELECT_PAGE, {
-            page: data.futureIndex
-        });
+        dispatch('selectPage', data.futureIndex);
     },
     /**
      * 删除指定页
@@ -94,6 +89,9 @@ export default {
             });
         }
     },
+
+
+
     setPhone({
         commit,
         state,
@@ -162,8 +160,22 @@ export default {
         });
     },
 
-
-
+    /**
+     * 取消选中
+     */
+    cancelSelect({
+        commit,
+        state,
+        rootState,
+        getters,
+        dispatch
+    }) {
+        commit(types.SELECT_ITEM, -1);
+    },
+    /**
+     * 选择元素
+     * @param {Number} index
+     */
     selectItem({
         commit,
         state,
@@ -172,5 +184,20 @@ export default {
         dispatch
     }, index) {
         commit(types.SELECT_ITEM, index);
+    },
+    /**
+     * 删除指定元素
+     * @param {Number} index
+     */
+    delItem({
+        commit,
+        dispatch,
+        getters
+    }, curItemId) {
+        dispatch('cancelSelect');
+        commit(types.DEL_ITEM, {
+            curItemId: curItemId,
+            curPageId: getters.currentPage
+        });
     },
 }
