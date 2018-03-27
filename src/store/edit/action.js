@@ -170,7 +170,11 @@ export default {
         getters,
         dispatch
     }) {
-        commit(types.SELECT_ITEM, -1);
+        //加定时器，以保证先触发ele ui的事件，后取消选中元素
+        setTimeout(() => {
+            commit(types.SELECT_ITEM, -1);
+        }, 0)
+
     },
     /**
      * 选择元素

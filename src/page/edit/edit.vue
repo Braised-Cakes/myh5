@@ -4,7 +4,7 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page></v-page>
-                <div class="workspace" @mousedown.stop="selectItem(-1)" >
+                <div class="workspace" @mousedown.stop="cancelSelect" >
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" :style="{ 'background' : currentPhone.main.background }">
@@ -75,7 +75,7 @@
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone', 'curItem', 'hasSelectedItems', 'curItemId'])
         }, 
         methods: {
-            ...mapActions(['selectItem', 'reset', 'addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage'])
+            ...mapActions(['selectItem', 'reset', 'addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage', 'cancelSelect'])
         },
         created() {
             this.reset();

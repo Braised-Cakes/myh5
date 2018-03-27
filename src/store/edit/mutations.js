@@ -41,11 +41,14 @@ export default {
         // }
 
         if (page >= 0) {
-            state.phone.data[page] = data;
+            Vue.set(state.phone.data, page, data)
+            // state.phone.data[page] = data;
         } else if (all) {
-            state.phone = data;
+            Vue.set(state, 'phone', data)
+            // state.phone = data;
         } else {
-            state.phone.data = data;
+            Vue.set(state.phone, 'data', data)
+            // state.phone.data = data;
         }
     },
     /**

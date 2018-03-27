@@ -2,12 +2,12 @@
     <div class="create_right">
         <div class="top">
             <ul>
-                <li @click="nav=2" :class="{active:nav==2}">页面属性</li>
-                <li @click="nav=0" :class="{active:nav==0}">元素属性</li>
-                <li @click="nav=1" :class="{active:nav==1}">页面管理</li>
+                <li v-if="!hasSelectedItems" @click="nav=1" :class="{active:nav==1}">页面属性</li>
+                <li v-if="hasSelectedItems" @click="nav=1" :class="{active:nav==1}">元素属性</li>
+                <li @click="nav=0" :class="{active:nav==0}">页面管理</li>
             </ul>
         </div>
-        <div v-if="nav==1">
+        <div v-if="nav==0">
             <el-scrollbar class="page-component__nav">
                 <ul class="page_ul">
                     <draggable v-model="myList" :move="move" @start="start" @end="end">
@@ -36,8 +36,8 @@
                 </ul>
             </div>
         </div>
-        <edit-dom v-if="nav==0"></edit-dom>
-        <page-dom v-if="nav==2"></page-dom>
+        <edit-dom v-if="nav==1 && hasSelectedItems"></edit-dom>
+        <page-dom v-if="nav==1 && !hasSelectedItems"></page-dom>
     </div>
 </template>
 
@@ -62,7 +62,7 @@
             draggable,
         },
         computed: {
-            ...mapGetters(['phoneData', 'currentPage']),
+            ...mapGetters(['phoneData', 'currentPage', 'hasSelectedItems']),
             myList: {
                 get() {
 
@@ -96,7 +96,7 @@
                 oldIndex: -1,
                 futureIndex: -1,
                 drag: false,
-                nav: 2
+                nav: 0
             }
         }
     }
