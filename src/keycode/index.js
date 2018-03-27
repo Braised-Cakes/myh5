@@ -18,12 +18,15 @@ $(window).keydown(function (ev) {
      * left 37
      * right 39
      */
+    if (!store.getters.hasSelectedItems) {
+        return;
+    }
     switch (ev.keyCode) {
         case keyCode.up:
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
-                    'top': parseInt(store.getters.currentItem.style.top) - 1 + 'px'
+                    'top': parseInt(store.getters.curItem.style.top) - 1 + 'px'
                 }
             });
             break;
@@ -31,7 +34,7 @@ $(window).keydown(function (ev) {
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
-                    'top': parseInt(store.getters.currentItem.style.top) + 1 + 'px'
+                    'top': parseInt(store.getters.curItem.style.top) + 1 + 'px'
                 }
             });
             break;
@@ -39,7 +42,7 @@ $(window).keydown(function (ev) {
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
-                    'left': parseInt(store.getters.currentItem.style.left) - 1 + 'px'
+                    'left': parseInt(store.getters.curItem.style.left) - 1 + 'px'
                 }
             });
             break;
@@ -47,10 +50,9 @@ $(window).keydown(function (ev) {
             store.dispatch('updateItem', {
                 key: 'style',
                 val: {
-                    'left': parseInt(store.getters.currentItem.style.left) + 1 + 'px'
+                    'left': parseInt(store.getters.curItem.style.left) + 1 + 'px'
                 }
             });
             break;
     }
-    console.log(ev.keyCode)
 });

@@ -8,7 +8,8 @@ const initState = {
         main: {},
         data: [$.extend(true, {}, constant.BASE_BLANK)]
     },
-    currentPage: 0
+    currentPage: 0,
+    curItemId: -1
 }
 const state = {
     ...initState

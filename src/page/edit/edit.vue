@@ -4,13 +4,13 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page></v-page>
-                <div class="workspace" v-my-select>
+                <div class="workspace" @mousedown.stop="selectItem(-1)" >
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" :style="{ 'background' : currentPhone.main.background }">
-                            <div class="phone-item" :style="item.style | filterItemWrap" v-for="item in currentPhone.data">
+                            <div v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                                 <div :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div>
-                                <div style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+                                <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                                     <div class="circle circle-nw"></div>
                                     <div class="circle circle-ne"></div>
                                     <div class="circle circle-sw"></div>
@@ -29,20 +29,6 @@
                                 </div>
                             </el-tooltip>
                         </li>
-                        <!-- <li>
-                            <el-tooltip class="item" content="Right Center 提示文字" placement="right">
-                                <div>
-                                    <i class="icon iconfont icon-more"></i>
-                                </div>
-                            </el-tooltip>
-                        </li>
-                        <li>
-                            <el-tooltip class="item" content="Right Center 提示文字" placement="right">
-                                <div>
-                                    <i class="icon iconfont icon-more"></i>
-                                </div>
-                            </el-tooltip>
-                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -86,10 +72,10 @@
             }
         },
         computed: {
-            ...mapGetters(['phoneData', 'currentPage', 'currentPhone'])
-        },
+            ...mapGetters(['phoneData', 'currentPage', 'currentPhone', 'curItem', 'hasSelectedItems', 'curItemId'])
+        }, 
         methods: {
-            ...mapActions(['reset', 'addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage'])
+            ...mapActions(['selectItem', 'reset', 'addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage'])
         },
         created() {
             this.reset();

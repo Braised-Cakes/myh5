@@ -19,7 +19,7 @@
     export default {
         components: {},
         computed: {
-            ...mapGetters(['currentItem', 'currentPhone'])
+            ...mapGetters(['curItem', 'currentPhone'])
         },
         methods: {
             ...mapActions(['updateItem', 'updatePhone'])

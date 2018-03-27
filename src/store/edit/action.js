@@ -139,7 +139,7 @@ export default {
     }) {
         console.log(val)
         commit(types.UPDATE_ITEM, {
-            item: getters.currentItem,
+            item: getters.curItem,
             key: key,
             val: val
         });
@@ -160,5 +160,17 @@ export default {
             item: getters.currentPhone,
             val: val
         });
+    },
+
+
+
+    selectItem({
+        commit,
+        state,
+        rootState,
+        getters,
+        dispatch
+    }, index) {
+        commit(types.SELECT_ITEM, index);
     },
 }

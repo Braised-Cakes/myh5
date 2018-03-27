@@ -16,3 +16,8 @@ export const UPDATE_PHONE = 'UPDATE_PHONE';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const RESET = 'RESET';
 export const CHANGE_DATA = 'CHANGE_DATA';
+
+/**
+ * 
+ */
+export const SELECT_ITEM = 'SELECT_ITEM';

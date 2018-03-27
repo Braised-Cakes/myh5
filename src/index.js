@@ -9,6 +9,8 @@ import '@/css/element-variables.scss'
 import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 import '@/directive/select'
+import '@/directive/drag'
+
 import '@/iconfont/iconfont'
 import '@/iconfont/iconfont.css'
 import '@/keycode'

@@ -30,7 +30,20 @@ export default {
      * 当前元素
      * @return {Object}
      */
-    currentItem(state, getters) {
-        return getters.currentPhone.data[0] || {};
+    curItem(state, getters) {
+        return getters.currentPhone.data[state.curItemId] || {};
+    },
+
+    /**
+     * 是否有被选中元素
+     */
+    hasSelectedItems(state) {
+        return state.curItemId >= 0 ? true : false;
+    },
+    /**
+     * 是否有被选中元素
+     */
+    curItemId(state) {
+        return state.curItemId;
     }
 }

@@ -117,5 +117,8 @@ export default {
                 Vue.set(item[key], attr, val[attr]);
             }
         }
+    },
+    [types.SELECT_ITEM](state, index) {
+        state.curItemId = index;
     }
 }
