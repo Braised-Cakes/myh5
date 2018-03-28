@@ -120,9 +120,11 @@ export default {
         getters,
         dispatch
     }, payload) {
+        let itemTpl = tpl.txt();
+        itemTpl.style['z-index'] = getters.curPageItemLen + 1;
         commit(types.ADD_ITEM, {
             currentPhone: getters.currentPhone,
-            item: tpl.txt()
+            item: itemTpl
         });
     },
     updateItem({
@@ -132,12 +134,13 @@ export default {
         getters,
         dispatch
     }, {
+        item,
         key,
         val
     }) {
         console.log(val)
         commit(types.UPDATE_ITEM, {
-            item: getters.curItem,
+            item: item || getters.curItem,
             key: key,
             val: val
         });
@@ -173,8 +176,7 @@ export default {
         //加定时器，以保证先触发ele ui的事件，后取消选中元素
         setTimeout(() => {
             commit(types.SELECT_ITEM, -1);
-        }, 0)
-
+        }, 0);
     },
     /**
      * 选择元素

@@ -27,11 +27,18 @@ export default {
         return state.phone.data[getters.currentPage];
     },
     /**
+     * 当前页数据
+     * @return {Object}
+     */
+    curPageItemLen(state, getters, rootState) {
+        return state.phone.data[getters.currentPage].data.length;
+    },
+    /**
      * 当前元素
      * @return {Object}
      */
     curItem(state, getters) {
-        return getters.currentPhone.data[state.curItemId] || {};
+        return getters.currentPhone.data[state.curItemId] || false;
     },
 
     /**

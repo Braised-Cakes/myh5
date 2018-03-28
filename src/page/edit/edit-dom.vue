@@ -38,7 +38,7 @@
                     <div style="padding:12px 20px;">
                         <div class="style-item">
                             <label>背景颜色</label>
-                            <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'transparent'"
+                            <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'rgba(0,0,0,0)'"
                                 show-alpha></el-color-picker>
                             <ul class="color-list">
                                 <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
@@ -140,10 +140,9 @@
                     value: 36
                 }],
                 value: 12,
-                color3: 'rgba(19, 206, 102, 0.8)',
-                colorList: ['#fff', 'rgb(255, 84, 72)', 'rgb(242, 166, 83)', 'rgb(255, 202, 40)', 'rgb(24, 207, 161)',
-                    'rgb(89, 199, 249)', 'rgb(77, 143, 243)', 'rgb(113, 113, 239)', 'rgb(79, 89, 117)',
-                    'rgb(0, 0, 0)'
+                colorList: ['#fff', 'rgba(255, 84, 72, 1)', 'rgba(242, 166, 83, 1)', 'rgba(255, 202, 40, 1)', 'rgba(24, 207, 161, 1)',
+                    'rgba(89, 199, 249, 1)', 'rgba(77, 143, 243, 1)', 'rgba(113, 113, 239, 1)', 'rgba(79, 89, 117, 1)',
+                    'rgba(0, 0, 0, 1)'
                 ],
                 options222: [{
                     value: 'none',

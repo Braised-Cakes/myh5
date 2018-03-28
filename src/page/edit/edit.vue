@@ -4,7 +4,7 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page></v-page>
-                <div class="workspace" @mousedown.stop="cancelSelect" >
+                <div class="workspace" @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" :style="{ 'background' : currentPhone.main.background }">
@@ -22,10 +22,38 @@
                 </div>
                 <div class="help">
                     <ul>
-                        <li>
+                        <li @click="copyPage">
                             <el-tooltip class="item" content="复制当前页" placement="right">
-                                <div @click="copyPage">
-                                    <i class="icon iconfont icon-more"></i>
+                                <div>
+                                    <i class="icon iconfont icon-fuzhi"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('++')">
+                            <el-tooltip class="item" content="置顶" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-zhiding"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('+')">
+                            <el-tooltip class="item" content="上移" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-shangyi"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('-')">
+                            <el-tooltip class="item" content="下移" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-xiayi"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('--')">
+                            <el-tooltip class="item" content="置底" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-12_zhidi"></i>
                                 </div>
                             </el-tooltip>
                         </li>
@@ -55,7 +83,8 @@
             filterItemWrap(res) {
                 var json = {};
                 for (let attr in res) {
-                    if (attr == 'position' || attr == 'left' || attr == 'width' || attr == 'height' || attr == 'top') {
+                    if (attr == 'position' || attr == 'left' || attr == 'width' || attr == 'height' || attr == 'top' ||
+                        attr == 'z-index') {
                         json[attr] = res[attr];
                     }
                 }
@@ -73,9 +102,115 @@
         },
         computed: {
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone', 'curItem', 'hasSelectedItems', 'curItemId'])
-        }, 
+        },
         methods: {
-            ...mapActions(['selectItem', 'reset', 'addPage', 'selectPage', 'delPage', 'setPhone', 'copyPage', 'cancelSelect'])
+            ...mapActions(['selectItem', 'updateItem', 'reset', 'addPage', 'selectPage', 'delPage', 'setPhone',
+                'copyPage',
+                'cancelSelect'
+            ]),
+            setZIndex(type) {
+                // for (let i = 0; i < this.currentPhone.data.length; i++) {
+
+                // }
+                if (!this.curItem) return;
+                let minZIndex = 1;
+                let maxZIndex = this.currentPhone.data.length;
+
+                /**
+                 * 找到选中元素的z-index,   
+                 * 
+                 * 当删除元素的时候， 一次可以删一个， 也可以删多个  调整z-index
+                 * 
+                 * 如果是上移一层，就找z-index = now + 1的元素
+                 * 
+                 * 如果是置顶，就找z-index比他大的所有元素
+                 * 
+                 * 遍历所有元素 ， 如果z-index > now,  z-index - 1,  最后now = 
+                 */
+                const index = this.currentPhone.data.findIndex((item) => {
+                    return item === this.curItem;
+                })
+                const zIndex = this.curItem.style['z-index'];
+                if (zIndex == minZIndex && (type == '-' || type == '--') || zIndex == maxZIndex && (type == '+' || type ==
+                        '++')) {
+                    return;
+                }
+
+                for (let i = 0; i < this.currentPhone.data.length; i++) {
+                    if (type == '+' && this.currentPhone.data[i].style['z-index'] == zIndex + 1) {
+                        this.updateItem({
+                            item: this.currentPhone.data[i],
+                            key: 'style',
+                            val: {
+                                'z-index': zIndex
+                            }
+                        })
+                    } else if (type == '-' && this.currentPhone.data[i].style['z-index'] == zIndex - 1) {
+                        this.updateItem({
+                            item: this.currentPhone.data[i],
+                            key: 'style',
+                            val: {
+                                'z-index': zIndex
+                            }
+                        })
+                    } else if (type == '++' && this.currentPhone.data[i].style['z-index'] >= zIndex + 1) {
+                        this.updateItem({
+                            item: this.currentPhone.data[i],
+                            key: 'style',
+                            val: {
+                                'z-index': this.currentPhone.data[i].style['z-index'] - 1
+                            }
+                        })
+                    } else if (type == '--' && this.currentPhone.data[i].style['z-index'] <= zIndex + 1) {
+                        this.updateItem({
+                            item: this.currentPhone.data[i],
+                            key: 'style',
+                            val: {
+                                'z-index': this.currentPhone.data[i].style['z-index'] + 1
+                            }
+                        })
+                    }
+                }
+
+                switch (type) {
+                    case '+':
+                        this.updateItem({
+                            item: this.curItem,
+                            key: 'style',
+                            val: {
+                                'z-index': zIndex + 1
+                            }
+                        });
+                        break;
+                    case '-':
+                        this.updateItem({
+                            item: this.curItem,
+                            key: 'style',
+                            val: {
+                                'z-index': zIndex - 1
+                            }
+                        });
+                        break;
+                    case '++':
+                        this.updateItem({
+                            item: this.curItem,
+                            key: 'style',
+                            val: {
+                                'z-index': maxZIndex
+                            }
+                        });
+                        break;
+                    case '--':
+                        this.updateItem({
+                            item: this.curItem,
+                            key: 'style',
+                            val: {
+                                'z-index': minZIndex
+                            }
+                        });
+                        break;
+                }
+            }
         },
         created() {
             this.reset();
