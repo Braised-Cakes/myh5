@@ -96,7 +96,7 @@
                 oldIndex: -1,
                 futureIndex: -1,
                 drag: false,
-                nav: 0
+                nav: 1
             }
         }
     }

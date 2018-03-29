@@ -126,6 +126,7 @@ export default {
             currentPhone: getters.currentPhone,
             item: itemTpl
         });
+        commit(types.SELECT_ITEM, getters.curPageItemLen - 1)
     },
     updateItem({
         commit,

@@ -5,7 +5,7 @@
                 {{item}}
             </li>
         </ul>
-        <el-scrollbar style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
+        <el-scrollbar v-if="navIndex == 0" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
             <div style="padding:12px 20px;">
                 <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
                 </el-input>
@@ -105,6 +105,11 @@
                 </el-collapse-item>
             </el-collapse>
         </el-scrollbar>
+        <el-scrollbar v-if="navIndex == 1" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
+            <!-- <div style="padding:12px 20px;"> -->
+            <v-ani></v-ani>
+            <!-- </div> -->
+        </el-scrollbar>
     </div>
 </template>
 
@@ -114,9 +119,12 @@
         mapActions,
         mapGetters
     } from 'vuex'
+    import ani from './ani'
     import $ from 'jquery'
     export default {
-        components: {},
+        components: {
+            'v-ani' : ani
+        },
         computed: {
             ...mapGetters(['curItem'])
         },
@@ -128,7 +136,7 @@
             return {
                 activeName: '1',
                 nav: ['样式', '动画'],
-                navIndex: 0,
+                navIndex: 1,
                 options: [{
                     label: '12px',
                     value: 12
@@ -140,8 +148,10 @@
                     value: 36
                 }],
                 value: 12,
-                colorList: ['#fff', 'rgba(255, 84, 72, 1)', 'rgba(242, 166, 83, 1)', 'rgba(255, 202, 40, 1)', 'rgba(24, 207, 161, 1)',
-                    'rgba(89, 199, 249, 1)', 'rgba(77, 143, 243, 1)', 'rgba(113, 113, 239, 1)', 'rgba(79, 89, 117, 1)',
+                colorList: ['#fff', 'rgba(255, 84, 72, 1)', 'rgba(242, 166, 83, 1)', 'rgba(255, 202, 40, 1)',
+                    'rgba(24, 207, 161, 1)',
+                    'rgba(89, 199, 249, 1)', 'rgba(77, 143, 243, 1)', 'rgba(113, 113, 239, 1)',
+                    'rgba(79, 89, 117, 1)',
                     'rgba(0, 0, 0, 1)'
                 ],
                 options222: [{
@@ -223,5 +233,10 @@
             }
         }
     }
+
+
+
+
+    
 
 </style>
