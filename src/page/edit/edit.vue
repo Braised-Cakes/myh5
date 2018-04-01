@@ -8,7 +8,7 @@
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" :style="{ 'background' : currentPhone.main.background }">
-                            <div v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
+                            <div :key="index" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                                 <div :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div>
                                 <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                                     <div class="circle circle-nw"></div>

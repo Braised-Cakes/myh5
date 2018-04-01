@@ -111,13 +111,18 @@ export default {
         key,
         val
     }) {
-        if (typeof val == 'string') {
-            Vue.set(item, key, val);
-        } else {
-            for (const attr in val) {
-                Vue.set(item[key], attr, val[attr]);
+        if (key == 'style') {
+            if (typeof val == 'string') {
+                Vue.set(item, key, val);
+            } else {
+                for (const attr in val) {
+                    Vue.set(item[key], attr, val[attr]);
+                }
             }
+        } else {
+            Vue.set(item, key, val);
         }
+
     },
     [types.SELECT_ITEM](state, index) {
         state.curItemId = index;

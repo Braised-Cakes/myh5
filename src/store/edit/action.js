@@ -145,6 +145,24 @@ export default {
             key: key,
             val: val
         });
+        if (key == 'animation') {
+            let str = '';
+            val.forEach((item, index) => {
+                if (index > 0) {
+                    str += ',';
+                }
+                for (let attr in item) {
+                    str += item[attr] + ' '
+                }
+            })
+            commit(types.UPDATE_ITEM, {
+                item: item || getters.curItem,
+                key: 'style',
+                val: {
+                    animation: str
+                }
+            });
+        }
     },
 
     updatePhone({

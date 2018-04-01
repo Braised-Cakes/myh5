@@ -11,7 +11,8 @@
             </li>
         </ul>
         <ul class="ani-list">
-            <li v-for="(item, index) in list">
+            {{curItem.style.animation}}
+            <li v-for="(item, index) in curItem.animation">
                 <div class="title">
                     <div class="left">
                         <span>动画{{index + 1}}</span>
@@ -25,7 +26,7 @@
                 <div style="padding:12px 20px;">
                     <div class="style-item">
                         <label>方式</label>
-                        <el-select size="mini" v-model="value7" placeholder="请选择">
+                        <el-select size="mini" @change="change('animation-name', index, $event)" :value="item['animation-name']" placeholder="请选择">
                             <el-option-group v-for="group in options3" :key="group.label" :label="group.label">
                                 <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
@@ -34,15 +35,13 @@
                     </div>
                     <div class="style-item">
                         <label>动画时间</label>
-                        <el-input-number size="mini" v-model="num1" :step="0.1" :min="0" :max="20"></el-input-number>
+                        <el-input-number @change="change('animation-duration', index, $event + 's')" size="mini" :value="parseFloat(item['animation-duration'])"
+                            :step="0.1" :min="1" :max="20"></el-input-number>
                     </div>
                     <div class="style-item">
                         <label>延迟时间</label>
-                        <el-input-number size="mini" v-model="num2" :step="0.1" :min="0" :max="20"></el-input-number>
-                    </div>
-                    <div class="style-item">
-                        <label>播放次数</label>
-                        <el-input-number size="mini" v-model="num3" :step="1" :min="1" :max="10"></el-input-number>
+                        <el-input-number @change="change('animation-delay', index, $event + 's')" size="mini" :value="parseFloat(item['animation-delay'])"
+                            :step="0.1" :min="0" :max="20"></el-input-number>
                     </div>
                 </div>
             </li>
@@ -51,13 +50,14 @@
     </div>
 </template>
 <script>
+    import $ from 'jquery'
+    import {
+        mapActions,
+        mapGetters
+    } from 'vuex'
     export default {
         data() {
             return {
-                list: [1],
-                num1: 0,
-                num2: 0,
-                num3: 1,
                 options3: [{
                     options: [{
                         value: 'none',
@@ -66,25 +66,68 @@
                 }, {
                     label: '进入',
                     options: [{
-                        value: 'Shanghai',
-                        label: '上海'
-                    }]
-                }, {
-                    label: '退出',
-                    options: [{
-                        value: 'Chengdu',
-                        label: '成都'
+                        value: 'fadeIn',
+                        label: '淡入'
+                    }, {
+                        value: 'fadeInLeft',
+                        label: '移入'
+                    }, {
+                        value: 'opacityFadeInLeft',
+                        label: '移入（透明度不变）'
                     }]
                 }],
-                value7: ''
             }
         },
+        computed: {
+            ...mapGetters(['curItem']),
+        },
+        filters: {
+
+        },
         methods: {
+            ...mapActions(['updateItem']),
             addAni() {
-                this.list.push(1)
+                let ani = $.extend(true, [], this.curItem.animation);
+                ani.push({
+                    'animation-name': 'none',
+                    'animation-duration': '1s',
+                    'animation-delay': '0s',
+                })
+                this.updateItem({
+                    key: 'animation',
+                    val: ani
+                })
             },
             delAni(index) {
-                this.list.splice(index, 1)
+                let ani = $.extend(true, [], this.curItem.animation);
+                ani.splice(index, 1)
+                this.updateItem({
+                    key: 'animation',
+                    val: ani
+                })
+            },
+            change(type, index, val) {
+                console.log(arguments)
+
+                let ani = $.extend(true, [], this.curItem.animation);
+                $('.phone-item').css({
+                    'animation-duration': '3s'
+                })
+                // if(type == 'animation-delay')
+                $('.phone-item').animateCss('bounce', function () {
+                    $('.phone-item').css({
+                        'animation-duration': '3s',
+                        // 'animation-delay': '1s'
+                    })
+                    $('.phone-item').animateCss('fadeIn', function () {
+                        // Do somthing after animation
+                    });
+                });
+                ani[index][type] = val;
+                this.updateItem({
+                    key: 'animation',
+                    val: ani
+                })
             }
         }
     }

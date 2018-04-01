@@ -10,6 +10,7 @@ export default {
             type: types.TXT,
             content: '空白文本',
             class: types.TXT.toLowerCase(),
+            animation: [],
             style: {
                 position: 'absolute',
                 left: '0',

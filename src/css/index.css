@@ -19,9 +19,11 @@ i {
     font-style: normal;
     font-weight: 400;
 }
-html{
+
+html {
     height: 100%;
 }
+
 body {
     /* -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale; */
@@ -37,15 +39,17 @@ body {
 body>div {
     /* height: 100%; */
 }
-#app{
+
+#app {
     height: 100%;
 }
 
-.el-scrollbar__view{
+.el-scrollbar__view {
     height: 100%;
 }
-.el-scrollbar__bar{
-    z-index: 999999!important;
+
+.el-scrollbar__bar {
+    z-index: 999999 !important;
 }
 
 .drag-handle {
@@ -53,6 +57,41 @@ body>div {
     cursor: -webkit-grabbing;
 }
 
-div{
+div {
     border-width: 0;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(-200px, 0, 0);
+        transform: translate3d(-200px, 0, 0)
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none
+    }
+}
+
+@keyframes opacityFadeInLeft {
+    0% {
+        opacity: 1;
+        -webkit-transform: translate3d(-200px, 0, 0);
+        transform: translate3d(-200px, 0, 0)
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none
+    }
 }

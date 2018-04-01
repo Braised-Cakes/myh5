@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from '@/App'
 import router from '@/router'
+import 'animate.css'
 import '@/css/reset.css'
 import '@/css/index.css'
 import '@/css/element-variables.scss'
@@ -18,7 +19,34 @@ import '@/keycode'
 // Vue.config.productionTip = false
 /* eslint-disable no-new */
 import store from '@/store'
+import $ from 'jquery'
 
+$.fn.extend({
+    animateCss: function (animationName, callback) {
+        var animationEnd = (function (el) {
+            var animations = {
+                animation: 'animationend',
+                OAnimation: 'oAnimationEnd',
+                MozAnimation: 'mozAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd',
+            };
+
+            for (var t in animations) {
+                if (el.style[t] !== undefined) {
+                    return animations[t];
+                }
+            }
+        })(document.createElement('div'));
+
+        this.addClass('animated ' + animationName).one(animationEnd, function () {
+            $(this).removeClass('animated ' + animationName);
+
+            if (typeof callback === 'function') callback();
+        });
+
+        return this;
+    },
+});
 Vue.use(ElementUI);
 export default new Vue({
     el: '#app',

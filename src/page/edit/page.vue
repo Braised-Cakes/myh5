@@ -19,7 +19,7 @@
                                         <em>{{index + 1}}</em>
                                     </span>
                                     <span @click.stop="delPage(index)">
-                                        <i class="icon iconfont icon-more"></i>
+                                        <i class="icon iconfont icon-fuzhi"></i>
                                     </span>
                                 </div>
                             </li>

@@ -11,6 +11,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
+        "animate.css": "^3.6.1",
         "concurrently": "^3.5.1",
         "cookie-parser": "^1.4.3",
         "debug": "^3.1.0",
