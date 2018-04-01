@@ -95,3 +95,7 @@ div {
         transform: none
     }
 }
+
+.pause {
+    animation-play-state: paused;
+}

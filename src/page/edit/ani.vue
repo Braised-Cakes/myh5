@@ -5,7 +5,7 @@
                 <i class="icon iconfont icon-tianjia"></i>
                 <span>添加动画</span>
             </li>
-            <li>
+            <li @click="goAni">
                 <i class="icon iconfont icon-tianjia"></i>
                 <span>预览动画</span>
             </li>
@@ -35,12 +35,12 @@
                     </div>
                     <div class="style-item">
                         <label>动画时间</label>
-                        <el-input-number @change="change('animation-duration', index, $event + 's')" size="mini" :value="parseFloat(item['animation-duration'])"
+                        <el-input-number @change="change('animation-duration', index, $event)" size="mini" :value="parseFloat(item['animation-duration'])"
                             :step="0.1" :min="1" :max="20"></el-input-number>
                     </div>
                     <div class="style-item">
                         <label>延迟时间</label>
-                        <el-input-number @change="change('animation-delay', index, $event + 's')" size="mini" :value="parseFloat(item['animation-delay'])"
+                        <el-input-number @change="change('animation-delay', index, $event)" size="mini" :value="parseFloat(item['animation-delay'])"
                             :step="0.1" :min="0" :max="20"></el-input-number>
                     </div>
                 </div>
@@ -110,24 +110,95 @@
                 console.log(arguments)
 
                 let ani = $.extend(true, [], this.curItem.animation);
-                $('.phone-item').css({
-                    'animation-duration': '3s'
-                })
-                // if(type == 'animation-delay')
-                $('.phone-item').animateCss('bounce', function () {
-                    $('.phone-item').css({
-                        'animation-duration': '3s',
-                        // 'animation-delay': '1s'
-                    })
-                    $('.phone-item').animateCss('fadeIn', function () {
-                        // Do somthing after animation
-                    });
-                });
                 ani[index][type] = val;
                 this.updateItem({
                     key: 'animation',
                     val: ani
                 })
+                if(type == 'animation-name'){
+                    this.goAni();
+                }
+            },
+            goAni() {
+                let ani = $.extend(true, [], this.curItem.animation);
+                console.log(ani)
+
+                // $('.phone-item').animateCss('bounce', ()=>{
+
+                // })
+                // for(let i = 0; i < 3;i++){
+                //     await $('.phone-item').animateCss('bounce');
+                // }
+
+                // $('.phone-item').addClass('pause');
+
+                // $('.phone-item').removeClass('pause');
+                // $('.phone-item').css({
+                //     'display': 'block'
+                // })
+                let str = '';
+                let delay = 0;
+                ani.forEach((item, index) => {
+
+                    // str += item['animation-name'] + item['animation-duration'] + 
+                    if (index > 0) {
+                        str += ','
+                    }
+                    str = str +
+                        `${item['animation-name']} ${item['animation-duration']}s ${delay||item['animation-delay']}s`
+                    delay += item['animation-delay'] + item['animation-duration']
+                    // item['animation-duration']
+                    // item['animation-delay']
+                });
+                console.log(str)
+                // $('.phone-item').css({
+                //     'animation': ''
+                // });
+                this.updateItem({
+                    key: 'style',
+                    val: {
+                        animation: ''
+                    }
+                })
+                setTimeout(() => {
+                    // $('.phone-item').css({
+                    //     'animation': str
+                    // })
+                    this.updateItem({
+                        key: 'style',
+                        val: {
+                            animation: str
+                        }
+                    })
+                }, 100);
+                // $('.phone-item').animateCss('none');
+                // $('.phone-item').stop(true, true);
+                // $('.phone-item')[0].classList.forEach((item) => {
+                //     if (!/phone-item/.test(item)) {
+                //         $('.phone-item').removeClass(item);
+                //     }
+                // })
+                // $('.phone-item').css({
+                //     'animation-duration': '3s'
+                // })
+                // $('.phone-item').animateCss('bounce', function () {
+                //     // $('.phone-item').css({
+                //     //     'animation-duration': '3s',
+                //     //     // 'animation-delay': '1s'
+                //     // })
+                //     $('.phone-item').animateCss('flash', function () {
+                //         // Do somthing after animation
+                //     });
+                // });
+
+                // setTimeout(() => {
+                //     $('.phone-item')[0].classList.forEach((item) => {
+                //         if (!/phone-item/.test(item)) {
+                //             $('.phone-item').removeClass(item);
+                //         }
+                //     })
+                // }, 1500)
+
             }
         }
     }
