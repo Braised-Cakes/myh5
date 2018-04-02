@@ -90,8 +90,8 @@
                 let ani = $.extend(true, [], this.curItem.animation);
                 ani.push({
                     'animation-name': 'none',
-                    'animation-duration': '1s',
-                    'animation-delay': '0s',
+                    'animation-duration': '1',
+                    'animation-delay': '0',
                 })
                 this.updateItem({
                     key: 'animation',
@@ -115,89 +115,55 @@
                     key: 'animation',
                     val: ani
                 })
-                if(type == 'animation-name'){
-                    this.goAni();
+                if (type == 'animation-name') {
+                    this.goAni(index);
                 }
             },
-            goAni() {
+            goAni(btn) {
                 let ani = $.extend(true, [], this.curItem.animation);
-                console.log(ani)
-
-                // $('.phone-item').animateCss('bounce', ()=>{
-
-                // })
-                // for(let i = 0; i < 3;i++){
-                //     await $('.phone-item').animateCss('bounce');
-                // }
-
-                // $('.phone-item').addClass('pause');
-
-                // $('.phone-item').removeClass('pause');
-                // $('.phone-item').css({
-                //     'display': 'block'
-                // })
                 let str = '';
                 let delay = 0;
-                ani.forEach((item, index) => {
 
-                    // str += item['animation-name'] + item['animation-duration'] + 
-                    if (index > 0) {
+                let curIndex = 0;
+                ani.forEach((item, index) => {
+                    if (typeof btn == 'number') {
+                        if (btn != index) {
+                            return;
+                        }
+                    }
+                    if (index > 0 && typeof btn != 'number') {
                         str += ','
                     }
                     str = str +
-                        `${item['animation-name']} ${item['animation-duration']}s ${delay||item['animation-delay']}s`
-                    delay += item['animation-delay'] + item['animation-duration']
-                    // item['animation-duration']
-                    // item['animation-delay']
+                        `${item['animation-name']} ${item['animation-duration']}s ${delay||item['animation-delay']}s`;
+                    delay += (Number((item['animation-delay'] + item['animation-duration'])).toFixed(1))
                 });
-                console.log(str)
-                // $('.phone-item').css({
-                //     'animation': ''
-                // });
-                this.updateItem({
-                    key: 'style',
-                    val: {
-                        animation: ''
-                    }
-                })
-                setTimeout(() => {
-                    // $('.phone-item').css({
-                    //     'animation': str
-                    // })
+
+                if (typeof btn == 'number') {
+                    $('.phone-item').css({
+                        'animation': ''
+                    })
+                    setTimeout(() => {
+                        $('.phone-item').css({
+                            'animation': str
+                        })
+                    }, 100);
+                } else {
                     this.updateItem({
                         key: 'style',
                         val: {
-                            animation: str
+                            animation: ''
                         }
                     })
-                }, 100);
-                // $('.phone-item').animateCss('none');
-                // $('.phone-item').stop(true, true);
-                // $('.phone-item')[0].classList.forEach((item) => {
-                //     if (!/phone-item/.test(item)) {
-                //         $('.phone-item').removeClass(item);
-                //     }
-                // })
-                // $('.phone-item').css({
-                //     'animation-duration': '3s'
-                // })
-                // $('.phone-item').animateCss('bounce', function () {
-                //     // $('.phone-item').css({
-                //     //     'animation-duration': '3s',
-                //     //     // 'animation-delay': '1s'
-                //     // })
-                //     $('.phone-item').animateCss('flash', function () {
-                //         // Do somthing after animation
-                //     });
-                // });
-
-                // setTimeout(() => {
-                //     $('.phone-item')[0].classList.forEach((item) => {
-                //         if (!/phone-item/.test(item)) {
-                //             $('.phone-item').removeClass(item);
-                //         }
-                //     })
-                // }, 1500)
+                    setTimeout(() => {
+                        this.updateItem({
+                            key: 'style',
+                            val: {
+                                animation: str
+                            }
+                        })
+                    }, 100);
+                }
 
             }
         }

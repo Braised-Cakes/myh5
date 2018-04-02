@@ -19,5 +19,7 @@ border-raduis : 设置为百分比还是px, px的话，效果漂亮，�
 
 zIndex问题，  删除元素， 会导致zIndex空出来
 
+
+引入id，  每一个id是唯一的
 ```
 

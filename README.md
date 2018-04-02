@@ -1,6 +1,11 @@
-# new_my_h5
+# my_h5
 
-> A Vue.js project
+> myh5页面制作工具,微信营销推广专业场景制作平台,企业宣传、音乐相册、电子贺卡、邀请函、微杂志等一键生成H5酷炫页面,易企秀为您助力移动自主营销!
+
+## 技术栈
+
+vue, node, sass, mongoose
+
 
 ## Build Setup
 
@@ -9,13 +14,15 @@
 npm install
 
 # serve with hot reload at localhost:8080
-npm run dev
+npm run start
 
 # build for production with minification
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 未来
+
+支持图片，音乐，表单等组件
+
+支持登录，分享，呼起客户端等操作
