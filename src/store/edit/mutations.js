@@ -33,7 +33,7 @@ export default {
         type
     }) {
         data = $.extend(true, $.type(data) == 'array' ? [] : {}, data);
-
+        console.log(data);
         // if(type){
         //     state.phone[type] = data;
         // }else if(page >= 0){
@@ -84,10 +84,7 @@ export default {
         if (!$.isEmptyObject(payload)) {
             state.phone = payload;
         } else {
-            state.phone = {
-                main: {},
-                data: [$.extend(true, {}, constant.BASE_BLANK)]
-            }
+            state.phone = $.extend(true, {}, constant.initState.phone);
         }
     },
 
@@ -132,5 +129,8 @@ export default {
         curPageId
     }) {
         state.phone.data[curPageId].data.splice(curItemId, 1)
+    },
+    [types.ADD_CREATED_ID](state) {
+        state.phone.main.createdDomId++;
     }
 }

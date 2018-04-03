@@ -138,13 +138,13 @@
                         `${item['animation-name']} ${item['animation-duration']}s ${delay||item['animation-delay']}s`;
                     delay += (Number((item['animation-delay'] + item['animation-duration'])).toFixed(1))
                 });
-
+                
                 if (typeof btn == 'number') {
-                    $('.phone-item').css({
+                    $('#' + this.curItem.id).css({
                         'animation': ''
                     })
                     setTimeout(() => {
-                        $('.phone-item').css({
+                        $('#' + this.curItem.id).css({
                             'animation': str
                         })
                     }, 100);

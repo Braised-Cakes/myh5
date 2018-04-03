@@ -8,14 +8,14 @@ export default {
      * 复制某一页
      * @param {Number} page 页码
      */
-    copyPage({
+    async copyPage({
         commit,
         state,
         dispatch,
         getters
     }, page) {
         let oldPage = getters.currentPage;
-        dispatch('addPage');
+        await dispatch('addPage');
         commit(types.CHANGE_DATA, {
             page: getters.currentPage,
             data: state.phone.data[oldPage]
@@ -25,7 +25,7 @@ export default {
      * 改变活跃页
      * @param {Number} page 页码
      */
-    selectPage({
+    async selectPage({
         commit,
         state,
         dispatch,
@@ -34,13 +34,16 @@ export default {
         if (getters.currentPage == page) {
             return;
         }
-        dispatch('cancelSelect');
+        // return dispatch('cancelSelect').then(() => {
+        //     commit(types.SELECT_PAGE, page);
+        // })
+        await dispatch('cancelSelect');
         commit(types.SELECT_PAGE, page);
     },
     /**
      * 页尾增加一页
      */
-    addPage({
+    async addPage({
         commit,
         getters,
         dispatch
@@ -49,7 +52,7 @@ export default {
             index: getters.currentPage,
             phoneData: getters.phoneData
         })
-        dispatch('selectPage', getters.currentPage + 1);
+        await dispatch('selectPage', getters.currentPage + 1);
     },
     /**
      * 排序
@@ -122,11 +125,13 @@ export default {
     }, payload) {
         let itemTpl = tpl.txt();
         itemTpl.style['z-index'] = getters.curPageItemLen + 1;
+        itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
         commit(types.ADD_ITEM, {
             currentPhone: getters.currentPhone,
             item: itemTpl
         });
         commit(types.SELECT_ITEM, getters.curPageItemLen - 1)
+        commit(types.ADD_CREATED_ID)
     },
     updateItem({
         commit,
@@ -192,10 +197,16 @@ export default {
         getters,
         dispatch
     }) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                commit(types.SELECT_ITEM, -1);
+                resolve()
+            }, 0)
+        });
         //加定时器，以保证先触发ele ui的事件，后取消选中元素
-        setTimeout(() => {
-            commit(types.SELECT_ITEM, -1);
-        }, 0);
+        // setTimeout(() => {
+        //     commit(types.SELECT_ITEM, -1);
+        // }, 0);
     },
     /**
      * 选择元素
@@ -214,12 +225,18 @@ export default {
      * 删除指定元素
      * @param {Number} index
      */
-    delItem({
+    async delItem({
         commit,
         dispatch,
         getters
     }, curItemId) {
-        dispatch('cancelSelect');
+        // return dispatch('cancelSelect').then(() => {
+        //     commit(types.DEL_ITEM, {
+        //         curItemId: curItemId,
+        //         curPageId: getters.currentPage
+        //     });
+        // })
+        await dispatch('cancelSelect');
         commit(types.DEL_ITEM, {
             curItemId: curItemId,
             curPageId: getters.currentPage
