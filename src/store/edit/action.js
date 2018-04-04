@@ -3,6 +3,8 @@ import $ from 'jquery'
 import * as types from './mutation-types.js'
 import * as api from '@/api'
 import tpl from '@/tpl'
+import app from '@/index'
+import * as utils from '@/utils'
 export default {
     /**
      * 复制某一页
@@ -39,6 +41,27 @@ export default {
         // })
         await dispatch('cancelSelect');
         commit(types.SELECT_PAGE, page);
+        // setTimeout(()=>{
+        //     getters.currentPhone.data.forEach((item) => {
+        //         // console.log(item);
+        //         // console.log(utils)
+        //         utils.runAni(item.id, item.animation);
+        //     })
+        // }, 1000)
+
+        // 作为一个 Promise 使用 (2.1.0 起新增，详见接下来的提示)
+        Vue.nextTick()
+            .then(function () {
+                getters.currentPhone.data.forEach((item) => {
+                    utils.runAni(item.id, item.animation, null, 1);
+                });
+            })
+        // setTimeout(()=>{
+
+        // }, 0)
+
+
+
     },
     /**
      * 页尾增加一页
@@ -72,7 +95,7 @@ export default {
      * 删除指定页
      * @param {Number} page 页码
      */
-    delPage({
+    async delPage({
         commit,
         state,
         dispatch,
@@ -84,11 +107,12 @@ export default {
                 page: page
             });
             if (getters.currentPage > getters.phoneData.data.length - 1) {
-                dispatch('selectPage', getters.phoneData.data.length - 1);
+                await dispatch('selectPage', getters.phoneData.data.length - 1);
             }
         } else {
             app.$alert('最少保留一页内容', {
-                closeOnClickModal: true
+                closeOnClickModal: true,
+                callback: action => {}
             });
         }
     },
@@ -150,24 +174,6 @@ export default {
             key: key,
             val: val
         });
-        if (key == 'animation') {
-            let str = '';
-            val.forEach((item, index) => {
-                if (index > 0) {
-                    str += ',';
-                }
-                for (let attr in item) {
-                    str += item[attr] + ' '
-                }
-            })
-            commit(types.UPDATE_ITEM, {
-                item: item || getters.curItem,
-                key: 'style',
-                val: {
-                    animation: str
-                }
-            });
-        }
     },
 
     updatePhone({

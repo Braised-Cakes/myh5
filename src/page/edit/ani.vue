@@ -11,23 +11,21 @@
             </li>
         </ul>
         <ul class="ani-list">
-            {{curItem.style.animation}}
-            <li v-for="(item, index) in curItem.animation">
+            <li class="ani-item" v-for="(item, index) in curItem.animation">
                 <div class="title">
                     <div class="left">
                         <span>动画{{index + 1}}</span>
-                        <span class="ani-name">无</span>
+                        <span class="ani-name">{{item | getLabel}}</span>
                     </div>
                     <div class="right">
                         <span @click="delAni(index)" class="close">x</span>
-                        <!-- <span class="close2">x</span> -->
                     </div>
                 </div>
-                <div style="padding:12px 20px;">
+                <div class="item-contain" style="padding:12px 20px;">
                     <div class="style-item">
                         <label>方式</label>
                         <el-select size="mini" @change="change('animation-name', index, $event)" :value="item['animation-name']" placeholder="请选择">
-                            <el-option-group v-for="group in options3" :key="group.label" :label="group.label">
+                            <el-option-group v-for="group in aniList" :key="group.label" :label="group.label">
                                 <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-option-group>
@@ -35,13 +33,13 @@
                     </div>
                     <div class="style-item">
                         <label>动画时间</label>
-                        <el-input-number @change="change('animation-duration', index, $event)" size="mini" :value="parseFloat(item['animation-duration'])"
-                            :step="0.1" :min="1" :max="20"></el-input-number>
+                        <el-input-number @change="change('animation-duration', index, $event)" size="mini" :value="item['animation-duration']" :step="0.1"
+                            :min="1" :max="20"></el-input-number>
                     </div>
                     <div class="style-item">
                         <label>延迟时间</label>
-                        <el-input-number @change="change('animation-delay', index, $event)" size="mini" :value="parseFloat(item['animation-delay'])"
-                            :step="0.1" :min="0" :max="20"></el-input-number>
+                        <el-input-number @change="change('animation-delay', index, $event)" size="mini" :value="item['animation-delay']" :step="0.1"
+                            :min="0" :max="20"></el-input-number>
                     </div>
                 </div>
             </li>
@@ -55,34 +53,27 @@
         mapActions,
         mapGetters
     } from 'vuex'
+    import * as constant from '@/constant'
+    import * as utils from '@/utils'
     export default {
         data() {
             return {
-                options3: [{
-                    options: [{
-                        value: 'none',
-                        label: '无'
-                    }]
-                }, {
-                    label: '进入',
-                    options: [{
-                        value: 'fadeIn',
-                        label: '淡入'
-                    }, {
-                        value: 'fadeInLeft',
-                        label: '移入'
-                    }, {
-                        value: 'opacityFadeInLeft',
-                        label: '移入（透明度不变）'
-                    }]
-                }],
+                aniList: constant.aniList
             }
         },
         computed: {
             ...mapGetters(['curItem']),
         },
         filters: {
-
+            getLabel(item) {
+                for (let i = 0; i < constant.aniList.length; i++) {
+                    for (let j = 0; j < constant.aniList[i].options.length; j++) {
+                        if (constant.aniList[i].options[j].value == item['animation-name']) {
+                            return constant.aniList[i].options[j].label;
+                        }
+                    }
+                }
+            }
         },
         methods: {
             ...mapActions(['updateItem']),
@@ -90,8 +81,8 @@
                 let ani = $.extend(true, [], this.curItem.animation);
                 ani.push({
                     'animation-name': 'none',
-                    'animation-duration': '1',
-                    'animation-delay': '0',
+                    'animation-duration': 1,
+                    'animation-delay': 0,
                 })
                 this.updateItem({
                     key: 'animation',
@@ -107,64 +98,18 @@
                 })
             },
             change(type, index, val) {
-                console.log(arguments)
-
                 let ani = $.extend(true, [], this.curItem.animation);
                 ani[index][type] = val;
                 this.updateItem({
                     key: 'animation',
                     val: ani
-                })
+                });
                 if (type == 'animation-name') {
                     this.goAni(index);
                 }
             },
-            goAni(btn) {
-                let ani = $.extend(true, [], this.curItem.animation);
-                let str = '';
-                let delay = 0;
-
-                let curIndex = 0;
-                ani.forEach((item, index) => {
-                    if (typeof btn == 'number') {
-                        if (btn != index) {
-                            return;
-                        }
-                    }
-                    if (index > 0 && typeof btn != 'number') {
-                        str += ','
-                    }
-                    str = str +
-                        `${item['animation-name']} ${item['animation-duration']}s ${delay||item['animation-delay']}s`;
-                    delay += (Number((item['animation-delay'] + item['animation-duration'])).toFixed(1))
-                });
-                
-                if (typeof btn == 'number') {
-                    $('#' + this.curItem.id).css({
-                        'animation': ''
-                    })
-                    setTimeout(() => {
-                        $('#' + this.curItem.id).css({
-                            'animation': str
-                        })
-                    }, 100);
-                } else {
-                    this.updateItem({
-                        key: 'style',
-                        val: {
-                            animation: ''
-                        }
-                    })
-                    setTimeout(() => {
-                        this.updateItem({
-                            key: 'style',
-                            val: {
-                                animation: str
-                            }
-                        })
-                    }, 100);
-                }
-
+            goAni(index) {
+                utils.runAni(this.curItem.id, this.curItem.animation, index);
             }
         }
     }
@@ -205,7 +150,7 @@
                         font-size: 20px;
                     }
                     .close {
-                        margin-right: 10px;
+                        // margin-right: 10px;
                     }
                 }
                 .ani-name {
