@@ -33,7 +33,6 @@ export default {
         type
     }) {
         data = $.extend(true, $.type(data) == 'array' ? [] : {}, data);
-        console.log(data);
         // if(type){
         //     state.phone[type] = data;
         // }else if(page >= 0){

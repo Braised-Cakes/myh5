@@ -1,10 +1,20 @@
 import $ from 'jquery'
-//保留n位小树
-export const round = function (num, index = 2) {
-    return Number(parseFloat(num).toFixed(index));
+/**
+ * 小数点后保留几位
+ * @param {*} num 数字
+ * @param {*} n   小数点后保留几位
+ */
+export const round = function (num, n = 2) {
+    return Number(parseFloat(num).toFixed(n));
 }
 
-
+/**
+ * 执行动画
+ * @param {*} id 元素id
+ * @param {*} ani 元素animation列表
+ * @param {*} aniIndex 取animation中第几个？
+ * @param {*} time 是否存在setTimeout
+ */
 export const runAni = function (id, ani, aniIndex, time) {
     let str = '';
     let delay = 0;
@@ -18,10 +28,9 @@ export const runAni = function (id, ani, aniIndex, time) {
             str += ','
         }
         str = str +
-            `${aniName} ${aniDuration}s ${round(delay + round(aniDelay, 1), 1)}s`;
+            `${aniName} ${aniDuration}s ${round(delay + round(aniDelay, 1), 1)}s 1 normal`;
         delay += round(parseFloat(aniDelay) + parseFloat(aniDuration), 1);
     });
-
     if (time) {
         $('#' + id + ' .item-body').css({
             'animation': str

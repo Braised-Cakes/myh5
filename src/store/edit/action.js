@@ -17,12 +17,21 @@ export default {
         getters
     }, page) {
         let oldPage = getters.currentPage;
-        await dispatch('addPage');
-        commit(types.CHANGE_DATA, {
-            page: getters.currentPage,
-            data: state.phone.data[oldPage]
+        await dispatch('addPage', {
+            go: false
         });
+        let data = $.extend(true, {}, state.phone.data[oldPage]);
+        data.data.forEach((item) => {
+            commit(types.ADD_CREATED_ID);
+            item.id = `item_${state.phone.main.createdDomId}`
+        });
+        commit(types.CHANGE_DATA, {
+            page: getters.currentPage + 1,
+            data: data
+        });
+        await dispatch('selectPage', getters.currentPage + 1);
     },
+
     /**
      * 改变活跃页
      * @param {Number} page 页码
@@ -36,46 +45,32 @@ export default {
         if (getters.currentPage == page) {
             return;
         }
-        // return dispatch('cancelSelect').then(() => {
-        //     commit(types.SELECT_PAGE, page);
-        // })
         await dispatch('cancelSelect');
         commit(types.SELECT_PAGE, page);
-        // setTimeout(()=>{
-        //     getters.currentPhone.data.forEach((item) => {
-        //         // console.log(item);
-        //         // console.log(utils)
-        //         utils.runAni(item.id, item.animation);
-        //     })
-        // }, 1000)
-
-        // 作为一个 Promise 使用 (2.1.0 起新增，详见接下来的提示)
+        //执行翻页动画
         Vue.nextTick()
             .then(function () {
                 getters.currentPhone.data.forEach((item) => {
                     utils.runAni(item.id, item.animation, null, 1);
                 });
-            })
-        // setTimeout(()=>{
-
-        // }, 0)
-
-
-
+            });
     },
     /**
-     * 页尾增加一页
+     * 增加一页
+     * @param {Boolean} go 是否选中新页面
      */
     async addPage({
         commit,
         getters,
         dispatch
+    }, {
+        go = true
     }) {
         commit(types.ADD_PAGE, {
             index: getters.currentPage,
             phoneData: getters.phoneData
         })
-        await dispatch('selectPage', getters.currentPage + 1);
+        go && await dispatch('selectPage', getters.currentPage + 1);
     },
     /**
      * 排序
@@ -209,10 +204,6 @@ export default {
                 resolve()
             }, 0)
         });
-        //加定时器，以保证先触发ele ui的事件，后取消选中元素
-        // setTimeout(() => {
-        //     commit(types.SELECT_ITEM, -1);
-        // }, 0);
     },
     /**
      * 选择元素
@@ -236,12 +227,6 @@ export default {
         dispatch,
         getters
     }, curItemId) {
-        // return dispatch('cancelSelect').then(() => {
-        //     commit(types.DEL_ITEM, {
-        //         curItemId: curItemId,
-        //         curPageId: getters.currentPage
-        //     });
-        // })
         await dispatch('cancelSelect');
         commit(types.DEL_ITEM, {
             curItemId: curItemId,
