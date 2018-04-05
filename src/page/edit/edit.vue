@@ -29,6 +29,13 @@
                                 </div>
                             </el-tooltip>
                         </li>
+                        <li @click="runCurPhoneAni(true)">
+                            <el-tooltip class="item" content="播放" placement="right">
+                                <div>
+                                    <i class="icon iconfont icon-bofang"></i>
+                                </div>
+                            </el-tooltip>
+                        </li>
                         <li @click="setZIndex('++')">
                             <el-tooltip class="item" content="置顶" placement="right">
                                 <div>
@@ -74,6 +81,7 @@
     import $ from 'jquery'
     import vHeader from './header'
     import vPage from './page'
+    import * as utils from '@/utils'
     export default {
         components: {
             'v-header': vHeader,
@@ -108,6 +116,7 @@
                 'copyPage',
                 'cancelSelect'
             ]),
+            runCurPhoneAni : utils.runCurPhoneAni,
             setZIndex(type) {
                 if (!this.curItem) return;
                 let minZIndex = 1;
@@ -210,7 +219,8 @@
             }
         },
         created() {
-            this.reset();
+            // this.reset();
+            this.selectPage(0);
         },
         mounted() {
             this.setPhone({

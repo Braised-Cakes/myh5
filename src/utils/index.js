@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import store from '@/store/index'
 /**
  * 小数点后保留几位
  * @param {*} num 数字
@@ -7,7 +8,19 @@ import $ from 'jquery'
 export const round = function (num, n = 2) {
     return Number(parseFloat(num).toFixed(n));
 }
+/**
+ * 执行当前页动画
+ */
+export const runCurPhoneAni = function (delay) {
+    store.getters.currentPhone.data.forEach((item) => {
+        if (delay) {
+            runAni(item.id, item.animation);
+        } else {
+            runAni(item.id, item.animation, null, 1);
+        }
 
+    });
+}
 /**
  * 执行动画
  * @param {*} id 元素id

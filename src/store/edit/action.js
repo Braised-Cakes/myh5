@@ -42,17 +42,15 @@ export default {
         dispatch,
         getters
     }, page) {
-        if (getters.currentPage == page) {
-            return;
-        }
+        // if (getters.currentPage == page) {
+        //     return;
+        // }
         await dispatch('cancelSelect');
         commit(types.SELECT_PAGE, page);
         //执行翻页动画
         Vue.nextTick()
             .then(function () {
-                getters.currentPhone.data.forEach((item) => {
-                    utils.runAni(item.id, item.animation, null, 1);
-                });
+                utils.runCurPhoneAni();
             });
     },
     /**
