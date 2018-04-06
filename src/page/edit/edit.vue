@@ -4,11 +4,13 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page></v-page>
+                <v-panel></v-panel>
                 <div class="workspace" @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
-                            <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
+                            <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap"
+                                v-for="(item, index) in currentPhone.data">
                                 <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div>
                                 <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                                     <div class="circle circle-nw"></div>
@@ -77,6 +79,7 @@
         mapGetters
     } from 'vuex'
     import Header from '@/components/header/header.vue'
+    import vPanel from './panel'
     import * as api from '@/api/index'
     import $ from 'jquery'
     import vHeader from './header'
@@ -85,7 +88,8 @@
     export default {
         components: {
             'v-header': vHeader,
-            'v-page': vPage
+            'v-page': vPage,
+            'v-panel': vPanel
         },
         filters: {
             filterItemWrap(res) {
@@ -116,7 +120,7 @@
                 'copyPage',
                 'cancelSelect'
             ]),
-            runCurPhoneAni : utils.runCurPhoneAni,
+            runCurPhoneAni: utils.runCurPhoneAni,
             setZIndex(type) {
                 if (!this.curItem) return;
                 let minZIndex = 1;
@@ -219,7 +223,7 @@
             }
         },
         created() {
-            // this.reset();
+            this.reset();
             this.selectPage(0);
         },
         mounted() {

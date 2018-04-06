@@ -21,6 +21,12 @@
                     </svg>
                     <span>背景</span>
                 </li>
+                <li>
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-logo"></use>
+                    </svg>
+                    <span>形状</span>
+                </li>
             </ul>
         </div>
         <div class="create-action">

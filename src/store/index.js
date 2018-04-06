@@ -11,14 +11,7 @@ const actions = {};
 const mutations = {
     ['RESET'](state) {
         for (let attr in state) {
-            state[attr] = {
-                phone: {
-                    main: {},
-                    data: [$.extend(true, {}, constant.BASE_BLANK)]
-                },
-                currentPage: 0,
-                curItemId: -1
-            }
+            state[attr] = $.extend(true, {}, constant.initState)
         }
     },
 }
