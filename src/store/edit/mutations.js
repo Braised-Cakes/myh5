@@ -105,7 +105,8 @@ export default {
     [types.UPDATE_ITEM](state, {
         item,
         key,
-        val
+        val,
+        fill
     }) {
         if (key == 'style') {
             if (typeof val == 'string') {
@@ -116,7 +117,11 @@ export default {
                 }
             }
         } else {
-            Vue.set(item, key, val);
+            // console.log($(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'))
+            Vue.set(item, key,  $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
+            // console.log($(item.content).find(`*[fill="${fill}"]`))
+            // console.log($(item.content).find('path').css('fill', val).parents('svg').prop('outerHTML'))
+            // Vue.set(item, key, $(item.content).find('path').css('fill', val).parents('svg').prop('outerHTML'));
         }
 
     },

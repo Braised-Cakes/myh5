@@ -7,8 +7,8 @@
         </ul>
         <el-scrollbar v-if="navIndex == 0" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
             <div style="padding:12px 20px;">
-                <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
-                </el-input>
+                <!-- <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
+                </el-input> -->
                 <div class="style-item">
                     <label>行高</label>
                     <el-input-number lazy size="mini" :step="0.1" @change="updateItem({key:'style', val:{'line-height':$event}})" :value="curItem.style['line-height'] || 1.5"
@@ -30,6 +30,13 @@
                         show-alpha></el-color-picker>
                     <ul class="color-list">
                         <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
+                    </ul>
+                </div>
+                <div class="style-item" v-for="item_p in svgColorList">
+                    <label>图形颜色</label>
+                    <el-color-picker :value="item_p.css || item_p.fill" show-alpha></el-color-picker>
+                    <ul class="color-list">
+                        <li @click="updateItem({key:'content', val:item, fill : item_p.fill})" :style="{'background-color':item}" v-for="item in colorList"></li>
                     </ul>
                 </div>
             </div>
@@ -123,7 +130,7 @@
     import $ from 'jquery'
     export default {
         components: {
-            'v-ani' : ani
+            'v-ani': ani
         },
         computed: {
             ...mapGetters(['curItem'])
@@ -131,12 +138,31 @@
         methods: {
             ...mapActions(['updateItem'])
         },
-        mounted() {},
+        mounted() {
+            // console.log(this.curItem.content);
+            var arr = [];
+            $(this.curItem.content).find('*').each((index, item) => {
+                if ($(item).attr('fill') && arr.every((item2) => {
+                        return item2.fill != $(item).attr('fill')
+                    })) {
+                    // console.log($(item).css('fill'))
+                    arr.push({
+                        fill: $(item).attr('fill'),
+                        css: $(item).css('fill')
+                    })
+                    // arr.push($(item).css('fill') || $(item).attr('fill'));
+                }
+                // console.log(item)
+            });
+            this.svgColorList = arr;
+            // console.log(arr)
+        },
         data() {
             return {
+                svgColorList: [],
                 activeName: '1',
                 nav: ['样式', '动画'],
-                navIndex: 1,
+                navIndex: 0,
                 options: [{
                     label: '12px',
                     value: 12
@@ -233,10 +259,5 @@
             }
         }
     }
-
-
-
-
-    
 
 </style>

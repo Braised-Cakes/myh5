@@ -140,7 +140,7 @@ export default {
         getters,
         dispatch
     }, payload) {
-        let itemTpl = tpl.txt();
+        let itemTpl = tpl.shape();
         itemTpl.style['z-index'] = getters.curPageItemLen + 1;
         itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
         commit(types.ADD_ITEM, {
@@ -159,13 +159,15 @@ export default {
     }, {
         item,
         key,
-        val
+        val,
+        fill
     }) {
         console.log(val)
         commit(types.UPDATE_ITEM, {
             item: item || getters.curItem,
             key: key,
-            val: val
+            val: val,
+            fill
         });
     },
 

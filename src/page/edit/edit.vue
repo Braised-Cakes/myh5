@@ -4,14 +4,15 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page></v-page>
-                <v-panel></v-panel>
+                <!-- <v-panel></v-panel> -->
                 <div class="workspace" @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
                             <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap"
                                 v-for="(item, index) in currentPhone.data">
-                                <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div>
+                                <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
+                                <div class="item-body" :style="item.style | filterItem" v-html="item.content"></div>
                                 <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                                     <div class="circle circle-nw"></div>
                                     <div class="circle circle-ne"></div>
