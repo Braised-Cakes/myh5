@@ -3,13 +3,13 @@
         <v-header></v-header>
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
-                <v-page></v-page>
+                <v-page :data="panel"></v-page>
                 <!-- <v-panel></v-panel> -->
                 <div class="workspace" @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>
                         <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
-                            <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemWrap"
+                            <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap"
                                 v-for="(item, index) in currentPhone.data">
                                 <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
                                 <div class="item-body" :style="item.style | filterItem" v-html="item.content"></div>
@@ -121,6 +121,23 @@
                 'copyPage',
                 'cancelSelect'
             ]),
+            select(index) {
+                this.selectItem(index);
+                if (this.curItem.type == 'shape') {
+                    var arr = [];
+                    $(this.curItem.content).find('*').each((index, item) => {
+                        if ($(item).attr('fill') && arr.every((item2) => {
+                                return item2.fill != $(item).attr('fill')
+                            })) {
+                            arr.push({
+                                fill: $(item).attr('fill'),
+                                css: $(item).css('fill')
+                            })
+                        }
+                    });
+                    this.panel.fillColorList = arr;
+                }
+            },
             runCurPhoneAni: utils.runCurPhoneAni,
             setZIndex(type) {
                 if (!this.curItem) return;
@@ -233,7 +250,11 @@
             });
         },
         data() {
-            return {}
+            return {
+                panel: {
+                    fillColorList: []
+                }
+            }
         }
     }
 

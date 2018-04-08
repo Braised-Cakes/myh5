@@ -36,7 +36,7 @@
                 </ul>
             </div>
         </div>
-        <edit-dom v-if="nav==1 && hasSelectedItems"></edit-dom>
+        <edit-dom :data="data" v-if="nav==1 && hasSelectedItems"></edit-dom>
         <page-dom v-if="nav==1 && !hasSelectedItems"></page-dom>
     </div>
 </template>
@@ -60,6 +60,11 @@
             'edit-dom': EditDom,
             'page-dom': PageDom,
             draggable,
+        },
+        props: {
+            data: {
+                type: Object
+            }
         },
         computed: {
             ...mapGetters(['phoneData', 'currentPage', 'hasSelectedItems']),

@@ -9,22 +9,22 @@
             <div style="padding:12px 20px;">
                 <!-- <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
                 </el-input> -->
-                <div class="style-item">
+                <div class="style-item" v-if="rules('line-height')">
                     <label>行高</label>
                     <el-input-number lazy size="mini" :step="0.1" @change="updateItem({key:'style', val:{'line-height':$event}})" :value="curItem.style['line-height'] || 1.5"
                         :min="0" :max="3"></el-input-number>
                 </div>
-                <div class="style-item">
+                <div class="style-item" v-if="rules('letter-spacing')">
                     <label>字距</label>
                     <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'letter-spacing':($event / 100).toFixed(2) + 'em'}})"
                         :value="Math.round(100 * parseFloat(curItem.style['letter-spacing'] || 0))" :min="0" :max="100"></el-input-number>
                 </div>
-                <div class="style-item">
+                <div class="style-item" v-if="rules('font-size')">
                     <label>字号</label>
                     <el-input-number size="mini" :step="2" @change="updateItem({key:'style', val:{'font-size':$event + 'px'}})" :value="parseInt(curItem.style['font-size']) || 12"
                         :min="12" :max="96"></el-input-number>
                 </div>
-                <div class="style-item">
+                <div class="style-item" v-if="rules('color')">
                     <label>文字颜色</label>
                     <el-color-picker @active-change="updateItem({key:'style', val:{'color':$event}})" :value="curItem.style['color'] || '#666'"
                         show-alpha></el-color-picker>
@@ -32,11 +32,13 @@
                         <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
                     </ul>
                 </div>
-                <div class="style-item" v-for="item_p in svgColorList">
-                    <label>图形颜色</label>
-                    <el-color-picker :value="item_p.css || item_p.fill" show-alpha></el-color-picker>
+                <div class="style-item" v-if="rules('fill')" v-for="(item1, index1) in data.fillColorList">
+                    <label>形状颜色{{index1 + 1}}</label>
+                    <el-color-picker @active-change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill"
+                        show-alpha></el-color-picker>
                     <ul class="color-list">
-                        <li @click="updateItem({key:'content', val:item, fill : item_p.fill})" :style="{'background-color':item}" v-for="item in colorList"></li>
+                        <li @click="updateItem({key:'content', val:item1, fill : item1.fill}); item1.css = item2" :style="{'background-color':item2}"
+                            v-for="item2 in colorList"></li>
                     </ul>
                 </div>
             </div>
@@ -128,6 +130,30 @@
     } from 'vuex'
     import ani from './ani'
     import $ from 'jquery'
+
+    let rules = {
+        'line-height': {
+            default: false,
+            but: ['txt']
+        },
+        'letter-spacing': {
+            default: false,
+            but: ['txt']
+        },
+        'font-size': {
+            default: false,
+            but: ['txt']
+        },
+        'color': {
+            default: false,
+            but: ['txt']
+        },
+        'fill': {
+            default: false,
+            but: ['shape']
+        },
+    }
+
     export default {
         components: {
             'v-ani': ani
@@ -136,26 +162,19 @@
             ...mapGetters(['curItem'])
         },
         methods: {
-            ...mapActions(['updateItem'])
-        },
-        mounted() {
-            // console.log(this.curItem.content);
-            var arr = [];
-            $(this.curItem.content).find('*').each((index, item) => {
-                if ($(item).attr('fill') && arr.every((item2) => {
-                        return item2.fill != $(item).attr('fill')
-                    })) {
-                    // console.log($(item).css('fill'))
-                    arr.push({
-                        fill: $(item).attr('fill'),
-                        css: $(item).css('fill')
-                    })
-                    // arr.push($(item).css('fill') || $(item).attr('fill'));
+            ...mapActions(['updateItem']),
+            rules(type) {
+                if (rules[type].but.indexOf(this.curItem.type) != -1) {
+                    return !rules[type].default
+                } else {
+                    return rules[type].default
                 }
-                // console.log(item)
-            });
-            this.svgColorList = arr;
-            // console.log(arr)
+            }
+        },
+        props: {
+            data: {
+                type: Object
+            }
         },
         data() {
             return {
