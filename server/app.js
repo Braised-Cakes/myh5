@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/store', express.static('/Users/BraisedCakes/Desktop/2018/myh5-store/svg'));
 app.use('/', index);
 app.use('/users', users);
 

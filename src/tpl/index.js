@@ -236,7 +236,7 @@ export default {
                 width: '200px',
                 // 'background-color':'blue',
                 height: '100px',
-                width:'auto',
+                // width:'auto',
                 // padding: '5px',
                 'border-style': 'solid'
             }

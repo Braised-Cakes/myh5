@@ -84,6 +84,8 @@
                     'animation-duration': 1,
                     'animation-delay': 0,
                 })
+                console.log('刘少鹏')
+                console.log(ani)
                 this.updateItem({
                     key: 'animation',
                     val: ani

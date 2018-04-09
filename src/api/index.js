@@ -7,3 +7,8 @@ export const delList = data => fetch('/aj/list/del', data);
 
 export const getEdit = data => fetch('/aj/edit/get', data);
 export const saveEdit = data => fetch('/aj/edit/save', data, 'POST');
+
+
+
+export const getShape = data => fetch('/aj/shape/get', data);
+export const getShapeContent = data => fetch('/aj/shape/getContent', data);

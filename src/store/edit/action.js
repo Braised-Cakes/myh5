@@ -140,7 +140,9 @@ export default {
         getters,
         dispatch
     }, payload) {
-        let itemTpl = tpl.shape();
+        let itemTpl = tpl['shape']();
+        // let itemTpl = tpl[payload]();
+        itemTpl.content = payload
         itemTpl.style['z-index'] = getters.curPageItemLen + 1;
         itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
         commit(types.ADD_ITEM, {
@@ -167,7 +169,7 @@ export default {
             item: item || getters.curItem,
             key: key,
             val: val,
-            fill
+            fill : fill
         });
     },
 

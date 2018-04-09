@@ -9,6 +9,10 @@ module.exports = {
 		"data": { type: Object, required: false},
 		"username": { type: String, required: false }
 	},
+	"shape": {
+		"path": { type: String, required: true },
+		"id": { type: Number, required: true }
+	},
 	'user': {
 		'password': { type: String, required: true },
 		'username': { type: String, required: true },

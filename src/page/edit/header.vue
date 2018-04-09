@@ -9,19 +9,13 @@
         </div>
         <div class="creat_con">
             <ul>
-                <li @click="addItem">
+                <li @click="addItem(types.TXT)">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-logo"></use>
                     </svg>
                     <span>文本</span>
                 </li>
-                <li>
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-logo"></use>
-                    </svg>
-                    <span>背景</span>
-                </li>
-                <li>
+                <li @click="addItem(types.SHAPE)">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-logo"></use>
                     </svg>
@@ -56,6 +50,7 @@
     import Header from '@/components/header/header.vue'
     import * as api from '@/api/index'
     import $ from 'jquery'
+    import * as types from '@/tpl/types.js'
     export default {
         components: {},
         computed: {
@@ -86,7 +81,7 @@
         },
         data() {
             return {
-
+                types: types
             }
         }
     }

@@ -1,7 +1,6 @@
 <style lang="scss" scoped>
     .wrapper {
         width: 970px;
-        // height: 584px;
         background: #fff;
         border-radius: 6px;
         z-index: 9999999;
@@ -93,8 +92,7 @@
                 }
                 .footer {
                     position: absolute;
-                    bottom: 20px;
-                    // left: 0;
+                    bottom: 20px; // left: 0;
                 }
             }
         }
@@ -103,7 +101,7 @@
 </style>
 
 <template>
-    <div class="wrapper">
+    <div class="wrapper" v-if="btn">
         <div class="header">
             <h4>形状库
                 <span>矢量素材，可更换颜色，放大不失真</span>
@@ -119,21 +117,7 @@
             </div>
             <div class="right">
                 <ul>
-                    <li style="background-image:url(http://res1.eqh5.com/6947c350-bc11-42d1-855f-06bea9003bc1.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/56a8e094-c132-406a-8e9c-305b48f9bbec.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/329e4128-161f-4a92-9c60-d398f6883cad.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
-                    <li style="background-image:url(http://res1.eqh5.com/3d949db0-6f22-43e9-92d2-461ade74fce0.svg);"></li>
+                    <li @click="cc(item.id)" :style="{'background-image':`url(/store/${item.path})`}" v-for="item in list"></li>
                 </ul>
                 <div class="footer">
                     <el-pagination background layout="prev, pager, next" :total="1000">
@@ -145,11 +129,43 @@
     </div>
 </template>
 <script>
+    import $ from 'jquery'
+    import * as api from '@/api'
+    import {
+        mapActions,
+        mapGetters
+    } from 'vuex'
     export default {
         data() {
             return {
-                index: 0
+                btn: true,
+                index: 0,
+                list: []
             }
+        },
+        methods: {
+            ...mapActions(['addItem']),
+            cc(id) {
+                api.getShapeContent({
+                    id: id
+                }).then(({
+                    result
+                }) => {
+                    
+                    this.btn = false;
+                    this.addItem(result.match(/<svg[\s\S]+/)[0]);
+                })
+            }
+        },
+        mounted() {
+            api.getShape({
+                limit: 12,
+                page: 1
+            }).then(res => {
+                console.log(res);
+                this.list = res.result.data;
+
+            })
         }
     }
 

@@ -4,7 +4,7 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page :data="panel"></v-page>
-                <!-- <v-panel></v-panel> -->
+                <v-panel></v-panel>
                 <div class="workspace" @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>
