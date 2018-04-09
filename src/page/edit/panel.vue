@@ -120,8 +120,8 @@
                     <li @click="cc(item.id)" :style="{'background-image':`url(/store/${item.path})`}" v-for="item in list"></li>
                 </ul>
                 <div class="footer">
-                    <el-pagination background layout="prev, pager, next" :total="1000">
-                    </el-pagination>
+                    <el-pagination background @current-change="get" :page-size="pageSize" layout="prev, pager, next" :total="total"></el-pagination>
+                    <!-- <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination> -->
                 </div>
 
             </div>
@@ -131,6 +131,7 @@
 <script>
     import $ from 'jquery'
     import * as api from '@/api'
+    import * as types from '@/tpl/types'
     import {
         mapActions,
         mapGetters
@@ -140,7 +141,10 @@
             return {
                 btn: true,
                 index: 0,
-                list: []
+                list: [],
+                page: 1,
+                pageSize: 18,
+                total: 0
             }
         },
         methods: {
@@ -151,21 +155,26 @@
                 }).then(({
                     result
                 }) => {
-                    
                     this.btn = false;
-                    this.addItem(result.match(/<svg[\s\S]+/)[0]);
+                    this.addItem({
+                        type: types.SHAPE,
+                        content: result.match(/<svg[\s\S]+/)[0]
+                    });
+                })
+            },
+            get(page) {
+                api.getShape({
+                    limit: 18,
+                    page: page || 1
+                }).then(res => {
+                    console.log(res);
+                    this.list = res.result.data;
+                    this.total = res.result.info.total;
                 })
             }
         },
         mounted() {
-            api.getShape({
-                limit: 12,
-                page: 1
-            }).then(res => {
-                console.log(res);
-                this.list = res.result.data;
-
-            })
+            this.get();
         }
     }
 

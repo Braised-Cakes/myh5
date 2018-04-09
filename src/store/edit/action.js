@@ -140,9 +140,57 @@ export default {
         getters,
         dispatch
     }, payload) {
-        let itemTpl = tpl['shape']();
-        // let itemTpl = tpl[payload]();
-        itemTpl.content = payload
+        let itemTpl;
+        if (typeof payload == 'string') {
+            itemTpl = tpl[payload]();
+        } else {
+            itemTpl = tpl[payload.type]();
+            let content = $(payload.content);
+            let width = Math.round(parseFloat(content.attr('width')));
+            let height = Math.round(parseFloat(content.attr('height')));
+            let oldWidth = width;
+            let oldHeight = height;
+
+            /**
+             * 如果都>100,则小的调整到100
+             * 如果<100, 最小的调整到100， 
+             */
+            if (width >= height) {
+                let radio = 100 / height;
+                width = radio * width;
+                height = 100;
+            } else {
+                let radio = 100 / width;
+                height = radio * width;
+                width = 100;
+            }
+            // if (width > 100 && height > 100) {
+            //     if (width >= height) {
+            //         let radio = 100 / height;
+            //         width = radio * width;
+            //         height = 100;
+            //     } else {
+            //         let radio = 100 / width;
+            //         width = 100;
+            //         height = radio * height;
+            //     }
+            //     // let min = Math.min(width, height);
+            //     // let radio = 100 / min;
+            //     // radio * Math.min(width, height)
+            // }else if(width < 100 )
+            width = Math.round(width);
+            height = Math.round(height);
+            console.log(oldWidth, oldHeight, width, height)
+            content.attr('width', width + 'px');
+            content.attr('height', height + 'px');
+            console.log(content.parents('svg').prop('outerHTML'))
+            payload.content && (itemTpl.content = content.prop('outerHTML'));
+            // let content = $(payload.content);
+            // let width = content.attr('width');
+            // let height = content.attr('height');
+            itemTpl.style['width'] = width + 'px';
+            itemTpl.style['height'] = height + 'px';
+        }
         itemTpl.style['z-index'] = getters.curPageItemLen + 1;
         itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
         commit(types.ADD_ITEM, {
@@ -169,7 +217,7 @@ export default {
             item: item || getters.curItem,
             key: key,
             val: val,
-            fill : fill
+            fill: fill
         });
     },
 
