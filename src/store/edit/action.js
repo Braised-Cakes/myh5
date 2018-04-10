@@ -283,4 +283,25 @@ export default {
             curPageId: getters.currentPage
         });
     },
+
+
+    /**
+     * 打开指定panel
+     */
+    openPanel({
+        commit,
+        dispatch,
+        getters
+    }, type) {
+        utils.openMask();
+        commit(types.OPEN_PANEL, type)
+    },
+    closePanel({
+        commit,
+        dispatch,
+        getters
+    }, type) {
+        utils.removeMask();
+        commit(types.CLOSE_PANEL, type)
+    },
 }

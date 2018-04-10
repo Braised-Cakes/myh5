@@ -1,5 +1,5 @@
 import $ from 'jquery'
-
+import * as types from '@/tpl/types'
 export const BASE_BLANK = {
     main: {
         background: '#ffffff'
@@ -15,7 +15,10 @@ export const initState = {
         data: [$.extend(true, {}, BASE_BLANK)]
     },
     currentPage: 0,
-    curItemId: -1
+    curItemId: -1,
+    panel: {
+        [types.SHAPE]: false
+    }
 }
 
 

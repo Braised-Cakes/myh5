@@ -117,9 +117,9 @@ export default {
                 }
             }
         } else {
-            if(fill){
-                Vue.set(item, key,  $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
-            }else{
+            if (fill) {
+                Vue.set(item, key, $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
+            } else {
                 Vue.set(item, key, val);
             }
         }
@@ -136,5 +136,11 @@ export default {
     },
     [types.ADD_CREATED_ID](state) {
         state.phone.main.createdDomId++;
+    },
+    [types.OPEN_PANEL](state, type) {
+        state.panel[type] = true;
+    },
+    [types.CLOSE_PANEL](state, type) {
+        state.panel[type] = false;
     }
 }

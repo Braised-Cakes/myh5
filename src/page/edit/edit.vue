@@ -260,12 +260,13 @@
 
 </script>
 <style lang="scss" scoped>
+    @import '~@/css/variables.scss';
     .help {
         width: 40px;
         box-shadow: 0 0 16px 0 rgba(0, 0, 0, .16);
         background: #fff;
         position: absolute;
-        z-index: 99999;
+        z-index: $helpZIndex;
         left: 770px;
         top: 200px;
         ul {
@@ -293,7 +294,7 @@
         bottom: 0;
         left: 0;
         right: 260px;
-        z-index: 1000;
+        z-index: $workspaceZIndex;
         .container {
             width: 328px;
             height: 560px;

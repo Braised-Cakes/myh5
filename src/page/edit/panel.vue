@@ -1,9 +1,10 @@
 <style lang="scss" scoped>
+    @import '~@/css/variables.scss';
     .wrapper {
         width: 970px;
         background: #fff;
         border-radius: 6px;
-        z-index: 9999999;
+        z-index: $panelZIndex;
         position: absolute;
         left: 100px;
         top: 30px;
@@ -36,6 +37,7 @@
                 font-size: 21px;
                 font-weight: bold;
                 text-align: center;
+                cursor: pointer;
             }
         }
         .main {
@@ -85,6 +87,7 @@
                         background-repeat: no-repeat;
                         background-position: center center;
                         background-size: contain;
+                        cursor: pointer;
                         &:nth-child(6n) {
                             margin-right: 0;
                         }
@@ -101,29 +104,26 @@
 </style>
 
 <template>
-    <div class="wrapper" v-if="btn">
+    <div class="wrapper" v-if="panel[types.SHAPE]">
         <div class="header">
             <h4>形状库
                 <span>矢量素材，可更换颜色，放大不失真</span>
             </h4>
-            <span class="close">x</span>
+            <span @click="closePanel(types.SHAPE)" class="close">x</span>
         </div>
         <div class="main">
             <div class="left">
                 <ul>
-                    <li @click="index=0" :class="{'active':index==0}">形状库</li>
-                    <li @click="index=1" :class="{'active':index==1}">最近使用</li>
+                    <li class="active">形状库</li>
                 </ul>
             </div>
             <div class="right">
                 <ul>
-                    <li @click="cc(item.id)" :style="{'background-image':`url(/store/${item.path})`}" v-for="item in list"></li>
+                    <li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" v-for="item in list"></li>
                 </ul>
                 <div class="footer">
-                    <el-pagination background @current-change="get" :page-size="pageSize" layout="prev, pager, next" :total="total"></el-pagination>
-                    <!-- <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination> -->
+                    <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
                 </div>
-
             </div>
         </div>
     </div>
@@ -133,29 +133,35 @@
     import * as api from '@/api'
     import * as types from '@/tpl/types'
     import {
+        mapState,
         mapActions,
         mapGetters
     } from 'vuex'
     export default {
         data() {
             return {
-                btn: true,
-                index: 0,
+                types: types,
                 list: [],
-                page: 1,
-                pageSize: 18,
-                total: 0
+                pageInfo: {
+                    pageSize: 18,
+                    total: 0
+                }
             }
         },
+        computed: {
+            ...mapState({
+                panel: state => state.edit.panel
+            })
+        },
         methods: {
-            ...mapActions(['addItem']),
-            cc(id) {
+            ...mapActions(['addItem', 'openPanel', 'closePanel']),
+            choiceShape(id) {
                 api.getShapeContent({
                     id: id
                 }).then(({
                     result
                 }) => {
-                    this.btn = false;
+                    this.closePanel(types.SHAPE)
                     this.addItem({
                         type: types.SHAPE,
                         content: result.match(/<svg[\s\S]+/)[0]
@@ -164,12 +170,11 @@
             },
             get(page) {
                 api.getShape({
-                    limit: 18,
+                    limit: this.pageInfo.pageSize,
                     page: page || 1
                 }).then(res => {
-                    console.log(res);
                     this.list = res.result.data;
-                    this.total = res.result.info.total;
+                    this.pageInfo.total = res.result.info.total;
                 })
             }
         },

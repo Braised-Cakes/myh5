@@ -60,3 +60,13 @@ export const runAni = function (id, ani, aniIndex, time) {
         }, 30);
     }
 };
+
+
+export const openMask = function () {
+    if (!$('.mask').length) {
+        $('body').append('<div class="my-mask"></div>');
+    }
+}
+export const removeMask = function () {
+    $('.my-mask').remove();
+}

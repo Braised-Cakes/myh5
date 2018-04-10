@@ -23,3 +23,8 @@ export const CHANGE_DATA = 'CHANGE_DATA';
 export const SELECT_ITEM = 'SELECT_ITEM';
 export const DEL_ITEM = 'DEL_ITEM';
 export const ADD_CREATED_ID = 'ADD_CREATED_ID';
+/**
+ * 打开or关闭面板
+ */
+export const OPEN_PANEL = 'OPEN_PANEL';
+export const CLOSE_PANEL = 'CLOSE_PANEL';

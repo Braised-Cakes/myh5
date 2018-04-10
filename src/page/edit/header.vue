@@ -15,7 +15,7 @@
                     </svg>
                     <span>文本</span>
                 </li>
-                <li @click="addItem(types.SHAPE)">
+                <li @click="openPanel(types.SHAPE)">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-logo"></use>
                     </svg>
@@ -57,7 +57,7 @@
             ...mapGetters(['phoneData'])
         },
         methods: {
-            ...mapActions(['addItem']),
+            ...mapActions(['addItem', 'openPanel']),
             save() {
                 api.saveEdit({
                     id: this.$route.params.id,
@@ -98,7 +98,7 @@
         left: 0;
         right: 0;
         top: 0;
-        z-index: 1000;
+        z-index: $headerZIndex;
         box-shadow: 0 0 16px rgba(0, 0, 0, .16);
         align-items: center;
         .creat-logo {

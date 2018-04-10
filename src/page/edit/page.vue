@@ -146,7 +146,7 @@
         right: 0;
         bottom: 0;
         width: 260px;
-        z-index: 999;
+        z-index: $pageZIndex;
         background-color: #fff;
         box-shadow: 0 0 0px rgba(0, 0, 0, .16);
         .page-component__nav {
