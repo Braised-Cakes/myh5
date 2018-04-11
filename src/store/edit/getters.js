@@ -23,15 +23,15 @@ export default {
      * 当前页数据
      * @return {Object}
      */
-    currentPhone(state, getters, rootState) {
-        return state.phone.data[getters.currentPage];
+    currentPhone(state) {
+        return state.phone.data[state.currentPage];
     },
     /**
      * 当前页数据
      * @return {Object}
      */
-    curPageItemLen(state, getters, rootState) {
-        return state.phone.data[getters.currentPage].data.length;
+    curPageItemLen(state) {
+        return state.phone.data[state.currentPage].data.length;
     },
     /**
      * 当前元素

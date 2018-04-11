@@ -1,6 +1,5 @@
 import $ from 'jquery'
 import store from '@/store/index.js'
-
 const keyCode = {
     up: 38,
     down: 40,

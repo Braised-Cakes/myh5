@@ -1,7 +1,7 @@
 <template>
     <div v-if="curItem.style">
         <ul @click="updateItem" class="nav">
-            <li @click="navIndex = index" :class="{'active':index == navIndex}" v-for="(item, index) in nav">
+            <li @click="navIndex = index" :class="{'active':index == navIndex}" :key="item" v-for="(item, index) in nav">
                 {{item}}
             </li>
         </ul>
@@ -29,16 +29,16 @@
                     <el-color-picker @active-change="updateItem({key:'style', val:{'color':$event}})" :value="curItem.style['color'] || '#666'"
                         show-alpha></el-color-picker>
                     <ul class="color-list">
-                        <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
+                        <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background-color':item}" :key="item" v-for="item in colorList"></li>
                     </ul>
                 </div>
-                <div class="style-item" v-if="rules('fill')" v-for="(item1, index1) in data.fillColorList">
+                <div class="style-item" v-if="rules('fill')" :key="item1" v-for="(item1, index1) in data.fillColorList">
                     <label>形状颜色{{index1 + 1}}</label>
                     <el-color-picker @active-change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill"
                         show-alpha></el-color-picker>
                     <ul class="color-list">
                         <li @click="updateItem({key:'content', val:item1, fill : item1.fill}); item1.css = item2" :style="{'background-color':item2}"
-                            v-for="item2 in colorList"></li>
+                          :key="item2"  v-for="item2 in colorList"></li>
                     </ul>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                             <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'rgba(0,0,0,0)'"
                                 show-alpha></el-color-picker>
                             <ul class="color-list">
-                                <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
+                                <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background-color':item}" :key="item" v-for="item in colorList"></li>
                             </ul>
                         </div>
                         <div class="style-item">
@@ -94,7 +94,7 @@
                             <el-color-picker @active-change="updateItem({key:'style', val:{'border-color':$event}})" :value="curItem.style['border-color'] || '#000'"
                                 show-alpha></el-color-picker>
                             <ul class="color-list">
-                                <li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background-color':item}" v-for="item in colorList"></li>
+                                <li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background-color':item}" :key="item" v-for="item in colorList"></li>
                             </ul>
                         </div>
                         <div class="style-item">
@@ -124,13 +124,10 @@
 
 <script>
     import {
-        mapState,
         mapActions,
         mapGetters
     } from 'vuex'
     import ani from './ani'
-    import $ from 'jquery'
-
     let rules = {
         'line-height': {
             default: false,

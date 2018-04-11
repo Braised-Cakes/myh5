@@ -1,13 +1,14 @@
 <template>
     <div>
-        <v-header></v-header>
+        <!-- <v-header></v-header> -->
+        adsf
     </div>
 </template>
 <script>
-    import Header from '@/components/header/header.vue'
+    // import Header from '@/components/header/header.vue'
     export default {
         components: {
-            'vHeader': Header
+            // 'vHeader': Header
         },
         data() {
             return {

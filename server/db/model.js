@@ -1,7 +1,4 @@
 module.exports = {
-	"pic_admin" : {
-		types : { type: Array, required: false, default : [] }
-	},
 	"myh5": {
 		"type": { type: String, required: false },
 		"id": { type: Number, required: true },
@@ -11,7 +8,16 @@ module.exports = {
 	},
 	"shape": {
 		"path": { type: String, required: true },
-		"id": { type: Number, required: true }
+		"id": { type: Number, required: true },
+		"typeId": { type: Number, required: false },
+		"tagId": { type: Number, required: false }
+	},
+	"desc": {
+		"id": { type: Number, required: true },
+		"shape": { type: Object, required: false }
+	},
+	"pic_admin" : {
+		types : { type: Array, required: false, default : [] }
 	},
 	'user': {
 		'password': { type: String, required: true },

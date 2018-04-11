@@ -90,34 +90,124 @@ app.get('/aj/shape/getContent', async (req, res) => {
 /**
  * 列表页， 添加
  */
-app.get('/aj/shape/del', async (req, res) => {
-    const collection = dbHandel.getModel('shape')
-    await collection.remove({});
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: '成功'
-    })
-});
-app.get('/aj/shape/add', async (req, res) => {
-    const collection = dbHandel.getModel('shape')
-    const count = await collection.count()
-    let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
-    let index = 400000000
-    for (let i = 0; i < docs.length; i++) {
-        let file = JSON.parse(fs.readFileSync(docs[i], 'utf-8'));
-        for (let j = 0; j < file.length; j++) {
-            new collection({
-                path: path.basename(file[j].path),
-                id: index++
-            }).save((err, docs) => {
+// app.get('/aj/shape/del', async (req, res) => {
+//     const collection = dbHandel.getModel('shape')
+//     await collection.remove({});
+//     res.send({
+//         status: AJ_STATUS.success,
+//         message: AJ_MESSAGE.success,
+//         result: '成功'
+//     })
+// });
+// app.get('/aj/shape/add', async (req, res) => {
+//     const collection = dbHandel.getModel('shape')
+//     const count = await collection.count()
+//     let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
+//     let index = 400000000
+//     for (let i = 0; i < docs.length; i++) {
+//         let file = JSON.parse(fs.readFileSync(docs[i], 'utf-8'));
+//         for (let j = 0; j < file.length; j++) {
+//             new collection({
+//                 path: path.basename(file[j].path),
+//                 id: index++
+//             }).save((err, docs) => {
 
-            })
-        }
-    }
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: {}
-    })
-})
+//             })
+//         }
+//     }
+//     res.send({
+//         status: AJ_STATUS.success,
+//         message: AJ_MESSAGE.success,
+//         result: {}
+//     })
+// })
+
+
+
+/**
+ * typeId 400 +
+ * tagId  4000 + 
+ */
+// app.get('/aj/shape/nav/get', async (req, res) => {
+//     const collection = dbHandel.getModel('shape')
+//     let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
+//     // console.log(docs)
+//     let typeId;
+//     let tagId = 40000;
+//     for (let i = 0; i < docs.length; i++) {
+//         let file = JSON.parse(fs.readFileSync(docs[i], 'utf-8'));
+//         switch (path.basename(path.dirname(docs[i]))) {
+//             case '图形':
+//                 typeId = 400;
+//                 break;
+//             case '图标':
+//                 typeId = 401;
+//                 break;
+//             case '文字':
+//                 typeId = 402;
+//                 break;
+//         }
+//         tagId++;
+//         for (let j = 0; j < file.length; j++) {
+//             await collection.update({
+//                 path: file[j].path
+//             }, {
+//                 typeId: typeId,
+//                 tagId: tagId
+//             })
+//         }
+//     }
+//     let data = await collection.find();
+//     console.log(data)
+
+
+//     res.send({
+//         status: AJ_STATUS.success,
+//         message: AJ_MESSAGE.success,
+//         result: 111
+//     })
+// })
+
+
+
+// app.get('/aj/shape/nav/set', async (req, res) => {
+//     const collection = dbHandel.getModel('desc')
+//     let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*')
+//     let docs2 = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
+//     const {
+//         shape = {}
+//     } = await collection.findOne({
+//         id : 1
+//     })
+//     shape.typeId = shape.typeId || [];
+//     let typeId;
+//     if (shape.typeId.length > 0) {
+//         typeId = shape.typeId[shape.typeId.length - 1].id + 1
+//     } else {
+//         typeId = 400
+//     }
+//     for (let i = 0; i < docs.length; i++) {
+//         let btn = shape.typeId.some((item)=>{
+//             return item.name == path.basename(docs[i])
+//         })
+//         if(btn){
+//             continue;
+//         }
+//         shape.typeId.push({
+//             id: typeId,
+//             name: path.basename(docs[i])
+//         })
+//         typeId++;
+//     }
+//     await collection.update({
+//         id: 1
+//     }, {
+//         shape: shape
+//     })
+//     console.log(shape)
+//     res.send({
+//         status: AJ_STATUS.success,
+//         message: AJ_MESSAGE.success,
+//         result: 111
+//     })
+// })

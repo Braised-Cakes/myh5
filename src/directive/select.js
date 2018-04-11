@@ -3,7 +3,7 @@ import $ from 'jquery'
 import store from '../store/index.js'
 
 Vue.directive('my-select', {
-    inserted(el) {
+    inserted() {
         $('body').append($('<div id="j-choice-box"></div>'))
         $('#j-choice-box').css({
             position: 'absolute',
@@ -16,10 +16,10 @@ Vue.directive('my-select', {
             background: 'rgba(0,0,0,0.3)'
         })
     },
-    bind: function (el, binding) {
+    bind: function (el) {
         console.log(el);
         $(el).on('mousedown', (ev) => {
-            
+
             let arr = store.getters.currentPhone.data;
             let oldX = ev.clientX;
             let oldY = ev.clientY;
@@ -65,7 +65,7 @@ Vue.directive('my-select', {
                     width = parseFloat(width);
                     height = parseFloat(height);
                     if (phoneLeft + left > x + w || phoneLeft + left + width < x || phoneTop + top > y + h || phoneTop + top + height < y) {
-
+                        // console.log(';')
                     } else {
                         list.push(index);
                     }
@@ -73,7 +73,7 @@ Vue.directive('my-select', {
 
                 // store.dispatch('selectItem', list)
             })
-            $(document).on('mouseup', (ev) => {
+            $(document).on('mouseup', () => {
                 $(document).off('mousemove');
                 $(document).off('mouseup');
                 $('#j-choice-box').css({

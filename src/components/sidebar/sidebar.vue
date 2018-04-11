@@ -1,7 +1,7 @@
 <template>
     <nav>
-        <ul>
-            <li class="menu" v-for="item in nav">
+        <!-- <ul>
+            <li class="menu" :key="item" v-for="item in nav">
                 <span class="menu-title">{{item.name}}</span>
                 <ul>
                     <router-link class="menu-item" tag="li" v-for="$item in item.children" :key="item.id" :to="{'name': $item.id}">
@@ -12,7 +12,7 @@
                     </router-link>
                 </ul>
             </li>
-        </ul>
+        </ul> -->
     </nav>
     <!-- <ul><li v-for="i in new Array(200)">123</li></ul> -->
 </template>

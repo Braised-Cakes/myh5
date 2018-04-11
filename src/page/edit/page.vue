@@ -12,8 +12,8 @@
                 <ul class="page_ul">
                     <draggable v-model="myList" :move="move" @start="start" @end="end">
                         <transition-group>
-                            <li @mousedown.stop="selectPage(index)" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList"
-                                :key="index">
+                            <li @click.stop="selectPage({page:index})" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}"
+                                v-for="(item, index) in myList" :key="index">
                                 <div v-if="!(drag && index == oldIndex)">
                                     <span>
                                         <em>{{index + 1}}</em>
@@ -46,11 +46,8 @@
         mapActions,
         mapGetters
     } from 'vuex'
-    import Header from '@/components/header/header.vue'
     import EditDom from './edit-dom'
     import PageDom from './page-dom'
-    import * as api from '@/api/index'
-    import $ from 'jquery'
     import vHeader from './header'
     import draggable from 'vuedraggable'
 
@@ -91,7 +88,7 @@
                 this.drag = true;
                 this.oldIndex = this.futureIndex = originalEvent.oldIndex;
             },
-            end(originalEvent) {
+            end() {
                 this.drag = false;
             }
         },
@@ -101,11 +98,10 @@
                 oldIndex: -1,
                 futureIndex: -1,
                 drag: false,
-                nav: 1
+                nav: 0
             }
         }
     }
-
 </script>
 <style lang="scss" scoped>
     @import '~@/css/variables.scss';
@@ -226,5 +222,4 @@
             }
         }
     }
-
 </style>

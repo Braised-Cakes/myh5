@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import $ from 'jquery'
 import edit from './edit'
-import * as api from '@/api'
 import * as constant from '@/constant'
 Vue.use(Vuex);
 const state = {};
@@ -13,7 +12,7 @@ const mutations = {
         for (let attr in state) {
             state[attr] = $.extend(true, {}, constant.initState)
         }
-    },
+    }
 }
 export default new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',

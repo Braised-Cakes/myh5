@@ -1,7 +1,7 @@
 import $ from 'jquery'
 
 export default async function (url, data, type = 'GET') {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         $.ajax({
             url: url,
             dataType: 'json',

@@ -79,9 +79,7 @@
         mapActions,
         mapGetters
     } from 'vuex'
-    import Header from '@/components/header/header.vue'
     import vPanel from './panel'
-    import * as api from '@/api/index'
     import $ from 'jquery'
     import vHeader from './header'
     import vPage from './page'
@@ -106,7 +104,9 @@
             filterItem(res) {
                 var json = {};
                 for (let attr in res) {
-                    if (attr == 'position' || attr == 'left' || attr == 'top') {} else {
+                    if (attr == 'position' || attr == 'left' || attr == 'top') {
+                        //console.log(2)
+                    } else {
                         json[attr] = res[attr];
                     }
                 }
@@ -117,7 +117,7 @@
             ...mapGetters(['phoneData', 'currentPage', 'currentPhone', 'curItem', 'hasSelectedItems', 'curItemId'])
         },
         methods: {
-            ...mapActions(['selectItem', 'updateItem', 'reset', 'addPage', 'selectPage', 'delPage', 'setPhone',
+            ...mapActions(['selectItem', 'updateItem', 'reset', 'addPage', 'delPage', 'setPhone',
                 'copyPage',
                 'cancelSelect'
             ]),
@@ -155,9 +155,9 @@
                  * 
                  * 遍历所有元素 ， 如果z-index > now,  z-index - 1,  最后now = 
                  */
-                const index = this.currentPhone.data.findIndex((item) => {
-                    return item === this.curItem;
-                })
+                // const index = this.currentPhone.data.findIndex((item) => {
+                //     return item === this.curItem;
+                // })
                 const zIndex = this.curItem.style['z-index'];
                 if (zIndex == minZIndex && (type == '-' || type == '--') || zIndex == maxZIndex && (type == '+' || type ==
                         '++')) {
@@ -240,11 +240,10 @@
                 }
             }
         },
-        created() {
-            this.reset();
-            this.selectPage(0);
+        beforeCreate() {
+
         },
-        mounted() {
+        created() {
             this.setPhone({
                 id: this.$route.params.id
             });
@@ -257,7 +256,6 @@
             }
         }
     }
-
 </script>
 <style lang="scss" scoped>
     @import '~@/css/variables.scss';
@@ -358,5 +356,4 @@
         min-width: 1180px;
 
     }
-
 </style>

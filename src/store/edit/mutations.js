@@ -29,16 +29,9 @@ export default {
     [types.CHANGE_DATA](state, {
         data,
         page,
-        all = false,
-        type
+        all = false
     }) {
         data = $.extend(true, $.type(data) == 'array' ? [] : {}, data);
-        // if(type){
-        //     state.phone[type] = data;
-        // }else if(page >= 0){
-        //     state.phone.data[page] = data;
-        // }
-
         if (page >= 0) {
             Vue.set(state.phone.data, page, data)
             // state.phone.data[page] = data;
@@ -56,6 +49,7 @@ export default {
      */
     [types.SELECT_PAGE](state, page) {
         state.currentPage = page;
+        
     },
     /**
      * 
@@ -89,7 +83,6 @@ export default {
 
     [types.UPDATE_PHONE](state, {
         item,
-        key,
         val
     }) {
         Vue.set(item, 'main', val)

@@ -11,11 +11,9 @@
 
 <script>
     import {
-        mapState,
         mapActions,
         mapGetters
     } from 'vuex'
-    import $ from 'jquery'
     export default {
         components: {},
         computed: {

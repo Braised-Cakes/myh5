@@ -47,9 +47,7 @@
         mapActions,
         mapGetters
     } from 'vuex'
-    import Header from '@/components/header/header.vue'
     import * as api from '@/api/index'
-    import $ from 'jquery'
     import * as types from '@/tpl/types.js'
     export default {
         components: {},
@@ -66,7 +64,7 @@
                     console.log(res);
                     this.$alert('保存成功', {
                         closeOnClickModal: true,
-                        callback: action => {
+                        callback: () => {
                             // this.$message({
                             //     type: 'info',
                             //     message: `action: ${ action }`

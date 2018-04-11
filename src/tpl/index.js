@@ -1,6 +1,4 @@
-import $ from 'jquery'
 import * as types from './types.js'
-import store from '@/store'
 export default {
     /*
     	文本

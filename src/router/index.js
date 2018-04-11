@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store/index.js'
 Vue.use(Router);
 
 let routes = new Router({
@@ -7,19 +8,25 @@ let routes = new Router({
     routes: [{
         path: '/home',
         name: 'home',
-        component: r => require.ensure([], () => r(require('@/page/home/home.vue')), 'home')
+        component: () =>
+            import ('@/page/home/home.vue')
     }, {
         path: '/list',
         name: 'list',
-        component: r => require.ensure([], () => r(require('@/page/list/list.vue')), 'list'),
+        component: () =>
+            import ('@/page/list/list.vue')
     }, {
         path: '/edit/:id',
         name: 'edit',
-        component: r => require.ensure([], () => r(require('@/page/edit/edit.vue')), 'edit'),
+        component: () =>
+            import ('@/page/edit/edit.vue')
     }]
 });
 
 routes.beforeEach((to, from, next) => {
+    if (to.name == 'edit') {
+        store.dispatch('reset');
+    }
     if (!to.name) {
         routes.push('/list')
         next();
@@ -28,4 +35,4 @@ routes.beforeEach((to, from, next) => {
     }
 })
 
-export default routes;
+export default routes

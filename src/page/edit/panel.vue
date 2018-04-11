@@ -69,38 +69,57 @@
                 }
             }
             .right {
-                padding: 20px;
-                height: 480px;
+                // padding: 20px;
+                // height: 480px;
                 flex: 1;
                 position: relative;
-                ul {
-                    height: 380px;
-                    margin-bottom: 20px;
-                    display: flex;
-                    flex-wrap: wrap;
-                    li {
-                        width: 115px;
-                        height: 115px;
-                        margin-right: 15px;
-                        margin-bottom: 15px;
-                        background-color: #e6ebed;
-                        background-repeat: no-repeat;
-                        background-position: center center;
-                        background-size: contain;
-                        cursor: pointer;
-                        &:nth-child(6n) {
-                            margin-right: 0;
+                .nav {
+                    border-bottom: 1px solid #ccc;
+                    margin: 0 20px;
+                    .nav-list {
+                        display: flex;
+                        li {
+                            line-height: 49px;
+                            margin-right: 30px;
+                            &.active {
+                                color: #1593ff;
+                            }
                         }
                     }
                 }
-                .footer {
-                    position: absolute;
-                    bottom: 20px; // left: 0;
+
+                .right-content {
+                    position: relative;
+                    height: 480px;
+                    .img-list {
+                        margin-bottom: 20px;
+                        display: flex;
+                        padding: 20px;
+                        flex-wrap: wrap;
+                        li {
+                            width: 115px;
+                            height: 115px;
+                            margin-right: 15px;
+                            margin-bottom: 15px;
+                            background-color: #e6ebed;
+                            background-repeat: no-repeat;
+                            background-position: center center;
+                            background-size: contain;
+                            cursor: pointer;
+                            &:nth-child(6n) {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                    .footer {
+                        position: absolute;
+                        bottom: 20px; // left: 0;
+                    }
                 }
+
             }
         }
     }
-
 </style>
 
 <template>
@@ -118,26 +137,34 @@
                 </ul>
             </div>
             <div class="right">
-                <ul>
-                    <li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" v-for="item in list"></li>
-                </ul>
-                <div class="footer">
-                    <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                <div class="nav">
+                    <ul class="nav-list">
+                        <li class="active">全部</li>
+                        <li>全部</li>
+                        <li>全部</li>
+                    </ul>
+                </div>
+                <div class="right-content">
+                    <ul class="img-list">
+                        <li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
+                    </ul>
+                    <div class="footer">
+                        <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-    import $ from 'jquery'
     import * as api from '@/api'
     import * as types from '@/tpl/types'
     import {
         mapState,
-        mapActions,
-        mapGetters
+        mapActions
     } from 'vuex'
     export default {
+        name: 'panel',
         data() {
             return {
                 types: types,
@@ -145,7 +172,21 @@
                 pageInfo: {
                     pageSize: 18,
                     total: 0
-                }
+                },
+                navOption: [{
+                    label: '全部',
+                    key: ''
+                }, {
+                    label: '图形',
+                    key: ''
+                }, {
+                    label: '文字',
+                    key: ''
+                }, {
+                    label: '图标',
+                    key: '',
+                    // children
+                }]
             }
         },
         computed: {
@@ -182,5 +223,4 @@
             this.get();
         }
     }
-
 </script>

@@ -4,7 +4,7 @@
         <div class="contain">
             <button @click="add">新增一页</button>
             <ul>
-                <li v-for="item in list">
+                <li :key="item.id" v-for="item in list">
                     <div class="image">
                         <div class="front"></div>
                         <div class="overlay">
@@ -37,17 +37,13 @@
 </template>
 
 <script>
-    import {
-        mapActions
-    } from 'vuex'
     import Header from '@/components/header/header.vue'
-    import Sidebar from '@/components/sidebar/sidebar.vue'
+    // import Sidebar from '@/components/sidebar/sidebar.vue'
     import * as api from '@/api/index'
-    import $ from 'jquery'
     export default {
         components: {
             'vHeader': Header,
-            'vSidebar': Sidebar
+            // 'vSidebar': Sidebar
         },
         computed: {},
         methods: {
