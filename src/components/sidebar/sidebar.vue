@@ -1,6 +1,6 @@
 <template>
-    <nav>
-        <!-- <ul>
+	<nav>
+		<!-- <ul>
             <li class="menu" :key="item" v-for="item in nav">
                 <span class="menu-title">{{item.name}}</span>
                 <ul>
@@ -13,51 +13,49 @@
                 </ul>
             </li>
         </ul> -->
-    </nav>
-    <!-- <ul><li v-for="i in new Array(200)">123</li></ul> -->
+	</nav>
+	<!-- <ul><li v-for="i in new Array(200)">123</li></ul> -->
 </template>
 
 <script>
-    export default {
-        props: {
-            nav: Array
-        },
-        data() {
-            return {}
-        }
-    }
-
+export default {
+  props: {
+    nav: Array
+  },
+  data() {
+    return {};
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-    .menu {
-        font-size: 16px;
-        border-bottom: dashed 1px #e6e7e4;
-        padding-top: 10px;
-        color: #666;
-        &:last-child {
-            border-bottom: none;
-        }
-        .menu-title {
-            line-height: 40px;
-            margin-left: 25px;
-        }
+.menu {
+  font-size: 16px;
+  border-bottom: dashed 1px #e6e7e4;
+  padding-top: 10px;
+  color: #666;
+  &:last-child {
+    border-bottom: none;
+  }
+  .menu-title {
+    line-height: 40px;
+    margin-left: 25px;
+  }
 
-        .menu-item {
-            line-height: 45px;
-            text-indent: 30px;
-            cursor: pointer;
-            &.active {
-                background: #d2e9bb;
-            }
-            .icon {
-                margin-right: 10px;
-            }
-        }
+  .menu-item {
+    line-height: 45px;
+    text-indent: 30px;
+    cursor: pointer;
+    &.active {
+      background: #d2e9bb;
     }
-
     .icon {
-        font-size: 20px;
+      margin-right: 10px;
     }
+  }
+}
 
+.icon {
+  font-size: 20px;
+}
 </style>

@@ -29,7 +29,7 @@ Vue.use(ElementUI);
 // });
 
 export default new Vue({
-    router: router,
-    store : store,
-    render: h => h(App)
+  router: router,
+  store: store,
+  render: h => h(App)
 }).$mount('#app')

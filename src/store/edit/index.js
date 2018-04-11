@@ -3,11 +3,11 @@ import getters from './getters'
 import mutations from './mutations'
 import * as constant from '@/constant'
 const state = {
-    ...constant.initState
+  ...constant.initState
 }
 export default {
-    state,
-    getters,
-    actions,
-    mutations
+  state,
+  getters,
+  actions,
+  mutations
 }

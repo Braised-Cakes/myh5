@@ -1,14 +1,14 @@
 const {
-    promisify
+  promisify
 } = require('util')
 var qiniu = require("qiniu")
 const {
-    ACCESS_KEY,
-    SECRET_KEY
+  ACCESS_KEY,
+  SECRET_KEY
 } = require('../../.key.js')
 var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 var options = {
-    scope: 'store',
+  scope: 'store',
 };
 var putPolicy = new qiniu.rs.PutPolicy(options);
 var uploadToken = putPolicy.uploadToken(mac);

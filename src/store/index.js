@@ -8,19 +8,19 @@ const state = {};
 const getters = {};
 const actions = {};
 const mutations = {
-    ['RESET'](state) {
-        for (let attr in state) {
-            state[attr] = $.extend(true, {}, constant.initState)
-        }
+  ['RESET'](state) {
+    for (let attr in state) {
+      state[attr] = $.extend(true, {}, constant.initState)
     }
+  }
 }
 export default new Vuex.Store({
-    strict: process.env.NODE_ENV !== 'production',
-    state,
-    getters,
-    actions,
-    mutations,
-    modules: {
-        edit
-    }
+  strict: process.env.NODE_ENV !== 'production',
+  state,
+  getters,
+  actions,
+  mutations,
+  modules: {
+    edit
+  }
 })

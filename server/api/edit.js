@@ -4,9 +4,9 @@ const fs = require('fs')
 let path = require('path')
 let glob = require('glob')
 const {
-    DEFAULT_PAGE,
-    AJ_STATUS,
-    AJ_MESSAGE
+  DEFAULT_PAGE,
+  AJ_STATUS,
+  AJ_MESSAGE
 } = require('../const/index')
 
 
@@ -14,73 +14,73 @@ const {
  * 列表页， 获取
  */
 app.get('/aj/edit/get', async (req, res) => {
-    const collection = dbHandel.getModel('myh5')
-    const data = await collection.findOne({
-        id: req.query.id
-    })
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: {
-            data: data
-        }
-    })
+  const collection = dbHandel.getModel('myh5')
+  const data = await collection.findOne({
+    id: req.query.id
+  })
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {
+      data: data
+    }
+  })
 })
 
 /**
  * 列表页， 保存
  */
 app.post('/aj/edit/save', async (req, res) => {
-    const collection = dbHandel.getModel('myh5')
-    await collection.update({
-        id: req.body.id
-    }, {
-        data: req.body.data
-    })
+  const collection = dbHandel.getModel('myh5')
+  await collection.update({
+    id: req.body.id
+  }, {
+    data: req.body.data
+  })
 
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: {}
-    })
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {}
+  })
 })
 
 /**
  * 列表页， 保存
  */
 app.get('/aj/shape/get', async (req, res) => {
-    const collection = dbHandel.getModel('shape')
-    const page = Number(req.query.page) || DEFAULT_PAGE.page
-    const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
-    const total = await collection.count()
-    const data = await collection.find({}, ['id', 'path'])
-        .skip((page - 1) * limit)
-        .limit(limit)
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: {
-            info: {
-                page: Number(req.query.page || DEFAULT_PAGE.page),
-                total: total,
-                limit: Number(req.query.limit || DEFAULT_PAGE.limit),
-            },
-            data: data
-        }
-    })
+  const collection = dbHandel.getModel('shape')
+  const page = Number(req.query.page) || DEFAULT_PAGE.page
+  const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
+  const total = await collection.count()
+  const data = await collection.find({}, ['id', 'path'])
+    .skip((page - 1) * limit)
+    .limit(limit)
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {
+      info: {
+        page: Number(req.query.page || DEFAULT_PAGE.page),
+        total: total,
+        limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+      },
+      data: data
+    }
+  })
 })
 
 app.get('/aj/shape/getContent', async (req, res) => {
-    const collection = dbHandel.getModel('shape')
-    const data = await collection.findOne({
-        id: req.query.id
-    })
-    let docs = fs.readFileSync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg/${data.path}`, 'utf-8');
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: docs
-    })
+  const collection = dbHandel.getModel('shape')
+  const data = await collection.findOne({
+    id: req.query.id
+  })
+  let docs = fs.readFileSync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg/${data.path}`, 'utf-8');
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: docs
+  })
 })
 
 
