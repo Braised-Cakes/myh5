@@ -262,5 +262,16 @@ export default {
   }, type) {
     utils.removeMask();
     commit(types.CLOSE_PANEL, type)
+  },
+  updateMain({
+    commit
+  }, {
+    key,
+    val
+  }) {
+    commit(types.UPDATE_MAIN, {
+      key: key,
+      val: val
+    })
   }
 }

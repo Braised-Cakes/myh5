@@ -13,6 +13,7 @@ export const SET_PHONE = 'SET_PHONE';
 export const ADD_ITEM = 'ADD_ITEM';
 
 export const UPDATE_PHONE = 'UPDATE_PHONE';
+export const UPDATE_MAIN = 'UPDATE_MAIN';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const RESET = 'RESET';
 export const CHANGE_DATA = 'CHANGE_DATA';

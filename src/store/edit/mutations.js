@@ -73,6 +73,9 @@ export default {
   }) {
     phoneData.data.splice(page, 1);
   },
+  /**
+   * 对phone赋值(页面初始化)
+   */
   [types.SET_PHONE](state, payload) {
     if (!$.isEmptyObject(payload)) {
       state.phone = payload;
@@ -80,13 +83,18 @@ export default {
       state.phone = $.extend(true, {}, constant.initState.phone);
     }
   },
-
+  /**
+   * 更新某个元素的main字段
+   */
   [types.UPDATE_PHONE](state, {
     item,
     val
   }) {
     Vue.set(item, 'main', val)
   },
+  /**
+   * 添加元素
+   */
   [types.ADD_ITEM](state, {
     currentPhone,
     item
@@ -95,6 +103,9 @@ export default {
     currentPhone.data.push(item);
     Vue.set(currentPhone, 'data', currentPhone.data);
   },
+  /**
+   * 更新元素属性
+   */
   [types.UPDATE_ITEM](state, {
     item,
     key,
@@ -118,9 +129,15 @@ export default {
     }
 
   },
+  /**
+   * 选择元素
+   */
   [types.SELECT_ITEM](state, index) {
     state.curItemId = index;
   },
+  /**
+   * 删除元素
+   */
   [types.DEL_ITEM](state, {
     curItemId,
     curPageId
@@ -130,10 +147,25 @@ export default {
   [types.ADD_CREATED_ID](state) {
     state.phone.main.createdDomId++;
   },
+  /**
+   * 打开panel
+   */
   [types.OPEN_PANEL](state, type) {
     state.panel[type] = true;
   },
+  /**
+   * 关闭panel
+   */
   [types.CLOSE_PANEL](state, type) {
     state.panel[type] = false;
+  },
+  /**
+   * 更新phone的main字段
+   */
+  [types.UPDATE_MAIN](state, {
+    key,
+    val
+  }) {
+    Vue.set(state.phone.main, key, val);
   }
 }

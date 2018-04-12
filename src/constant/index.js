@@ -10,14 +10,17 @@ export const BASE_BLANK = {
 export const initState = {
   phone: {
     main: {
-      createdDomId: 0
+      createdDomId: 0,
+      // music:{}
     },
+    // music:{},
     data: [$.extend(true, {}, BASE_BLANK)]
   },
   currentPage: 0,
   curItemId: -1,
   panel: {
-    [types.SHAPE]: false
+    [types.SHAPE]: false,
+    [types.MUSIC]: false, 
   }
 }
 

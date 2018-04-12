@@ -1,90 +1,94 @@
 <template>
-	<div style="height:100%;">
-		<v-header></v-header>
-		<el-scrollbar class="page-component__nav" style="height:100%;">
-			<div class="main">
-				<v-page :data="panel"></v-page>
-				<v-panel></v-panel>
-				<div class="workspace" @mousedown.stop="cancelSelect">
-					<div class="container">
-						<div class="phone-bg"></div>
-						<div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
-							<div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
-								<!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
-								<div class="item-body" :style="item.style | filterItem" v-html="item.content"></div>
-								<div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
-									<div class="circle circle-nw"></div>
-									<div class="circle circle-ne"></div>
-									<div class="circle circle-sw"></div>
-									<div class="circle circle-se"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="help">
-					<ul>
-						<li @click="copyPage">
-							<el-tooltip class="item" content="复制当前页" placement="right">
-								<div>
-									<i class="icon iconfont icon-fuzhi"></i>
-								</div>
-							</el-tooltip>
-						</li>
-						<li @click="runCurPhoneAni(true)">
-							<el-tooltip class="item" content="播放" placement="right">
-								<div>
-									<i class="icon iconfont icon-bofang"></i>
-								</div>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('++')">
-							<el-tooltip class="item" content="置顶" placement="right">
-								<div>
-									<i class="icon iconfont icon-zhiding"></i>
-								</div>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('+')">
-							<el-tooltip class="item" content="上移" placement="right">
-								<div>
-									<i class="icon iconfont icon-shangyi"></i>
-								</div>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('-')">
-							<el-tooltip class="item" content="下移" placement="right">
-								<div>
-									<i class="icon iconfont icon-xiayi"></i>
-								</div>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('--')">
-							<el-tooltip class="item" content="置底" placement="right">
-								<div>
-									<i class="icon iconfont icon-12_zhidi"></i>
-								</div>
-							</el-tooltip>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</el-scrollbar>
-	</div>
+  <div style="height:100%;">
+    <v-header></v-header>
+    <el-scrollbar class="page-component__nav" style="height:100%;">
+      <div class="main">
+        <v-page :data="panel"></v-page>
+        <v-panel></v-panel>
+        <v-music v-if="modulePanel[types.MUSIC]"></v-music>
+        <div class="workspace" @mousedown.stop="cancelSelect">
+          <div class="container">
+            <div class="phone-bg"></div>
+            <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
+              <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
+                <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
+                <div class="item-body" :style="item.style | filterItem" v-html="item.content"></div>
+                <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+                  <div class="circle circle-nw"></div>
+                  <div class="circle circle-ne"></div>
+                  <div class="circle circle-sw"></div>
+                  <div class="circle circle-se"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="help">
+          <ul>
+            <li @click="copyPage">
+              <el-tooltip class="item" content="复制当前页" placement="right">
+                <div>
+                  <i class="icon iconfont icon-fuzhi"></i>
+                </div>
+              </el-tooltip>
+            </li>
+            <li @click="runCurPhoneAni(true)">
+              <el-tooltip class="item" content="播放" placement="right">
+                <div>
+                  <i class="icon iconfont icon-bofang"></i>
+                </div>
+              </el-tooltip>
+            </li>
+            <li @click="setZIndex('++')">
+              <el-tooltip class="item" content="置顶" placement="right">
+                <div>
+                  <i class="icon iconfont icon-zhiding"></i>
+                </div>
+              </el-tooltip>
+            </li>
+            <li @click="setZIndex('+')">
+              <el-tooltip class="item" content="上移" placement="right">
+                <div>
+                  <i class="icon iconfont icon-shangyi"></i>
+                </div>
+              </el-tooltip>
+            </li>
+            <li @click="setZIndex('-')">
+              <el-tooltip class="item" content="下移" placement="right">
+                <div>
+                  <i class="icon iconfont icon-xiayi"></i>
+                </div>
+              </el-tooltip>
+            </li>
+            <li @click="setZIndex('--')">
+              <el-tooltip class="item" content="置底" placement="right">
+                <div>
+                  <i class="icon iconfont icon-12_zhidi"></i>
+                </div>
+              </el-tooltip>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import vPanel from "./panel";
+import vMusic from "./music";
 import $ from "jquery";
 import vHeader from "./header";
 import vPage from "./page";
 import * as utils from "@/utils";
+import * as types from "@/tpl/types";
 export default {
   components: {
     "v-header": vHeader,
     "v-page": vPage,
-    "v-panel": vPanel
+    "v-panel": vPanel,
+    "v-music": vMusic
   },
   filters: {
     filterItemWrap(res) {
@@ -123,7 +127,10 @@ export default {
       "curItem",
       "hasSelectedItems",
       "curItemId"
-    ])
+    ]),
+    ...mapState({
+      modulePanel: state => state.edit.panel
+    })
   },
   methods: {
     ...mapActions([
@@ -134,7 +141,8 @@ export default {
       "delPage",
       "setPhone",
       "copyPage",
-      "cancelSelect"
+      "cancelSelect",
+      "openPanel"
     ]),
     select(index) {
       this.selectItem(index);
@@ -280,11 +288,15 @@ export default {
       id: this.$route.params.id
     });
   },
+  mounted() {
+    this.openPanel("music");
+  },
   data() {
     return {
       panel: {
         fillColorList: []
-      }
+      },
+      types: types
     };
   }
 };

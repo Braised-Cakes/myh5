@@ -11,7 +11,7 @@
       </li>
     </ul>
     <ul class="ani-list">
-      <li class="ani-item" :key="item" v-for="(item, index) in curItem.animation">
+      <li class="ani-item" :key="index" v-for="(item, index) in curItem.animation">
         <div class="title">
           <div class="left">
             <span>动画{{index + 1}}</span>

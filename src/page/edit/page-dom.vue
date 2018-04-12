@@ -3,7 +3,7 @@
 		<div class="style-item">
 			<label>纯色背景</label>
 			<!-- {{currentPhone}} -->
-			<el-color-picker @active-change="updatePhone({key:'style', val:{'background':$event}})" :value="currentPhone.main['background'] || '#fff'" show-alpha></el-color-picker>
+			<el-color-picker @active-change="updatePhone({val:{'background':$event}})" :value="currentPhone.main['background'] || '#fff'" show-alpha></el-color-picker>
 		</div>
 	</div>
 </template>

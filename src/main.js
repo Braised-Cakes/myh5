@@ -14,7 +14,7 @@ import '@/iconfont/iconfont'
 import '@/iconfont/iconfont.css'
 import '@/keycode/index'
 
-Vue.config.productionTip = false
+// Vue.config.productionTip = false
 /* eslint-disable no-new */
 import store from '@/store'
 Vue.use(ElementUI);
