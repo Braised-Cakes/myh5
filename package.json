@@ -26,6 +26,7 @@
     "@vue/cli-plugin-babel": "^3.0.0-beta.6",
     "@vue/cli-plugin-eslint": "^3.0.0-beta.6",
     "@vue/cli-service": "^3.0.0-beta.6",
+    "babel-plugin-component": "^1.1.0",
     "node-sass": "^4.8.3",
     "sass-loader": "^6.0.7",
     "vue-template-compiler": "^2.5.13"
@@ -33,6 +34,15 @@
   "babel": {
     "presets": [
       "@vue/app"
+    ],
+    "plugins": [
+      [
+        "component",
+        {
+          "libraryName": "element-ui",
+          "styleLibraryName": "theme-chalk"
+        }
+      ]
     ]
   },
   "eslintConfig": {
