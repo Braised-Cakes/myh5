@@ -1,39 +1,39 @@
 <template>
-	<div>
-		<v-header></v-header>
-		<div class="contain">
-			<button @click="add">新增一页</button>
-			<ul>
-				<li :key="item.id" v-for="item in list">
-					<div class="image">
-						<div class="front"></div>
-						<div class="overlay">
-							<router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
-								<div>
-									<svg class="icon" aria-hidden="true">
-										<use xlink:href="#icon-logo"></use>
-									</svg>
-								</div>
-								<span>编辑</span>
-							</router-link>
-							<a class="edit" @click="del(item)">
-								<div>
-									<svg class="icon" aria-hidden="true">
-										<use xlink:href="#icon-logo"></use>
-									</svg>
-								</div>
-								<span>删除</span>
-							</a>
-						</div>
-					</div>
-					<div class="project-info">
-						<p>场景{{item.id}}</p>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
-	</div>
+  <div>
+    <v-header></v-header>
+    <div class="contain">
+      <button @click="add">新1增一页</button>
+      <ul>
+        <li :key="item.id" v-for="item in list">
+          <div class="image">
+            <div class="front"></div>
+            <div class="overlay">
+              <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
+                <div>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-logo"></use>
+                  </svg>
+                </div>
+                <span>编辑</span>
+              </router-link>
+              <a class="edit" @click="del(item)">
+                <div>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-logo"></use>
+                  </svg>
+                </div>
+                <span>删除</span>
+              </a>
+            </div>
+          </div>
+          <div class="project-info">
+            <p>场景{{item.id}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
+  </div>
 </template>
 
 <script>

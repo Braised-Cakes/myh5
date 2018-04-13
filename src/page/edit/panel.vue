@@ -122,38 +122,39 @@
 </style>
 
 <template>
-	<div class="wrapper" v-if="panel[types.SHAPE]">
-		<div class="header">
-			<h4>形状库
-				<span>矢量素材，可更换颜色，放大不失真</span>
-			</h4>
-			<span @click="closePanel(types.SHAPE)" class="close">x</span>
-		</div>
-		<div class="main">
-			<div class="left">
-				<ul>
-					<li class="active">形状库</li>
-				</ul>
-			</div>
-			<div class="right">
-				<div class="nav">
-					<ul class="nav-list">
-						<li class="active">全部</li>
-						<li>全部</li>
-						<li>全部</li>
-					</ul>
-				</div>
-				<div class="right-content">
-					<ul class="img-list">
-						<li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
-					</ul>
-					<div class="footer">
-						<el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="wrapper" v-if="panel[types.SHAPE]">
+    <div class="header">
+      <h4>形状库
+        <span>矢量素材，可更换颜色，放大不失真</span>
+      </h4>
+      <span @click="closePanel(types.SHAPE)" class="close">x</span>
+    </div>
+    <div class="main">
+      <div class="left">
+        <ul>
+          <li @click="navIndex=0" :class="{'active':navIndex == 0}">形状库</li>
+          <li @click="navIndex=1" :class="{'active':navIndex == 1}">最近使用</li>
+        </ul>
+      </div>
+      <div class="right">
+        <div class="nav">
+          <ul class="nav-list">
+            <li class="active">全部</li>
+            <li>全部</li>
+            <li>全部</li>
+          </ul>
+        </div>
+        <div class="right-content">
+          <ul class="img-list">
+            <li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
+          </ul>
+          <div class="footer">
+            <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import * as api from "@/api";
@@ -164,6 +165,7 @@ export default {
   data() {
     return {
       types: types,
+      navIndex: 0,
       list: [],
       pageInfo: {
         pageSize: 18,

@@ -46,7 +46,7 @@ app.post('/aj/edit/save', async (req, res) => {
 })
 
 /**
- * 列表页， 保存
+ * 获取形状的接口
  */
 app.get('/aj/shape/get', async (req, res) => {
   const collection = dbHandel.getModel('shape')
@@ -69,7 +69,9 @@ app.get('/aj/shape/get', async (req, res) => {
     }
   })
 })
-
+/**
+ * 获取某个svg的content? js是否可以根据svg url拿到content?
+ */
 app.get('/aj/shape/getContent', async (req, res) => {
   const collection = dbHandel.getModel('shape')
   const data = await collection.findOne({
@@ -82,7 +84,6 @@ app.get('/aj/shape/getContent', async (req, res) => {
     result: docs
   })
 })
-
 
 
 

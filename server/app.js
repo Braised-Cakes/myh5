@@ -2,12 +2,16 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+let session = require('express-session')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+const {
+  AJ_STATUS,
+  AJ_MESSAGE
+} = require('./const/index')
 var index = require('./routes/index');
 var users = require('./routes/users');
-
+const types = require('./api/types')
 // let dbHandel = require('../server/db/handel.js')
 
 
@@ -25,6 +29,14 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'who am i ?',
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  },
+  saveUninitialized: true,
+  resave: true
+}))
 // app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/store', express.static('/Users/BraisedCakes/Desktop/2018/myh5-store/svg'));
@@ -46,6 +58,19 @@ app.use('/users', users);
 // 	res.end(JSON.stringify(req.body, null, 2))
 //   })
 // error handler
+app.all('/*', (req, res, next) => {
+  if (req.session.username || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
+    next()
+  } else {
+    res.send({
+      status: AJ_STATUS.notlogin,
+      data: {},
+      message: AJ_MESSAGE.error
+    })
+    // res.redirect('/#/login')
+  }
+})
+
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

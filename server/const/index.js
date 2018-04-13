@@ -5,10 +5,12 @@ module.exports.DEFAULT_PAGE = {
 
 module.exports.AJ_MESSAGE = {
   success: 'success',
-  error: 'error'
+  error: 'error',
+
 }
 
 module.exports.AJ_STATUS = {
   success: 0,
-  error: 1
+  error: 1,
+  notlogin: 2
 }

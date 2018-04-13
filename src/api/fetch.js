@@ -1,7 +1,7 @@
 import $ from 'jquery'
-
+import routes from '@/router'
 export default async function (url, data, type = 'GET') {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     $.ajax({
       url: url,
       dataType: 'json',
@@ -9,7 +9,14 @@ export default async function (url, data, type = 'GET') {
       type: type,
       contentType: 'application/json; charset=UTF-8',
       success(rs) {
-        resolve(rs)
+        //为登录
+        if (rs.status == 2) {
+          routes.push('/login')
+          reject()
+        } else {
+          resolve(rs)
+        }
+
       }
     });
   })

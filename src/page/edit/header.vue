@@ -49,12 +49,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import * as api from "@/api/index";
 import * as types from "@/tpl/types.js";
 export default {
   components: {},
   computed: {
+    ...mapState(['userInfo']),
     ...mapGetters(["phoneData"])
   },
   methods: {

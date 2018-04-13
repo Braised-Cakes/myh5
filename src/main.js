@@ -15,6 +15,7 @@ import {
   Collapse,
   CollapseItem,
   InputNumber,
+  Input,
   Select,
   Option,
   MessageBox,
@@ -37,6 +38,7 @@ Vue.use(ColorPicker);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(InputNumber);
+Vue.use(Input);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Loading.directive);

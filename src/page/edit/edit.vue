@@ -288,9 +288,6 @@ export default {
       id: this.$route.params.id
     });
   },
-  mounted() {
-    this.openPanel("music");
-  },
   data() {
     return {
       panel: {

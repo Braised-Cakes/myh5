@@ -12,3 +12,8 @@ export const saveEdit = data => fetch('/aj/edit/save', data, 'POST');
 
 export const getShape = data => fetch('/aj/shape/get', data);
 export const getShapeContent = data => fetch('/aj/shape/getContent', data);
+
+
+export const userRegister = data => fetch('/aj/user/register', data, 'POST');
+export const userLogin = data => fetch('/aj/user/login', data, 'POST');
+export const getUserInfo = data => fetch('/aj/user/info', data);

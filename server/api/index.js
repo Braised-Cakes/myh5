@@ -8,3 +8,4 @@ const {
 
 require('./list')
 require('./edit')
+require('./login')
