@@ -25,14 +25,6 @@ export default {
       password: ""
     };
   },
-  created() {
-    console.log('login vue created')
-    // api.userIsLogin().then(({ result }) => {
-    //   if (result) {
-    //     this.$router.push({ name: "list" });
-    //   }
-    // });
-  },
   methods: {
     register() {
       api

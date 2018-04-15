@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/store/index.js'
-import * as api from '@/api'
+// import store from '@/store/index.js'
+// import * as api from '@/api'
 Vue.use(Router);
 
 let routes = new Router({
@@ -23,26 +23,7 @@ let routes = new Router({
       import ('@/page/login/login.vue')
   }]
 });
-routes.beforeEach(async (to, from, next) => {
-  const auth = store.state.auth;
-  if (!auth.request) {
-    const {
-      result = ''
-    } = await api.getUserInfo()
-    store.dispatch('setUser', {
-      request: true,
-      username: result
-    })
-  }
-  if (to.name == 'login') {
-    if (auth.username != '') {
-      routes.push('/list')
-    }
-  } else {
-    if (auth.username == '') {
-      routes.push('/login')
-    }
-  }
+routes.beforeEach((to, from, next) => {
   if (!to.name) {
     routes.push('/list')
   }
