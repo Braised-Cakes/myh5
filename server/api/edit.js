@@ -89,6 +89,45 @@ app.get('/aj/shape/getContent', async (req, res) => {
 
 
 /**
+ * 获取形状的接口
+ */
+app.get('/aj/music/get', async (req, res) => {
+  const collection = dbHandel.getModel('music')
+  const page = Number(req.query.page) || DEFAULT_PAGE.page
+  const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
+  const total = await collection.count()
+  const data = await collection.find({})
+    .skip((page - 1) * limit)
+    .limit(limit)
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {
+      info: {
+        page: Number(req.query.page || DEFAULT_PAGE.page),
+        total: total,
+        limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+      },
+      data: data
+    }
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * 列表页， 添加
  */
 // app.get('/aj/shape/del', async (req, res) => {

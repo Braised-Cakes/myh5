@@ -101,12 +101,16 @@
     <el-scrollbar v-if="navIndex == 1" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
       <v-ani></v-ani>
     </el-scrollbar>
+    <el-scrollbar v-if="navIndex == 2" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
+      <v-event></v-event>
+    </el-scrollbar>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import ani from "./ani";
+import vEvent from "./event";
 let rules = {
   "line-height": {
     default: false,
@@ -131,7 +135,8 @@ let rules = {
 };
 export default {
   components: {
-    "v-ani": ani
+    "v-ani": ani,
+    "v-event": vEvent
   },
   computed: {
     ...mapGetters(["curItem"])
@@ -155,8 +160,8 @@ export default {
     return {
       svgColorList: [],
       activeName: "1",
-      nav: ["样式", "动画"],
-      navIndex: 0,
+      nav: ["样式", "动画", "事件"],
+      navIndex: 2,
       options: [
         {
           label: "12px",

@@ -167,6 +167,7 @@ export default {
     }
     itemTpl.style['z-index'] = getters.curPageItemLen + 1;
     itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
+    itemTpl.event = {};
     commit(types.ADD_ITEM, {
       currentPhone: getters.currentPhone,
       item: itemTpl

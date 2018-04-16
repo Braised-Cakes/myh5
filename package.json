@@ -13,7 +13,7 @@
     "animate.css": "^3.6.1",
     "art-template": "^4.12.2",
     "cookie-parser": "^1.4.3",
-    "element-ui": "^2.3.3",
+    "element-ui": "^2.3.4",
     "express-art-template": "^1.0.1",
     "express-session": "^1.15.6",
     "jquery": "^3.3.1",

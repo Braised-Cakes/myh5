@@ -18,6 +18,9 @@ import {
   Input,
   Select,
   Option,
+  Radio,
+  RadioGroup,
+  OptionGroup,
   MessageBox,
   Notification,
   Message
@@ -40,7 +43,10 @@ Vue.use(CollapseItem);
 Vue.use(InputNumber);
 Vue.use(Input);
 Vue.use(Select);
+Vue.use(Radio);
+Vue.use(RadioGroup);
 Vue.use(Option);
+Vue.use(OptionGroup);
 Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;

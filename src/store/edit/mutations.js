@@ -124,7 +124,20 @@ export default {
       if (fill) {
         Vue.set(item, key, $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
       } else {
-        Vue.set(item, key, val);
+        console.log(item);
+        console.log(key);
+        console.log(val)
+        if (typeof val == 'string') {
+          Vue.set(item, key, val);
+        } else {
+          if(!item[key]){
+            Vue.set(item, key, {});
+          }
+          for (const attr in val) {
+            console.log(attr);
+            Vue.set(item[key], attr, val[attr]);
+          }
+        }
       }
     }
 
