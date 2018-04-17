@@ -10,16 +10,16 @@ new window.Swiper('.swiper-container', {
       // console.log(this.activeIndex); //
       // console.log(1)
 
-      console.log(this.activeIndex)
-      // $('.swiper-slide').eq(this.activeIndex).each((index, item) => {
-      //   $(item).find('.items').each((index2, item2) => {
-      //     // console.log(item2)
-      //     $('.' + $(item2).attr('data-id')).css('animation', '');
-      //     $('.' + $(item2).attr('data-id')).show();
-      //     // console.log($(item2).attr(''));
-      //     utils.runAni($(item2).attr('data-id'), JSON.parse($('.' + $(item2).attr('data-id')).attr('v-data')))
-      //   })
-      // })
+      // console.log(this.activeIndex)
+      $('.swiper-slide').eq(this.activeIndex).each((index, item) => {
+        $(item).find('.items').each((index2, item2) => {
+          // console.log(item2)
+          $('.' + $(item2).attr('data-id')).css('animation', '');
+          $('.' + $(item2).attr('data-id')).show();
+          // console.log($(item2).attr(''));
+          utils.runAni($(item2).attr('data-id'), JSON.parse($('.' + $(item2).attr('data-id')).attr('v-data')))
+        })
+      })
 
 
       // utils.runAni('item_20', JSON.parse($('.item_20').attr('v-data')))

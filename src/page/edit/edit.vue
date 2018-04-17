@@ -4,7 +4,7 @@
     <el-scrollbar class="page-component__nav" style="height:100%;">
       <div class="main">
         <v-page :data="panel"></v-page>
-        <v-panel></v-panel>
+        <v-panel v-if="modulePanel[types.SHAPE]"></v-panel>
         <v-music v-if="modulePanel[types.MUSIC]"></v-music>
         <div class="workspace" @mousedown.stop="cancelSelect">
           <div class="container">

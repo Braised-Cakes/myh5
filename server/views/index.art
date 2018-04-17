@@ -30,6 +30,9 @@
 		height: 100%;
         overflow:hidden;
 	}
+  .items{
+      border-width : 0;
+    }
   </style>
   <!-- <style>
     * {
@@ -78,7 +81,6 @@
       text-align: center;
       color: #7986cb;
     }
-
   </style> -->
   <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/4.2.2/css/swiper.min.css">
 </head>

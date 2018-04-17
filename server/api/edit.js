@@ -52,8 +52,12 @@ app.get('/aj/shape/get', async (req, res) => {
   const collection = dbHandel.getModel('shape')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
-  const total = await collection.count()
-  const data = await collection.find({}, ['id', 'path'])
+  let find = {}
+  req.query.typeId && (find.typeId = req.query.typeId)
+  req.query.tagId && (find.tagId = req.query.tagId)
+
+  const total = await collection.count(find)
+  const data = await collection.find(find, ['id', 'path'])
     .skip((page - 1) * limit)
     .limit(limit)
   res.send({
@@ -114,12 +118,65 @@ app.get('/aj/music/get', async (req, res) => {
 })
 
 
+app.get('/aj/shape/nav', async (req, res) => {
+  const collection = dbHandel.getModel('desc')
+  let {
+    shape
+  } = await collection.findOne();
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: shape.type
+  })
+})
 
 
 
 
+/**
+ * 
+ */
 
+// app.get('/aj/shape/gggg', async (req, res) => {
+//   const collection = dbHandel.getModel('desc')
+//   const shapeCollection = dbHandel.getModel('shape')
+//   let {
+//     shape
+//   } = await collection.findOne();
 
+//   for (let i = 0; i < shape.type.length; i++) {
+//     // let docs = glob.sync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/${shape.type[i].name}/*.json`);
+//     // console.log(docs);
+//     // for (let j = 0; j < docs.length; j++) {
+//     //   let json = JSON.parse(fs.readFileSync(docs[j], 'utf-8'));
+//     //   // console.log(json)
+
+//     //   for(let z = 0; z < json.length; z++){
+//     //     console.log(path.basename(json[z].path))
+//     //   }
+//     // }
+//     let typeId = shape.type[i].typeId;
+//     for (let j = 0; j < shape.type[i].children.length; j++) {
+//       // console.log(j)
+//       let child = shape.type[i].children[j];
+//       let json = JSON.parse(fs.readFileSync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/${shape.type[i].name}/${child.name}.json`, 'utf-8'));
+//       // console.log(docs)
+//       for (let z = 0; z < json.length; z++) {
+//         let paths = path.basename(json[z].path);
+//         await shapeCollection.update({
+//           path: paths
+//         }, {
+//           typeId: typeId,
+//           tagId: child.tagId
+//         })
+//       }
+//     }
+
+//   }
+//   res.send({
+//     data: shape
+//   })
+// })
 
 
 

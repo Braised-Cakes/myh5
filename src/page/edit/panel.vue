@@ -81,6 +81,19 @@
           li {
             line-height: 49px;
             margin-right: 30px;
+            cursor: pointer;
+            &.active {
+              color: #1593ff;
+            }
+          }
+        }
+        .tag-list {
+          display: flex;
+          flex-wrap: wrap;
+          li {
+            line-height: 30px;
+            margin-right: 15px;
+            cursor: pointer;
             &.active {
               color: #1593ff;
             }
@@ -122,7 +135,7 @@
 </style>
 
 <template>
-  <div class="wrapper" v-if="panel[types.SHAPE]">
+  <div class="wrapper" ref="bbb">
     <div class="header">
       <h4>形状库
         <span>矢量素材，可更换颜色，放大不失真</span>
@@ -137,11 +150,12 @@
         </ul>
       </div>
       <div class="right">
-        <div class="nav">
+        <div class="nav" v-if="typeList.length > 0">
           <ul class="nav-list">
-            <li class="active">全部</li>
-            <li>全部</li>
-            <li>全部</li>
+            <li @click="changeType(index)" :class="{'active' : typeIndex == index}" :key="item.typeId" v-for="(item, index) in typeList">{{item.name}}</li>
+          </ul>
+          <ul class="tag-list">
+            <li @click="changeTag(index)" :class="{'active' : tagIndex == index}" :key="item.tagId" v-for="(item, index) in typeList[typeIndex].children">{{item.name}}</li>
           </ul>
         </div>
         <div class="right-content">
@@ -149,7 +163,7 @@
             <li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
           </ul>
           <div class="footer">
-            <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+            <el-pagination :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
           </div>
         </div>
       </div>
@@ -157,6 +171,7 @@
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions } from "vuex";
@@ -169,27 +184,12 @@ export default {
       list: [],
       pageInfo: {
         pageSize: 18,
-        total: 0
+        total: 0,
+        currentPage: 1
       },
-      navOption: [
-        {
-          label: "全部",
-          key: ""
-        },
-        {
-          label: "图形",
-          key: ""
-        },
-        {
-          label: "文字",
-          key: ""
-        },
-        {
-          label: "图标",
-          key: ""
-          // children
-        }
-      ]
+      typeList: [],
+      typeIndex: 0,
+      tagIndex: 0
     };
   },
   computed: {
@@ -199,6 +199,17 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel"]),
+    changeType(index) {
+      this.typeIndex = index;
+      this.tagIndex = 0;
+      this.pageInfo.currentPage = 1;
+      this.get();
+    },
+    changeTag(index) {
+      this.tagIndex = index;
+      this.pageInfo.currentPage = 1;
+      this.get();
+    },
     choiceShape(id) {
       api
         .getShapeContent({
@@ -212,19 +223,42 @@ export default {
           });
         });
     },
-    get(page) {
+    get() {
       api
         .getShape({
           limit: this.pageInfo.pageSize,
-          page: page || 1
+          page: this.pageInfo.currentPage,
+          typeId: this.typeList[this.typeIndex].typeId,
+          tagId:
+            this.typeList[this.typeIndex] &&
+            this.typeList[this.typeIndex].children &&
+            this.typeList[this.typeIndex].children[this.tagIndex].tagId
         })
         .then(res => {
           this.list = res.result.data;
           this.pageInfo.total = res.result.info.total;
         });
+        console.log($(this.$refs.bbb).attr('data-b'))
+        console.log($(this.$refs.bbb).attr('data-b', 'lalala'))
+    },
+    async getNav() {
+      const { result } = await api.getShapeNav();
+      result.forEach(item => {
+        item.children.unshift({
+          name: "全部",
+          tagId: ""
+        });
+      });
+      result.unshift({
+        name: "全部",
+        typeId: ""
+      });
+      this.typeList = result;
+      this.typeIndex = 0;
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getNav();
     this.get();
   }
 };
