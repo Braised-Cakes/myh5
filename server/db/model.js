@@ -26,16 +26,24 @@ module.exports = {
       type: String,
       required: true
     },
+    "space": {
+      type: String,
+      required: false
+    },
+    "name": {
+      type: String,
+      required: false
+    },
     "id": {
       type: Number,
       required: true
     },
     "typeId": {
-      type: Number,
+      type: String,
       required: false
     },
     "tagId": {
-      type: Number,
+      type: String,
       required: false
     }
   },
@@ -45,7 +53,7 @@ module.exports = {
       required: true
     },
     "shape": {
-      type: Object,
+      type: Array,
       required: false
     }
   },

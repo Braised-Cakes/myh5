@@ -160,7 +160,7 @@
         </div>
         <div class="right-content">
           <ul class="img-list">
-            <li @click="choiceShape(item.id)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
+            <li @click="choiceShape(item.id)" :style="{'background-image':`url(//p7d4z759a.bkt.clouddn.com/${item.path})`}" :key="item.id" v-for="item in list"></li>
           </ul>
           <div class="footer">
             <el-pagination :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>

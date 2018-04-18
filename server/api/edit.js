@@ -46,18 +46,22 @@ app.post('/aj/edit/save', async (req, res) => {
 })
 
 /**
- * 获取形状的接口
+ * 获取形状
+ * @param {page}
+ * @param {limit}
+ * @param {typeId}
+ * @param {tagId}
  */
 app.get('/aj/shape/get', async (req, res) => {
   const collection = dbHandel.getModel('shape')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
   let find = {}
-  req.query.typeId && (find.typeId = req.query.typeId)
-  req.query.tagId && (find.tagId = req.query.tagId)
-
+  req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
+  req.query.tagId && (find.tagId = new RegExp(req.query.tagId))
+  console.log(find)
   const total = await collection.count(find)
-  const data = await collection.find(find, ['id', 'path'])
+  const data = await collection.find(find)
     .skip((page - 1) * limit)
     .limit(limit)
   res.send({
@@ -126,7 +130,7 @@ app.get('/aj/shape/nav', async (req, res) => {
   res.send({
     status: AJ_STATUS.success,
     message: AJ_MESSAGE.success,
-    result: shape.type
+    result: shape
   })
 })
 
