@@ -117,10 +117,9 @@
         height: 420px;
         margin: 0 20px;
         .img-list {
-          // margin-bottom: 20px;
-          // display: flex;
-          padding: 20px 0;
+          padding: 15px 0;
           flex-wrap: wrap;
+          height: 340px;
           li {
             // width: 115px;
             height: 30px;
@@ -156,12 +155,25 @@
             }
           }
         }
+        .no-list {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          img {
+            margin-top: 70px;
+          }
+          p {
+            margin-top: 30px;
+          }
+        }
         .footer {
           position: absolute;
           width: 100%;
           bottom: 10px;
-          display: flex;
-          justify-content: space-between;
+          // display: flex;
+          // justify-content: space-between;
         }
       }
     }
@@ -175,13 +187,13 @@
       <h4>音乐库
         <!-- <span>{{phoneData.main}}</span> -->
       </h4>
-      <span @click="closePanel(types.MUSIC)" class="close">x</span>
+      <span @click="closePanel(types.MUSIC);audio.pause()" class="close">x</span>
     </div>
     <div class="main">
       <div class="left">
         <ul>
-          <li class="active">音乐库</li>
-          <li>我的上传</li>
+          <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">音乐库</li>
+          <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">我的上传</li>
         </ul>
         <div class="operation">
           <div class="item">
@@ -193,28 +205,33 @@
         </div>
       </div>
       <div class="right">
-        <div class="nav">
+        <div class="nav" v-if="leftIndex == 0">
           <ul class="nav-list">
             <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
           </ul>
         </div>
         <div class="right-content">
-          <ul class="img-list">
+          <ul v-if="list.length > 0" class="img-list">
             <li @click="choiceMusic(item)" :class="{'active':item.id == curMusic.id}" :key="item.id" v-for="item in list">
               <p>{{item.name}}</p>
-              <div class="button">
-                <i class="icon iconfont icon-bofang"></i>
+              <div @click="playMusic(item)" class="button">
+                <i v-if="playItem.id != item.id" class="icon iconfont icon-bofang"></i>
+                <i v-if="playItem.id == item.id" class="icon iconfont icon-zanting"></i>
               </div>
             </li>
           </ul>
-          <div v-if="curMusic">
+          <div class="no-list" v-if="list.length == 0">
+            <img src="@/img/image_default.svg" />
+            <p class="empty-guide">赶紧去制作场景吧～</p>
+          </div>
+          <div v-if="curMusic && leftIndex == 0">
             <p>已选择:{{curMusic.name}}</p>
           </div>
           <div class="footer">
-            <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
-            <div>
+            <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+            <div style="float:right;">
+              <el-button @click="closePanel(types.MUSIC)" size="mini">取消</el-button>
               <el-button @click="confirm" size="mini" type="success">确定</el-button>
-              <el-button @click="closePanel(types.MUSIC)" size="mini" type="success">取消</el-button>
             </div>
           </div>
         </div>
@@ -234,12 +251,16 @@ export default {
       types: types,
       list: [],
       nowItem: {},
+      playItem: {},
       pageInfo: {
         pageSize: 10,
-        total: 0
+        total: 0,
+        currentPage: 1
       },
       navOption: [],
-      navIndex: 0
+      navIndex: 0,
+      audio: null,
+      leftIndex: 0
     };
   },
   computed: {
@@ -257,9 +278,14 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    changeLeftIndex(index) {
+      this.leftIndex = index;
+      this.pageInfo.currentPage = 1;
+      this.get();
+    },
     changeNav(index) {
       this.navIndex = index;
-
+      this.pageInfo.currentPage = 1;
       this.get();
     },
     choiceMusic(item) {
@@ -272,17 +298,35 @@ export default {
       });
       this.closePanel(types.MUSIC);
     },
-    get(page) {
+    get() {
       api
         .getMusic({
           limit: this.pageInfo.pageSize,
-          page: page || 1,
-          typeId: this.navOption[this.navIndex].typeId
+          page: this.pageInfo.currentPage,
+          typeId: this.navOption[this.navIndex].typeId,
+          used: this.leftIndex == 0 ? "" : 1
         })
         .then(res => {
           this.list = res.result.data;
           this.pageInfo.total = res.result.info.total;
         });
+    },
+    playMusic(item) {
+      if (this.audio) {
+        this.audio.pause();
+      } else {
+        this.audio = document.createElement("audio");
+      }
+      if (item.id == this.playItem.id) {
+        this.playItem = {};
+        return;
+      }
+      this.audio.src = `http://p7dremn1s.bkt.clouddn.com/${item.path}`;
+      this.audio.play();
+      this.playItem = item;
+      this.audio.onended = function() {
+        this.playItem = {};
+      };
     }
   },
   async mounted() {

@@ -96,6 +96,20 @@ module.exports = {
       required: true
     }
   },
+  'used_musics': {
+    'uid': {
+      type: Number,
+      required: true
+    },
+    'musicId': {
+      type: Number,
+      required: true
+    },
+    'usedTime': {
+      type: Number,
+      required: true
+    }
+  },
   'pics': {
     'username': {
       type: String,
