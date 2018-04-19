@@ -98,7 +98,9 @@ app.get('/aj/shape/get', async (req, res) => {
     })
     var arrx = [];
     for (let i = 0; i < ddd.length; i++) {
-      arrx.push(await collection.findOne(ddd[i]))
+      arrx.push(await collection.findOne(ddd[i], {
+        content: 0
+      }))
     }
     res.send({
       status: AJ_STATUS.success,
@@ -179,14 +181,30 @@ app.get('/aj/shape/getContent', async (req, res) => {
 
 
 /**
- * 获取形状的接口
+ * 获取形状的导航信息
+ */
+app.get('/aj/music/nav', async (req, res) => {
+  const collection = dbHandel.getModel('desc')
+  let {
+    music = []
+  } = await collection.findOne();
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: music
+  })
+})
+/**
+ * 获取音乐的接口
  */
 app.get('/aj/music/get', async (req, res) => {
   const collection = dbHandel.getModel('music')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
-  const total = await collection.count()
-  const data = await collection.find({})
+  let find = {}
+  req.query.typeId && (find.typeId = req.query.typeId)
+  const total = await collection.count(find)
+  const data = await collection.find(find)
     .skip((page - 1) * limit)
     .limit(limit)
   res.send({

@@ -201,6 +201,7 @@ export default {
     ...mapActions(["addItem", "openPanel", "closePanel"]),
     changeNav(index) {
       this.navIndex = index;
+      this.pageInfo.currentPage = 1;
       this.get();
     },
     changeType(index) {

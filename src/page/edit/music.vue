@@ -98,9 +98,13 @@
         margin: 0 20px;
         .nav-list {
           display: flex;
+          flex-wrap: wrap;
+          padding-top: 15px;
+          padding-bottom: 5px;
           li {
-            line-height: 49px;
+            line-height: 30px;
             margin-right: 30px;
+            cursor: pointer;
             &.active {
               color: #1593ff;
             }
@@ -191,22 +195,20 @@
       <div class="right">
         <div class="nav">
           <ul class="nav-list">
-            <li class="active">全部</li>
-            <li>全部</li>
-            <li>全部</li>
+            <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
           </ul>
         </div>
         <div class="right-content">
           <ul class="img-list">
             <li @click="choiceMusic(item)" :class="{'active':item.id == curMusic.id}" :key="item.id" v-for="item in list">
-              <p>{{item.path}}.mp3</p>
+              <p>{{item.name}}</p>
               <div class="button">
                 <i class="icon iconfont icon-bofang"></i>
               </div>
             </li>
           </ul>
           <div v-if="curMusic">
-            <p>已选择:{{curMusic.path}}</p>
+            <p>已选择:{{curMusic.name}}</p>
           </div>
           <div class="footer">
             <el-pagination background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
@@ -236,25 +238,8 @@ export default {
         pageSize: 10,
         total: 0
       },
-      navOption: [
-        {
-          label: "全部",
-          key: ""
-        },
-        {
-          label: "图形",
-          key: ""
-        },
-        {
-          label: "文字",
-          key: ""
-        },
-        {
-          label: "图标",
-          key: ""
-          // children
-        }
-      ]
+      navOption: [],
+      navIndex: 0
     };
   },
   computed: {
@@ -272,6 +257,11 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    changeNav(index) {
+      this.navIndex = index;
+
+      this.get();
+    },
     choiceMusic(item) {
       this.nowItem = item;
     },
@@ -284,9 +274,10 @@ export default {
     },
     get(page) {
       api
-        .getShape({
+        .getMusic({
           limit: this.pageInfo.pageSize,
-          page: page || 1
+          page: page || 1,
+          typeId: this.navOption[this.navIndex].typeId
         })
         .then(res => {
           this.list = res.result.data;
@@ -294,7 +285,9 @@ export default {
         });
     }
   },
-  mounted() {
+  async mounted() {
+    let { result = [] } = await api.getMusicNav();
+    this.navOption = result;
     this.get();
   }
 };
