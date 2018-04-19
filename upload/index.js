@@ -104,8 +104,6 @@ function uploadQiniu(localFile, key) {
   })
 }
 
-let initTypeId = 400;
-let initTagId = 40000;
 let typeList = [{
   id: 8201,
   name: '图形'
@@ -124,6 +122,11 @@ let typeList = [{
 //   } else {
 //     arr = descData.shape
 //   }
+    //  let initTypeId = arr.length + 400;
+    //  let initTagId = 40000; 
+    // arr.forEach((item)=>{
+    //   initTagId += item.children.length
+    // });
 //   console.log(descData)
 //   for (let i = 0; i < typeList.length; i++) {
 //     //当数据库没有当前大类型时

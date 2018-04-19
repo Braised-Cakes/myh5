@@ -30,6 +30,10 @@ module.exports = {
       type: String,
       required: false
     },
+    "content": {
+      type: String,
+      required: false
+    },
     "name": {
       type: String,
       required: false
@@ -55,6 +59,10 @@ module.exports = {
     "shape": {
       type: Array,
       required: false
+    },
+    "music": {
+      type: Array,
+      required: false
     }
   },
   "pic_admin": {
@@ -71,6 +79,20 @@ module.exports = {
     },
     'username': {
       type: String,
+      required: true
+    }
+  },
+  'used_shapes': {
+    'uid': {
+      type: Number,
+      required: true
+    },
+    'shapeId': {
+      type: Number,
+      required: true
+    },
+    'usedTime': {
+      type: Number,
       required: true
     }
   },
@@ -113,7 +135,7 @@ module.exports = {
     },
   },
   'music': {
-    'src': {
+    'path': {
       type: String,
       required: true
     },
@@ -121,21 +143,13 @@ module.exports = {
       type: String,
       required: false
     },
-    'type': {
-      type: String,
-      required: false
-    },
-    'sourceId': {
+    'typeId': {
       type: String,
       required: false
     },
     'id': {
-      type: String,
-      required: false
-    },
-    'createTime': {
-      type: String,
-      required: false
-    },
+      type: Number,
+      required: true
+    }
   }
 }

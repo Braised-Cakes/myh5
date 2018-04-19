@@ -145,12 +145,12 @@
     <div class="main">
       <div class="left">
         <ul>
-          <li @click="navIndex=0" :class="{'active':navIndex == 0}">形状库</li>
-          <li @click="navIndex=1" :class="{'active':navIndex == 1}">最近使用</li>
+          <li @click="changeNav(0)" :class="{'active':navIndex == 0}">形状库</li>
+          <li @click="changeNav(1)" :class="{'active':navIndex == 1}">最近使用</li>
         </ul>
       </div>
       <div class="right">
-        <div class="nav" v-if="typeList.length > 0">
+        <div class="nav" v-if="typeList.length > 0 && navIndex == 0">
           <ul class="nav-list">
             <li @click="changeType(index)" :class="{'active' : typeIndex == index}" :key="item.typeId" v-for="(item, index) in typeList">{{item.name}}</li>
           </ul>
@@ -171,7 +171,7 @@
   </div>
 </template>
 <script>
-import $ from 'jquery'
+import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions } from "vuex";
@@ -199,6 +199,10 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel"]),
+    changeNav(index) {
+      this.navIndex = index;
+      this.get();
+    },
     changeType(index) {
       this.typeIndex = index;
       this.tagIndex = 0;
@@ -229,6 +233,7 @@ export default {
           limit: this.pageInfo.pageSize,
           page: this.pageInfo.currentPage,
           typeId: this.typeList[this.typeIndex].typeId,
+          used: this.navIndex == 0 ? "" : 1,
           tagId:
             this.typeList[this.typeIndex] &&
             this.typeList[this.typeIndex].children &&
@@ -238,8 +243,8 @@ export default {
           this.list = res.result.data;
           this.pageInfo.total = res.result.info.total;
         });
-        console.log($(this.$refs.bbb).attr('data-b'))
-        console.log($(this.$refs.bbb).attr('data-b', 'lalala'))
+      console.log($(this.$refs.bbb).attr("data-b"));
+      console.log($(this.$refs.bbb).attr("data-b", "lalala"));
     },
     async getNav() {
       const { result } = await api.getShapeNav();

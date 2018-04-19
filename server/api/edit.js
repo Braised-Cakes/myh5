@@ -3,6 +3,7 @@ const dbHandel = require('../db/handel.js')
 const fs = require('fs')
 let path = require('path')
 let glob = require('glob')
+const userId = 999;
 const {
   DEFAULT_PAGE,
   AJ_STATUS,
@@ -45,6 +46,23 @@ app.post('/aj/edit/save', async (req, res) => {
   })
 })
 
+
+/**
+ * 获取形状的导航信息
+ */
+app.get('/aj/shape/nav', async (req, res) => {
+  const collection = dbHandel.getModel('desc')
+  let {
+    shape
+  } = await collection.findOne();
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: shape
+  })
+})
+
+
 /**
  * 获取形状
  * @param {page}
@@ -54,29 +72,72 @@ app.post('/aj/edit/save', async (req, res) => {
  */
 app.get('/aj/shape/get', async (req, res) => {
   const collection = dbHandel.getModel('shape')
+  const usedCollection = dbHandel.getModel('used_shapes')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
   let find = {}
   req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
   req.query.tagId && (find.tagId = new RegExp(req.query.tagId))
-  console.log(find)
-  const total = await collection.count(find)
-  const data = await collection.find(find)
-    .skip((page - 1) * limit)
-    .limit(limit)
-  res.send({
-    status: AJ_STATUS.success,
-    message: AJ_MESSAGE.success,
-    result: {
-      info: {
-        page: Number(req.query.page || DEFAULT_PAGE.page),
-        total: total,
-        limit: Number(req.query.limit || DEFAULT_PAGE.limit),
-      },
-      data: data
+  let total, data;
+  if (req.query.used) {
+    let total = await usedCollection.count({
+      uid: userId
+    })
+    let ddd = await usedCollection.find({
+        uid: userId
+      })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({
+        usedTime: -1
+      })
+    ddd = ddd.map((item) => {
+      return {
+        id: item.shapeId
+      }
+    })
+    var arrx = [];
+    for (let i = 0; i < ddd.length; i++) {
+      arrx.push(await collection.findOne(ddd[i]))
     }
-  })
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: arrx
+      }
+    })
+  } else {
+    total = await collection.count(find)
+    data = await collection.find(find, {
+        content: 0
+      })
+      .skip((page - 1) * limit)
+      .limit(limit)
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: data
+      }
+    })
+  }
+
 })
+
+
+
+
 /**
  * 获取某个svg的content? js是否可以根据svg url拿到content?
  */
@@ -85,11 +146,32 @@ app.get('/aj/shape/getContent', async (req, res) => {
   const data = await collection.findOne({
     id: req.query.id
   })
-  let docs = fs.readFileSync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg/${data.path}`, 'utf-8');
+  /* 添加到最近使用 */
+  const usedCollection = dbHandel.getModel('used_shapes')
+  let docs = await usedCollection.findOne({
+    uid: userId,
+    shapeId: Number(req.query.id)
+  });
+  if (docs) {
+    await usedCollection.update({
+      uid: userId,
+      shapeId: Number(req.query.id),
+    }, {
+      usedTime: new Date().getTime()
+    })
+  } else {
+    await new usedCollection({
+      uid: userId,
+      shapeId: Number(req.query.id),
+      usedTime: new Date().getTime()
+    }).save();
+  }
+
+  /* end 添加到最近使用 */
   res.send({
     status: AJ_STATUS.success,
     message: AJ_MESSAGE.success,
-    result: docs
+    result: data.content
   })
 })
 
@@ -121,18 +203,6 @@ app.get('/aj/music/get', async (req, res) => {
   })
 })
 
-
-app.get('/aj/shape/nav', async (req, res) => {
-  const collection = dbHandel.getModel('desc')
-  let {
-    shape
-  } = await collection.findOne();
-  res.send({
-    status: AJ_STATUS.success,
-    message: AJ_MESSAGE.success,
-    result: shape
-  })
-})
 
 
 
