@@ -187,7 +187,7 @@
       <h4>音乐库
         <!-- <span>{{phoneData.main}}</span> -->
       </h4>
-      <span @click="closePanel(types.MUSIC);audio.pause()" class="close">x</span>
+      <span @click="close" class="close">x</span>
     </div>
     <div class="main">
       <div class="left">
@@ -204,8 +204,8 @@
           </div>
         </div>
       </div>
-      <div class="right">
-        <div class="nav" v-if="leftIndex == 0">
+      <div class="right" v-loading="loading1">
+        <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
           <ul class="nav-list">
             <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
           </ul>
@@ -214,9 +214,9 @@
           <ul v-if="list.length > 0" class="img-list">
             <li @click="choiceMusic(item)" :class="{'active':item.id == curMusic.id}" :key="item.id" v-for="item in list">
               <p>{{item.name}}</p>
-              <div @click="playMusic(item)" class="button">
-                <i v-if="playItem.id != item.id" class="icon iconfont icon-bofang"></i>
-                <i v-if="playItem.id == item.id" class="icon iconfont icon-zanting"></i>
+              <div @click="play(item)" class="button">
+                <i v-if="playMusicId != item.id" class="icon iconfont icon-bofang"></i>
+                <i v-if="playMusicId == item.id" class="icon iconfont icon-zanting"></i>
               </div>
             </li>
           </ul>
@@ -224,13 +224,16 @@
             <img src="@/img/image_default.svg" />
             <p class="empty-guide">赶紧去制作场景吧～</p>
           </div>
-          <div v-if="curMusic && leftIndex == 0">
-            <p>已选择:{{curMusic.name}}</p>
+          <div v-if="curMusic.id">
+            <span>已选择:{{curMusic.name}}</span>
+            <span @click="cancelChoiceMusic" style="margin-left:15px;cursor:pointer;">
+              <i class="icon iconfont icon-qingchu"></i>
+            </span>
           </div>
           <div class="footer">
             <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
             <div style="float:right;">
-              <el-button @click="closePanel(types.MUSIC)" size="mini">取消</el-button>
+              <el-button @click="close" size="mini">取消</el-button>
               <el-button @click="confirm" size="mini" type="success">确定</el-button>
             </div>
           </div>
@@ -250,8 +253,8 @@ export default {
     return {
       types: types,
       list: [],
-      nowItem: {},
-      playItem: {},
+      curMusic: {},
+      playMusicId: null,
       pageInfo: {
         pageSize: 10,
         total: 0,
@@ -260,24 +263,26 @@ export default {
       navOption: [],
       navIndex: 0,
       audio: null,
-      leftIndex: 0
+      leftIndex: 0,
+      loading1: true,
+      loading2: false
     };
   },
   computed: {
     ...mapState({
       panel: state => state.edit.panel
     }),
-    ...mapGetters(["phoneData"]),
-    curMusic() {
-      let music = this.nowItem;
-      if ($.isEmptyObject(music)) {
-        music = this.phoneData.main.music || {};
-      }
-      return music;
-    }
+    ...mapGetters(["phoneData"])
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    /**
+     * 关闭音乐面板
+     */
+    close() {
+      this.pause();
+      this.closePanel(types.MUSIC);
+    },
     changeLeftIndex(index) {
       this.leftIndex = index;
       this.pageInfo.currentPage = 1;
@@ -288,17 +293,33 @@ export default {
       this.pageInfo.currentPage = 1;
       this.get();
     },
+    /**
+     * 选择音乐
+     */
     choiceMusic(item) {
-      this.nowItem = item;
+      this.curMusic = item;
     },
-    confirm() {
+    /**
+     * 取消选择音乐
+     */
+    cancelChoiceMusic() {
+      this.curMusic = {};
+    },
+    /**
+     * 确认
+     */
+    async confirm() {
+      await api.choiceMusic({
+        id: this.curMusic.id
+      });
       this.updateMain({
         key: "music",
         val: this.curMusic
       });
-      this.closePanel(types.MUSIC);
+      this.close();
     },
     get() {
+      this.loading1 = true;
       api
         .getMusic({
           limit: this.pageInfo.pageSize,
@@ -309,23 +330,34 @@ export default {
         .then(res => {
           this.list = res.result.data;
           this.pageInfo.total = res.result.info.total;
+          this.loading1 = false;
         });
     },
-    playMusic(item) {
+    /**
+     * 暂停音乐
+     */
+    pause() {
+      this.audio && this.audio.pause();
+      this.playMusicId = null;
+    },
+    /**
+     * 播放音乐
+     */
+    play(item) {
       if (this.audio) {
         this.audio.pause();
       } else {
         this.audio = document.createElement("audio");
       }
-      if (item.id == this.playItem.id) {
-        this.playItem = {};
+      if (item.id == this.playMusicId) {
+        this.playMusicId = null;
         return;
       }
       this.audio.src = `http://p7dremn1s.bkt.clouddn.com/${item.path}`;
       this.audio.play();
-      this.playItem = item;
+      this.playMusicId = item.id;
       this.audio.onended = function() {
-        this.playItem = {};
+        this.playMusicId = null;
       };
     }
   },
@@ -333,6 +365,7 @@ export default {
     let { result = [] } = await api.getMusicNav();
     this.navOption = result;
     this.get();
+    this.curMusic = $.extend(true, {}, this.phoneData.main.music || {});
   }
 };
 </script>

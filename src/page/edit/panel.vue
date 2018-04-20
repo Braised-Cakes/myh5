@@ -171,7 +171,7 @@
   </div>
 </template>
 <script>
-import $ from "jquery";
+// import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions } from "vuex";
@@ -244,8 +244,6 @@ export default {
           this.list = res.result.data;
           this.pageInfo.total = res.result.info.total;
         });
-      console.log($(this.$refs.bbb).attr("data-b"));
-      console.log($(this.$refs.bbb).attr("data-b", "lalala"));
     },
     async getNav() {
       const { result } = await api.getShapeNav();

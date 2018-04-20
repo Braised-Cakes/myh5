@@ -16,6 +16,7 @@ export const getShapeContent = data => fetch('/aj/shape/getContent', data);
 
 export const getMusicNav = () => fetch('/aj/music/nav');
 export const getMusic = data => fetch('/aj/music/get', data);
+export const choiceMusic = data => fetch('/aj/music/choice', data);
 
 
 export const userRegister = data => fetch('/aj/user/register', data, 'POST');

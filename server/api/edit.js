@@ -199,29 +199,97 @@ app.get('/aj/music/nav', async (req, res) => {
  */
 app.get('/aj/music/get', async (req, res) => {
   const collection = dbHandel.getModel('music')
+  const usedCollection = dbHandel.getModel('used_musics')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
   let find = {}
   req.query.typeId && (find.typeId = req.query.typeId)
-  const total = await collection.count(find)
-  const data = await collection.find(find)
-    .skip((page - 1) * limit)
-    .limit(limit)
-  res.send({
-    status: AJ_STATUS.success,
-    message: AJ_MESSAGE.success,
-    result: {
-      info: {
-        page: Number(req.query.page || DEFAULT_PAGE.page),
-        total: total,
-        limit: Number(req.query.limit || DEFAULT_PAGE.limit),
-      },
-      data: data
+  let data, total;
+  if (req.query.used) {
+    total = await usedCollection.count({
+      uid: userId
+    })
+    let ddd = await usedCollection.find({
+        uid: userId
+      })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({
+        usedTime: -1
+      })
+    ddd = ddd.map((item) => {
+      return {
+        id: item.musicId
+      }
+    })
+    var arrx = [];
+    for (let i = 0; i < ddd.length; i++) {
+      arrx.push(await collection.findOne(ddd[i]))
     }
-  })
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: arrx
+      }
+    })
+  } else {
+    total = await collection.count(find)
+    data = await collection.find(find)
+      .skip((page - 1) * limit)
+      .limit(limit)
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: data
+      }
+    })
+  }
+
+
 })
 
 
+/**
+ * 获取音乐的接口
+ */
+app.get('/aj/music/choice', async (req, res) => {
+  const usedCollection = dbHandel.getModel('used_musics')
+  let docs = await usedCollection.findOne({
+    uid: userId,
+    musicId: Number(req.query.id)
+  });
+  if (docs) {
+    await usedCollection.update({
+      uid: userId,
+      musicId: Number(req.query.id),
+    }, {
+      usedTime: new Date().getTime()
+    })
+  } else {
+    await new usedCollection({
+      uid: userId,
+      musicId: Number(req.query.id),
+      usedTime: new Date().getTime()
+    }).save();
+  }
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {}
+  })
+})
 
 
 
