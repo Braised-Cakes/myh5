@@ -14,10 +14,10 @@ export default async function (url, data, type = 'GET') {
           routes.push('/login')
           reject()
         } else {
-          setTimeout(()=>{
-            resolve(rs)
-          }, 500)
-          
+
+          resolve(rs)
+
+
         }
 
       }

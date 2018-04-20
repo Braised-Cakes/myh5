@@ -21,6 +21,7 @@ export const initState = {
   panel: {
     [types.SHAPE]: false,
     [types.MUSIC]: false, 
+    [types.IMAGE]: false,
   }
 }
 

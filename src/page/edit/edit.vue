@@ -6,6 +6,7 @@
         <v-page :data="panel"></v-page>
         <v-panel v-if="modulePanel[types.SHAPE]"></v-panel>
         <v-music v-if="modulePanel[types.MUSIC]"></v-music>
+        <v-image v-if="modulePanel[types.IMAGE]"></v-image>
         <div class="workspace" @mousedown.stop="cancelSelect">
           <div class="container">
             <div class="phone-bg"></div>
@@ -78,6 +79,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import vPanel from "./panel";
 import vMusic from "./music";
+import vImage from "./image";
 import $ from "jquery";
 import vHeader from "./header";
 import vPage from "./page";
@@ -88,7 +90,8 @@ export default {
     "v-header": vHeader,
     "v-page": vPage,
     "v-panel": vPanel,
-    "v-music": vMusic
+    "v-music": vMusic,
+    "v-image": vImage
   },
   filters: {
     filterItemWrap(res) {

@@ -19,6 +19,11 @@ export const getMusic = data => fetch('/aj/music/get', data);
 export const choiceMusic = data => fetch('/aj/music/choice', data);
 
 
+export const getImageNav = () => fetch('/aj/image/nav');
+export const getImage = data => fetch('/aj/image/get', data);
+export const choiceImage = data => fetch('/aj/image/choice', data);
+
+
 export const userRegister = data => fetch('/aj/user/register', data, 'POST');
 export const userLogin = data => fetch('/aj/user/login', data, 'POST');
 export const getUserInfo = data => fetch('/aj/user/info', data);

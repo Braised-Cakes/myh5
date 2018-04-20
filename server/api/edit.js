@@ -181,7 +181,7 @@ app.get('/aj/shape/getContent', async (req, res) => {
 
 
 /**
- * 获取形状的导航信息
+ * 获取音乐的导航信息
  */
 app.get('/aj/music/nav', async (req, res) => {
   const collection = dbHandel.getModel('desc')
@@ -198,12 +198,12 @@ app.get('/aj/music/nav', async (req, res) => {
  * 获取音乐的接口
  */
 app.get('/aj/music/get', async (req, res) => {
-  const collection = dbHandel.getModel('music')
+  const collection = dbHandel.getModel('musics')
   const usedCollection = dbHandel.getModel('used_musics')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
   let find = {}
-  req.query.typeId && (find.typeId = req.query.typeId)
+  req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
   let data, total;
   if (req.query.used) {
     total = await usedCollection.count({
@@ -265,6 +265,14 @@ app.get('/aj/music/get', async (req, res) => {
  * 获取音乐的接口
  */
 app.get('/aj/music/choice', async (req, res) => {
+  if (!req.query.id) {
+    res.send({
+      status: AJ_STATUS.success,
+      message: '音乐id不存在',
+      result: {}
+    })
+    return;
+  }
   const usedCollection = dbHandel.getModel('used_musics')
   let docs = await usedCollection.findOne({
     uid: userId,
@@ -293,6 +301,90 @@ app.get('/aj/music/choice', async (req, res) => {
 
 
 
+
+
+
+/**
+ * 获取音乐的导航信息
+ */
+app.get('/aj/image/nav', async (req, res) => {
+  const collection = dbHandel.getModel('desc')
+  let {
+    image = []
+  } = await collection.findOne();
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: image
+  })
+})
+
+
+/**
+ * 获取图片的接口
+ */
+app.get('/aj/image/get', async (req, res) => {
+  const collection = dbHandel.getModel('images')
+  const usedCollection = dbHandel.getModel('used_images')
+  const page = Number(req.query.page) || DEFAULT_PAGE.page
+  const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
+  let find = {}
+  req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
+  let data, total;
+  if (req.query.used) {
+    total = await usedCollection.count({
+      uid: userId
+    })
+    let ddd = await usedCollection.find({
+        uid: userId
+      })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({
+        usedTime: -1
+      })
+    ddd = ddd.map((item) => {
+      return {
+        id: item.musicId
+      }
+    })
+    var arrx = [];
+    for (let i = 0; i < ddd.length; i++) {
+      arrx.push(await collection.findOne(ddd[i]))
+    }
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: arrx
+      }
+    })
+  } else {
+    total = await collection.count(find)
+    data = await collection.find(find)
+      .skip((page - 1) * limit)
+      .limit(limit)
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: data
+      }
+    })
+  }
+
+
+})
 /**
  * 
  */

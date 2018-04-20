@@ -15,6 +15,12 @@
 					</svg>
 					<span>文本</span>
 				</li>
+        <li @click="openPanel(types.IMAGE)">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-logo"></use>
+					</svg>
+					<span>图片</span>
+				</li>
 				<li @click="openPanel(types.SHAPE)">
 					<svg class="icon" aria-hidden="true">
 						<use xlink:href="#icon-logo"></use>

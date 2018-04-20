@@ -63,6 +63,10 @@ module.exports = {
     "music": {
       type: Array,
       required: false
+    },
+    "image": {
+      type: Array,
+      required: false
     }
   },
   "pic_admin": {
@@ -110,6 +114,20 @@ module.exports = {
       required: true
     }
   },
+  'used_images': {
+    'uid': {
+      type: Number,
+      required: true
+    },
+    'imageId': {
+      type: Number,
+      required: true
+    },
+    'usedTime': {
+      type: Number,
+      required: true
+    }
+  },
   'pics': {
     'username': {
       type: String,
@@ -148,7 +166,41 @@ module.exports = {
       required: false
     },
   },
-  'music': {
+  'images': {
+    'uid': {
+      type: Number,
+      required: false
+    },
+    'path': {
+      type: String,
+      required: true
+    },
+    'id': {
+      type: Number,
+      required: true
+    },
+    'name': {
+      type: String,
+      required: false
+    },
+    'typeId': {
+      type: String,
+      required: false
+    },
+    'width': {
+      type: Number,
+      required: false
+    },
+    'height': {
+      type: Number,
+      required: false
+    },
+    'createTime': {
+      type: Number,
+      required: false
+    },
+  },
+  'musics': {
     'path': {
       type: String,
       required: true

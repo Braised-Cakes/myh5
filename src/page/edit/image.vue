@@ -114,45 +114,38 @@
 
       .right-content {
         position: relative;
-        height: 420px;
+        height: 460px;
         margin: 0 20px;
         .img-list {
           padding: 15px 0;
+          display: flex;
           flex-wrap: wrap;
           height: 340px;
           li {
-            // width: 115px;
-            height: 30px;
-            line-height: 30px;
-            // text-indent: 10px;
-            padding: 0 10px;
-            display: flex;
-            justify-content: space-between;
-            // margin-right: 15px;
-            // margin-bottom: 15px;
-            background: #e6ebed;
-            // background-repeat: no-repeat;
-            // background-position: center center;
-            // background-size: contain;
+            width: 115px;
+            height: 115px;
+            margin-right: 15px;
+            margin-bottom: 15px;
+            background-color: #e6ebed;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
             cursor: pointer;
             .icon {
               font-size: 12px;
               color: #ccc;
             }
             &:nth-child(6n) {
-              // margin-right: 0;
+              margin-right: 0;
             }
-            &:nth-child(2n) {
-              background: #fff;
-            }
-            &:hover,
-            &.active {
-              background: #2495fc;
-              color: #fff;
-              .icon {
-                color: #fff;
-              }
-            }
+            // &:hover,
+            // &.active {
+            //   background: #2495fc;
+            //   color: #fff;
+            //   .icon {
+            //     color: #fff;
+            //   }
+            // }
           }
         }
         .no-list {
@@ -182,73 +175,55 @@
 </style>
 
 <template>
-  <div class="wrapper">
-    <div class="header">
-      <h4>音乐库
-        <!-- <span>{{phoneData.main}}</span> -->
-      </h4>
-      <span @click="close" class="close">x</span>
-    </div>
-    <div class="main">
-      <div class="left">
-        <ul>
-          <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">音乐库</li>
-          <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
-        </ul>
-        <div class="operation">
-          <div class="item">
-            <span>上传</span>
-          </div>
-          <div class="item">
-            <span>添加外链</span>
-          </div>
+    <div class="wrapper">
+        <div class="header">
+            <h4>图片库</h4>
+            <span @click="close" class="close">x</span>
         </div>
-      </div>
-      <div class="right" v-loading="loading1">
-        <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
-          <ul class="nav-list">
-            <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
-          </ul>
-        </div>
-        <div class="right-content">
-          <ul v-if="list.length > 0" class="img-list">
-            <li @click="choiceMusic(item)" :class="{'active':item.id == curMusic.id}" :key="item.id" v-for="item in list">
-              <p>{{item.name}}</p>
-              <div @click="play(item)" class="button">
-                <i v-if="playMusicId != item.id" class="icon iconfont icon-bofang"></i>
-                <i v-if="playMusicId == item.id" class="icon iconfont icon-zanting"></i>
-              </div>
-            </li>
-          </ul>
-          <div class="no-list" v-if="list.length == 0">
-            <img src="@/img/image_default.svg" />
-            <p class="empty-guide">赶紧去制作场景吧～</p>
-          </div>
-          <div v-if="curMusic.id">
-            <span>已选择:{{curMusic.name}}</span>
-            <span @click="cancelChoiceMusic" style="margin-left:15px;cursor:pointer;">
-              <i class="icon iconfont icon-qingchu"></i>
-            </span>
-          </div>
-          <div class="footer">
-            <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
-            <div style="float:right;">
-              <el-button @click="close" size="mini">取消</el-button>
-              <el-button @click="confirm" size="mini" type="success">确定</el-button>
+        <div class="main">
+            <div class="left">
+                <ul>
+                    <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">图片库</li>
+                    <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
+                </ul>
+                <div class="operation">
+                    <div class="item">
+                        <span>上传</span>
+                    </div>
+                    <div class="item">
+                        <span>添加外链</span>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="right">
+                <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
+                    <ul class="nav-list">
+                        <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
+                    </ul>
+                </div>
+                <div class="right-content">
+                    <ul class="img-list">
+                        <li :style="{'background-image':`url(//p7h1y3vg2.bkt.clouddn.com/${item.path}?imageMogr2/thumbnail/115x115/format/webp/blur/1x0/quality/75|imageslim)`}" :key="item.id" v-for="item in list"></li>
+                    </ul>
+                    <div class="footer">
+                        <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                        <div style="float:right;">
+                            <el-button @click="close" size="mini">取消</el-button>
+                            <el-button @click="confirm" size="mini" type="success">确定</el-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 <script>
-import $ from "jquery";
+// import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
-  name: "music",
+  //   name: "image",
   data() {
     return {
       types: types,
@@ -256,7 +231,7 @@ export default {
       curMusic: {},
       playMusicId: null,
       pageInfo: {
-        pageSize: 10,
+        pageSize: 18,
         total: 0,
         currentPage: 1
       },
@@ -280,8 +255,7 @@ export default {
      * 关闭音乐面板
      */
     close() {
-      this.pause();
-      this.closePanel(types.MUSIC);
+      this.closePanel(types.IMAGE);
     },
     changeLeftIndex(index) {
       this.leftIndex = index;
@@ -294,35 +268,22 @@ export default {
       this.get();
     },
     /**
-     * 选择音乐
-     */
-    choiceMusic(item) {
-      this.curMusic = item;
-    },
-    /**
-     * 取消选择音乐
-     */
-    cancelChoiceMusic() {
-      this.curMusic = {};
-    },
-    /**
      * 确认
      */
     async confirm() {
-      
-      this.curMusic.id && await api.choiceMusic({
-        id: this.curMusic.id
-      });
-      this.updateMain({
-        key: "music",
-        val: this.curMusic
-      });
+      //   this.curMusic.id &&
+          // (await api.choiceImage({
+          //   id: this.curMusic.id
+          // }));
+      //   this.updateMain({
+      //     key: "music",
+      //     val: this.curMusic
+      //   });
       this.close();
     },
     get() {
-      this.loading1 = true;
       api
-        .getMusic({
+        .getImage({
           limit: this.pageInfo.pageSize,
           page: this.pageInfo.currentPage,
           typeId: this.navOption[this.navIndex].typeId,
@@ -331,42 +292,13 @@ export default {
         .then(res => {
           this.list = res.result.data;
           this.pageInfo.total = res.result.info.total;
-          this.loading1 = false;
         });
-    },
-    /**
-     * 暂停音乐
-     */
-    pause() {
-      this.audio && this.audio.pause();
-      this.playMusicId = null;
-    },
-    /**
-     * 播放音乐
-     */
-    play(item) {
-      if (this.audio) {
-        this.audio.pause();
-      } else {
-        this.audio = document.createElement("audio");
-      }
-      if (item.id == this.playMusicId) {
-        this.playMusicId = null;
-        return;
-      }
-      this.audio.src = `http://p7dremn1s.bkt.clouddn.com/${item.path}`;
-      this.audio.play();
-      this.playMusicId = item.id;
-      this.audio.onended = function() {
-        this.playMusicId = null;
-      };
     }
   },
   async mounted() {
-    let { result = [] } = await api.getMusicNav();
+    let { result = [] } = await api.getImageNav();
     this.navOption = result;
     this.get();
-    this.curMusic = $.extend(true, {}, this.phoneData.main.music || {});
   }
 };
 </script>
