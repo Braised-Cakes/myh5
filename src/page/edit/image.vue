@@ -175,47 +175,47 @@
 </style>
 
 <template>
-    <div class="wrapper">
-        <div class="header">
-            <h4>图片库</h4>
-            <span @click="close" class="close">x</span>
-        </div>
-        <div class="main">
-            <div class="left">
-                <ul>
-                    <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">图片库</li>
-                    <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
-                </ul>
-                <div class="operation">
-                    <div class="item">
-                        <span>上传</span>
-                    </div>
-                    <div class="item">
-                        <span>添加外链</span>
-                    </div>
-                </div>
-            </div>
-            <div class="right">
-                <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
-                    <ul class="nav-list">
-                        <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
-                    </ul>
-                </div>
-                <div class="right-content">
-                    <ul class="img-list">
-                        <li :style="{'background-image':`url(//p7h1y3vg2.bkt.clouddn.com/${item.path}?imageMogr2/thumbnail/115x115/format/webp/blur/1x0/quality/75|imageslim)`}" :key="item.id" v-for="item in list"></li>
-                    </ul>
-                    <div class="footer">
-                        <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
-                        <div style="float:right;">
-                            <el-button @click="close" size="mini">取消</el-button>
-                            <el-button @click="confirm" size="mini" type="success">确定</el-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="wrapper">
+    <div class="header">
+      <h4>图片库</h4>
+      <span @click="close" class="close">x</span>
     </div>
+    <div class="main">
+      <div class="left">
+        <ul>
+          <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">图片库</li>
+          <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
+        </ul>
+        <div class="operation">
+          <div class="item">
+            <span>上传</span>
+          </div>
+          <div class="item">
+            <span>添加外链</span>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
+          <ul class="nav-list">
+            <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
+          </ul>
+        </div>
+        <div class="right-content">
+          <ul class="img-list">
+            <li @click="choiceImage(item)" :style="{'background-image':`url(//p7h1y3vg2.bkt.clouddn.com/${item.path}?imageMogr2/thumbnail/115x115/format/webp/blur/1x0/quality/75|imageslim)`}" :key="item.id" v-for="item in list"></li>
+          </ul>
+          <div class="footer">
+            <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+            <div style="float:right;">
+              <el-button @click="close" size="mini">取消</el-button>
+              <el-button @click="confirm" size="mini" type="success">确定</el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 // import $ from "jquery";
@@ -267,14 +267,34 @@ export default {
       this.pageInfo.currentPage = 1;
       this.get();
     },
+    async choiceImage(item) {
+      console.log(item);
+      await api.choiceImage({
+        id: item.id
+      });
+      let img = new Image();
+      let path = `//p7h1y3vg2.bkt.clouddn.com/${
+        item.path
+      }?imageMogr2/thumbnail/320x486/format/webp/blur/1x0/quality/75|imageslim`;
+      img.src = path;
+      img.onload = () => {
+        this.addItem({
+          type: types.IMAGE,
+          path: path,
+          width: img.width,
+          height: img.height
+        });
+      };
+      this.closePanel(types.IMAGE);
+    },
     /**
      * 确认
      */
     async confirm() {
       //   this.curMusic.id &&
-          // (await api.choiceImage({
-          //   id: this.curMusic.id
-          // }));
+      // (await api.choiceImage({
+      //   id: this.curMusic.id
+      // }));
       //   this.updateMain({
       //     key: "music",
       //     val: this.curMusic

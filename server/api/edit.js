@@ -345,7 +345,7 @@ app.get('/aj/image/get', async (req, res) => {
       })
     ddd = ddd.map((item) => {
       return {
-        id: item.musicId
+        id: item.imageId
       }
     })
     var arrx = [];
@@ -385,6 +385,47 @@ app.get('/aj/image/get', async (req, res) => {
 
 
 })
+
+
+/**
+ * 获取音乐的接口
+ */
+app.get('/aj/image/choice', async (req, res) => {
+  if (!req.query.id) {
+    res.send({
+      status: AJ_STATUS.success,
+      message: 'imageId不存在',
+      result: {}
+    })
+    return;
+  }
+  const usedCollection = dbHandel.getModel('used_images')
+  let docs = await usedCollection.findOne({
+    uid: userId,
+    imageId: Number(req.query.id)
+  });
+  if (docs) {
+    await usedCollection.update({
+      uid: userId,
+      imageId: Number(req.query.id),
+    }, {
+      usedTime: new Date().getTime()
+    })
+  } else {
+    await new usedCollection({
+      uid: userId,
+      imageId: Number(req.query.id),
+      usedTime: new Date().getTime()
+    }).save();
+  }
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {}
+  })
+})
+
+
 /**
  * 
  */

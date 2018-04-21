@@ -144,26 +144,7 @@ export default {
     if (typeof payload == 'string') {
       itemTpl = tpl[payload]();
     } else {
-      itemTpl = tpl[payload.type]();
-      let content = $(payload.content);
-      let width = Math.round(parseFloat(content.attr('width')));
-      let height = Math.round(parseFloat(content.attr('height')));
-      if (width >= height) {
-        let radio = 100 / height;
-        width = radio * width;
-        height = 100;
-      } else {
-        let radio = 100 / width;
-        height = radio * width;
-        width = 100;
-      }
-      width = Math.round(width);
-      height = Math.round(height);
-      content.attr('width', width + 'px');
-      content.attr('height', height + 'px');
-      payload.content && (itemTpl.content = content.prop('outerHTML'));
-      itemTpl.style['width'] = width + 'px';
-      itemTpl.style['height'] = height + 'px';
+      itemTpl = tpl[payload.type](payload);
     }
     itemTpl.style['z-index'] = getters.curPageItemLen + 1;
     itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;

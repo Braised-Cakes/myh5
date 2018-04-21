@@ -139,12 +139,15 @@ function getStat(key) {
         console.log(err);
         //throw err;
       }
+      console.log(respBody)
       resolve(respBody.hash)
     });
   })
 }
 
-
+(async ()=>{
+  await getStat('6299f98466e4b647b8fbdffe070a14e7.gif')
+})()
 function fetchQiniu(resUrl, key) {
   return new Promise((resolve) => {
     bucketManager.fetch(resUrl, bucket, key, function (err, respBody, respInfo) {
@@ -166,66 +169,66 @@ function fetchQiniu(resUrl, key) {
  * 将所有数据存到数据库, 没有的保存， 有的就更新
  */
 // ;
-(async () => {
-  let {
-    image: imageDocs
-  } = await descCollection.findOne();
-  let successIndex = 0;
-  let existIndex = 0;
-  let notPathIndex = 0;
-  let count = await imageCollection.count();
-  let id = 200000000 + count;
-  for (let i = 0; i < imageDocs.length; i++) {
-    for (let j = 0; j < 100000; j++) {
-      let data = await requestData(imageDocs[i].eqxiuId, j + 1);
-      if (data.length == 0) {
-        break;
-      }
-      for (let k = 0; k < data.length; k++) {
-        if (!data[k].path) {
-          console.log('path不存在')
-          notPathIndex++;
-          continue;
-        }
-        let fileUrl = `http://res1.eqh5.com/${data[k].path}`;
-        let key = path.basename(data[k].path);
-        if (!await getStat(key)) {
-          await fetchQiniu(fileUrl, key)
-          successIndex++;
-        } else {
-          existIndex++;
-        }
-        console.log(`已经存在${existIndex}个, 新上传${successIndex}个`);
+// (async () => {
+//   let {
+//     image: imageDocs
+//   } = await descCollection.findOne();
+//   let successIndex = 0;
+//   let existIndex = 0;
+//   let notPathIndex = 0;
+//   let count = await imageCollection.count();
+//   let id = 200000000 + count;
+//   for (let i = 0; i < imageDocs.length; i++) {
+//     for (let j = 0; j < 100000; j++) {
+//       let data = await requestData(imageDocs[i].eqxiuId, j + 1);
+//       if (data.length == 0) {
+//         break;
+//       }
+//       for (let k = 0; k < data.length; k++) {
+//         if (!data[k].path) {
+//           console.log('path不存在')
+//           notPathIndex++;
+//           continue;
+//         }
+//         let fileUrl = `http://res1.eqh5.com/${data[k].path}`;
+//         let key = path.basename(data[k].path);
+//         if (!await getStat(key)) {
+//           await fetchQiniu(fileUrl, key)
+//           successIndex++;
+//         } else {
+//           existIndex++;
+//         }
+//         console.log(`已经存在${existIndex}个, 新上传${successIndex}个`);
 
-        let itemPath = path.basename(data[k].path);
-        let itemDocs = await imageCollection.findOne({
-          path: itemPath
-        })
-        if (!itemDocs) {
-          await new imageCollection({
-            path: itemPath,
-            name: data[k].name,
-            typeId: String(imageDocs[i].typeId),
-            id: id++
-          }).save();
-          console.log(`第${successIndex}个保存完成`)
-        } else {
-          let itemTypeId = itemDocs.typeId.split(',');
-          if (itemTypeId.indexOf(String(imageDocs[i].typeId)) == -1) {
-            itemTypeId.push(String(imageDocs[i].typeId));
-          }
-          await imageCollection.update({
-            path: itemPath
-          }, {
-            typeId: itemTypeId.join(','),
-          })
-          console.log(`第${successIndex}个更新完成`)
-        }
-        // successIndex++;
-      }
+//         let itemPath = path.basename(data[k].path);
+//         let itemDocs = await imageCollection.findOne({
+//           path: itemPath
+//         })
+//         if (!itemDocs) {
+//           await new imageCollection({
+//             path: itemPath,
+//             name: data[k].name,
+//             typeId: String(imageDocs[i].typeId),
+//             id: id++
+//           }).save();
+//           console.log(`第${successIndex}个保存完成`)
+//         } else {
+//           let itemTypeId = itemDocs.typeId.split(',');
+//           if (itemTypeId.indexOf(String(imageDocs[i].typeId)) == -1) {
+//             itemTypeId.push(String(imageDocs[i].typeId));
+//           }
+//           await imageCollection.update({
+//             path: itemPath
+//           }, {
+//             typeId: itemTypeId.join(','),
+//           })
+//           console.log(`第${successIndex}个更新完成`)
+//         }
+//         // successIndex++;
+//       }
 
-    }
+//     }
 
-  }
-  console.log(`path不存在的共${notPathIndex}个`)
-})()
+//   }
+//   console.log(`path不存在的共${notPathIndex}个`)
+// })()
