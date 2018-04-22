@@ -166,6 +166,7 @@ export default {
               });
             }
           });
+          console.log(arr)
         this.panel.fillColorList = arr;
       }
     },

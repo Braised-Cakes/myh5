@@ -203,7 +203,7 @@
         </div>
         <div class="right-content">
           <ul class="img-list">
-            <li @click="choiceImage(item)" :style="{'background-image':`url(//p7h1y3vg2.bkt.clouddn.com/${item.path}?imageMogr2/thumbnail/115x115/format/webp/blur/1x0/quality/75|imageslim)`}" :key="item.id" v-for="item in list"></li>
+            <li @click="choiceImage(item)" :style="{'background-image':`url(//p7h1y3vg2.bkt.clouddn.com/${item.path}?imageView2/2/w/230/h/230/q/75|imageslim)`}" :key="item.id" v-for="item in list"></li>
           </ul>
           <div class="footer">
             <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
@@ -275,7 +275,7 @@ export default {
       let img = new Image();
       let path = `//p7h1y3vg2.bkt.clouddn.com/${
         item.path
-      }?imageMogr2/thumbnail/320x486/format/webp/blur/1x0/quality/75|imageslim`;
+      }?imageView2/2/w/230/h/230/q/75|imageslim`;
       img.src = path;
       img.onload = () => {
         this.addItem({

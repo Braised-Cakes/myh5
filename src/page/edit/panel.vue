@@ -222,6 +222,7 @@ export default {
         })
         .then(({ result }) => {
           this.closePanel(types.SHAPE);
+          console.log(result.match(/<svg[\s\S]+/)[0])
           this.addItem({
             type: types.SHAPE,
             content: result.match(/<svg[\s\S]+/)[0]

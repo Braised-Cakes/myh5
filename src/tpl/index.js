@@ -31,6 +31,9 @@ export default {
     content = $(content);
     let width = Math.round(parseFloat(content.attr('width')));
     let height = Math.round(parseFloat(content.attr('height')));
+    if (!content.attr('viewbox')) {
+      content.attr('viewbox', `0 0 ${width} ${height}`);
+    }
     if (width >= height) {
       let radio = 100 / height;
       width = radio * width;
