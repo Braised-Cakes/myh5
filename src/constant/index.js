@@ -22,6 +22,7 @@ export const initState = {
     [types.SHAPE]: false,
     [types.MUSIC]: false, 
     [types.IMAGE]: false,
+    [types.QRCODE]: false,
   }
 }
 

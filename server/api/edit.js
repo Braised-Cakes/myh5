@@ -3,6 +3,16 @@ const dbHandel = require('../db/handel.js')
 const fs = require('fs')
 let path = require('path')
 let glob = require('glob')
+var QRCode = require('qrcode')
+let md5 = require('md5')
+const rimraf = require('rimraf')
+const {
+  promisify
+} = require('util')
+const {
+  upload
+} = require('../qiniu/upload')
+
 const userId = 999;
 const {
   DEFAULT_PAGE,
@@ -425,6 +435,36 @@ app.get('/aj/image/choice', async (req, res) => {
   })
 })
 
+
+/**
+ * 二维码
+ */
+app.get('/aj/qrcode/create', async (req, res) => {
+  let url = req.query.url
+  if (!url) {
+    res.send({
+      status: AJ_STATUS.error,
+      message: AJ_MESSAGE.error,
+      result: `url不存在`
+    })
+    return
+  }
+  url = decodeURIComponent(url)
+  let fileName = `${md5(url)}.svg`
+  toFileSync = promisify(QRCode.toFile);
+  let toFilePath = path.resolve(process.cwd(), 'cache', fileName);
+  await toFileSync(toFilePath, url, {
+    type: 'svg',
+    margin: 1
+  });
+  await upload('user', toFilePath, fileName);
+  rimraf.sync(toFilePath)
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: `http://p7m90pgef.bkt.clouddn.com/${fileName}`
+  })
+});
 
 /**
  * 

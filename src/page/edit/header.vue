@@ -33,6 +33,12 @@
 					</svg>
 					<span>音乐</span>
 				</li>
+        <li @click="openPanel(types.QRCODE)">
+					<svg class="icon" aria-hidden="true">
+						<use xlink:href="#icon-logo"></use>
+					</svg>
+					<span>二维码</span>
+				</li>
 			</ul>
 		</div>
 		<div class="create-action">

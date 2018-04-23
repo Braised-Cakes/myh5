@@ -86,5 +86,28 @@ export default {
         'border-style': 'solid'
       }
     }
+  },
+  /*
+  	图片
+  */
+  [types.QRCODE]: function ({
+    url
+  }) {
+    let width = 200;
+    let height = 200;
+    return {
+      type: types.QRCODE,
+      content: `<img src="${url}"/>`,
+      class: types.IMAGE.toLowerCase(),
+      animation: [],
+      style: {
+        position: 'absolute',
+        left: '0',
+        top: '50px',
+        width: `${width}px`,
+        height: `${height}px`,
+        'border-style': 'solid'
+      }
+    }
   }
 }
