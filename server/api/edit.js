@@ -440,7 +440,11 @@ app.get('/aj/image/choice', async (req, res) => {
  * 二维码
  */
 app.get('/aj/qrcode/create', async (req, res) => {
-  let url = req.query.url
+  let {
+    url,
+    margin = 4
+  } = req.query
+
   if (!url) {
     res.send({
       status: AJ_STATUS.error,
@@ -450,12 +454,12 @@ app.get('/aj/qrcode/create', async (req, res) => {
     return
   }
   url = decodeURIComponent(url)
-  let fileName = `${md5(url)}.svg`
+  let fileName = `${md5(`url=${url};time:${new Date().getTime()};margin:${margin}`)}.svg`
   toFileSync = promisify(QRCode.toFile);
   let toFilePath = path.resolve(process.cwd(), 'cache', fileName);
   await toFileSync(toFilePath, url, {
     type: 'svg',
-    margin: 1
+    margin: Number(margin)
   });
   await upload('user', toFilePath, fileName);
   rimraf.sync(toFilePath)

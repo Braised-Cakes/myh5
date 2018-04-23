@@ -41,6 +41,20 @@
                 </div>
               </el-tooltip>
             </li>
+            <li>
+              <el-tooltip class="item" content="撤销" placement="right">
+                <div>
+                  <i class="icon iconfont icon-chexiao disabled"></i>
+                </div>
+              </el-tooltip>
+            </li>
+            <li>
+              <el-tooltip class="item" content="重做" placement="right">
+                <div>
+                  <i class="icon iconfont icon-zhongzuo disabled"></i>
+                </div>
+              </el-tooltip>
+            </li>
             <li @click="setZIndex('++')">
               <el-tooltip class="item" content="置顶" placement="right">
                 <div>
@@ -169,7 +183,7 @@ export default {
               });
             }
           });
-          console.log(arr)
+        console.log(arr);
         this.panel.fillColorList = arr;
       }
     },
@@ -402,5 +416,9 @@ export default {
   top: 0;
   margin-top: 56px;
   min-width: 1180px;
+}
+
+.icon.disabled {
+  color: #ccc;
 }
 </style>

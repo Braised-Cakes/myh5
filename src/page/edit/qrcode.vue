@@ -1,13 +1,14 @@
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
 .wrapper {
-  width: 970px;
+  width: 470px;
   background: #fff;
   border-radius: 6px;
   z-index: $panelZIndex;
   position: absolute;
-  left: 100px;
-  top: 30px;
+  margin-left: 50%;
+  left: -235px;
+  top: 80px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   .header {
     padding: 15px 20px;
@@ -42,93 +43,24 @@
   }
   .main {
     display: flex;
-    height: calc(100% - 56px);
+    height: 300px;
+    padding: 20px;
     .left {
-      width: 160px;
-      background: #f7f7f7;
-      ul {
-        li {
-          height: 50px;
-          line-height: 50px;
-          color: #76838f;
-          font-size: 14px;
-          text-indent: 20px;
-          cursor: pointer;
-          &:hover {
-            color: #1593ff;
-          }
-          &.active {
-            background: #fff;
-            border-top: 1px solid #ccd5db;
-            border-bottom: 1px solid #ccd5db;
-          }
-          &:first-child {
-            border-top: none;
-          }
+      width: 300px;
+      .item {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        line-height: 40px;
+        label {
+          min-width: 50px;
         }
       }
     }
     .right {
-      // padding: 20px;
-      // height: 480px;
-      flex: 1;
-      position: relative;
-      .nav {
-        border-bottom: 1px solid #ccc;
-        margin: 0 20px;
-        .nav-list {
-          display: flex;
-          li {
-            line-height: 49px;
-            margin-right: 30px;
-            cursor: pointer;
-            &.active {
-              color: #1593ff;
-            }
-          }
-        }
-        .tag-list {
-          display: flex;
-          flex-wrap: wrap;
-          li {
-            line-height: 30px;
-            margin-right: 15px;
-            cursor: pointer;
-            &.active {
-              color: #1593ff;
-            }
-          }
-        }
-      }
-
-      .right-content {
-        position: relative;
-        height: 480px;
-        .img-list {
-          margin-bottom: 20px;
-          display: flex;
-          padding: 20px;
-          flex-wrap: wrap;
-          li {
-            width: 115px;
-            height: 115px;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            background-color: #e6ebed;
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: contain;
-            cursor: pointer;
-            &:nth-child(6n) {
-              margin-right: 0;
-            }
-          }
-        }
-        .footer {
-          position: absolute;
-          bottom: 20px; // left: 0;
-        }
-      }
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
 }
@@ -140,11 +72,28 @@
       <h4>二维码</h4>
       <span @click="closePanel(types.QRCODE)" class="close">x</span>
     </div>
-    <div class="main" style="height:500px;">
-      <el-input v-model="url"></el-input>
-      <el-button @click="create" size="mini" type="success">生成二维码</el-button>
-      <el-button @click="confirm" size="mini" type="success">确定</el-button>
-      <img :src="src" />
+    <div class="main" style="height:280px;display:flex;">
+      <div style="display:flex;flex-direction:column;" class="left">
+        <div class="item">
+          <label>链接</label>
+          <el-input v-model="url" size="mini" placeholder="http://www.baidu.com"></el-input>
+        </div>
+        <div class="item">
+          <label>边距</label>
+          <el-input-number v-model="margin" size="mini" :max="4" :step="1" :min="0"></el-input-number>
+        </div>
+        <div class="item">
+          <label></label>
+          <el-button @click="create" size="mini" type="success">生成</el-button>
+        </div>
+      </div>
+      <div class="right">
+        <img :src="src" style="width:200px;border:1px solid #dce0e2" />
+        <footer>
+          <el-button @click="closePanel(types.QRCODE)" size="mini">取消</el-button>
+          <el-button @click="confirm" size="mini" type="success">确定</el-button>
+        </footer>
+      </div>
     </div>
   </div>
 </template>
@@ -156,7 +105,8 @@ export default {
   data() {
     return {
       types: types,
-      url: "http://www.baidu.com",
+      url: "",
+      margin: 2,
       src:
         "http://p7m90pgef.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg"
     };
@@ -166,7 +116,8 @@ export default {
     create() {
       api
         .createQRCode({
-          url: encodeURIComponent(this.url)
+          url: encodeURIComponent(this.url),
+          margin: this.margin
         })
         .then(({ result }) => {
           this.src = result;
