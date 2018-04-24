@@ -20,6 +20,7 @@
     "md5": "^2.2.1",
     "mongoose": "^5.0.14",
     "morgan": "^1.9.0",
+    "qaep-push": "^1.0.3",
     "qrcode": "^1.2.0",
     "serve-favicon": "^2.5.0",
     "superagent": "^3.8.2",

@@ -45,8 +45,10 @@ export default {
     }
     width = Math.round(width);
     height = Math.round(height);
-    content.attr('width', width + 'px');
-    content.attr('height', height + 'px');
+    // content.attr('width', width + 'px');
+    // content.attr('height', height + 'px');
+    content.attr('width', '100%');
+    content.attr('height', '100%');
     content = content.prop('outerHTML');
     return {
       type: types.SHAPE,
@@ -74,7 +76,7 @@ export default {
     console.log(path)
     return {
       type: types.IMAGE,
-      content: `<img src="${path}"/>`,
+      content: `<img style="width:100%;height:100%" src="${path}"/>`,
       class: types.IMAGE.toLowerCase(),
       animation: [],
       style: {
@@ -97,7 +99,7 @@ export default {
     let height = 200;
     return {
       type: types.QRCODE,
-      content: `<img src="${url}"/>`,
+      content: `<img style="width:100%;height:100%" src="${url}"/>`,
       class: types.IMAGE.toLowerCase(),
       animation: [],
       style: {

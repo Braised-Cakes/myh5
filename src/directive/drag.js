@@ -4,7 +4,7 @@ import store from '@/store/index.js'
 Vue.directive('my-drag', {
   bind: function (el) {
     $(el).on('mousedown', function (ev) {
-      if ($(ev.target).hasClass('ui-resizable-handle')) {
+      if ($(ev.target).hasClass('circle')) {
         return;
       }
       let isMove = false;

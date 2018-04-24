@@ -5504,6 +5504,10 @@ q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.npmjs.org/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
 
+qaep-push@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/qaep-push/-/qaep-push-1.0.3.tgz#ba860b85106b979756e04c32f9dbaa25fddd7054"
+
 qiniu@^7.1.3:
   version "7.1.3"
   resolved "https://registry.npmjs.org/qiniu/-/qiniu-7.1.3.tgz#664d850d2be69dd48c125755d8ed574d487f9332"

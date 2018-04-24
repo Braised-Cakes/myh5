@@ -2,7 +2,7 @@
   <div>
     <v-header></v-header>
     <div class="contain">
-      <button @click="add">新1增一页</button>
+      <button @click="add">新增一页</button>
       <ul>
         <li :key="item.id" v-for="item in list">
           <div class="image">

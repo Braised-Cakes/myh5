@@ -14,12 +14,12 @@
             <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
               <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                 <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
-                <div class="item-body" :style="item.style | filterItem" v-html="item.content"></div>
+                <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
                 <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
-                  <div class="circle circle-nw"></div>
-                  <div class="circle circle-ne"></div>
-                  <div class="circle circle-sw"></div>
-                  <div class="circle circle-se"></div>
+                  <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
+                  <div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
+                  <div v-my-changesize="{type : 'sw'}" class="circle circle-sw"></div>
+                  <div v-my-changesize="{type : 'se'}" class="circle circle-se"></div>
                 </div>
               </div>
             </div>
@@ -29,58 +29,58 @@
           <ul>
             <li @click="copyPage">
               <el-tooltip class="item" content="复制当前页" placement="right">
-                <div>
+                <el-button type="text">
                   <i class="icon iconfont icon-fuzhi"></i>
-                </div>
+                </el-button>
               </el-tooltip>
             </li>
             <li @click="runCurPhoneAni(true)">
               <el-tooltip class="item" content="播放" placement="right">
-                <div>
+                <el-button type="text">
                   <i class="icon iconfont icon-bofang"></i>
-                </div>
+                </el-button>
               </el-tooltip>
             </li>
             <li>
               <el-tooltip class="item" content="撤销" placement="right">
-                <div>
-                  <i class="icon iconfont icon-chexiao disabled"></i>
-                </div>
+                <el-button type="text" disabled>
+                  <i class="icon iconfont icon-chexiao"></i>
+                </el-button>
               </el-tooltip>
             </li>
             <li>
               <el-tooltip class="item" content="重做" placement="right">
-                <div>
-                  <i class="icon iconfont icon-zhongzuo disabled"></i>
-                </div>
+                <el-button type="text" disabled>
+                  <i class="icon iconfont icon-zhongzuo"></i>
+                </el-button>
               </el-tooltip>
             </li>
             <li @click="setZIndex('++')">
               <el-tooltip class="item" content="置顶" placement="right">
-                <div>
+                <el-button type="text">
                   <i class="icon iconfont icon-zhiding"></i>
-                </div>
+                </el-button>
               </el-tooltip>
             </li>
             <li @click="setZIndex('+')">
               <el-tooltip class="item" content="上移" placement="right">
-                <div>
+                <el-button type="text">
                   <i class="icon iconfont icon-shangyi"></i>
-                </div>
+                </el-button>
               </el-tooltip>
             </li>
             <li @click="setZIndex('-')">
               <el-tooltip class="item" content="下移" placement="right">
-                <div>
+                <el-button type="text">
                   <i class="icon iconfont icon-xiayi"></i>
-                </div>
+                </el-button>
               </el-tooltip>
             </li>
             <li @click="setZIndex('--')">
               <el-tooltip class="item" content="置底" placement="right">
-                <div>
+                <el-button type="text">
                   <i class="icon iconfont icon-12_zhidi"></i>
-                </div>
+                </el-button>
               </el-tooltip>
             </li>
           </ul>
@@ -101,6 +101,7 @@ import vHeader from "./header";
 import vPage from "./page";
 import * as utils from "@/utils";
 import * as types from "@/tpl/types";
+import "@/directive/changesize";
 export default {
   components: {
     "v-header": vHeader,
@@ -130,7 +131,14 @@ export default {
     filterItem(res) {
       var json = {};
       for (let attr in res) {
-        if (attr == "position" || attr == "left" || attr == "top") {
+        if (
+          attr == "position" ||
+          attr == "left" ||
+          attr == "top" ||
+          attr == "width" ||
+          attr == "height" ||
+          attr == "z-index"
+        ) {
           //console.log(2)
         } else {
           json[attr] = res[attr];
@@ -388,18 +396,22 @@ export default {
           &.circle-nw {
             left: $position;
             top: $position;
+            cursor: nw-resize;
           }
           &.circle-ne {
             right: $position;
             top: $position;
+            cursor: ne-resize;
           }
           &.circle-sw {
             left: $position;
             bottom: $position;
+            cursor: sw-resize;
           }
           &.circle-se {
             right: $position;
             bottom: $position;
+            cursor: se-resize;
           }
         }
       }
@@ -420,5 +432,8 @@ export default {
 
 .icon.disabled {
   color: #ccc;
+}
+.el-button {
+  color: #999;
 }
 </style>
