@@ -17,9 +17,13 @@
                 <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
                 <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                   <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
+                  <div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
                   <div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
+                  <div v-my-changesize="{type : 's'}" class="circle circle-s"></div>
                   <div v-my-changesize="{type : 'sw'}" class="circle circle-sw"></div>
+                  <div v-my-changesize="{type : 'w'}" class="circle circle-w"></div>
                   <div v-my-changesize="{type : 'se'}" class="circle circle-se"></div>
+                  <div v-my-changesize="{type : 'e'}" class="circle circle-e"></div>
                 </div>
               </div>
             </div>
@@ -385,6 +389,7 @@ export default {
       background: #fff;
       .phone-item {
         $size: 12px;
+        $halfSize: 6px;
         $position: -6px;
         .circle {
           width: $size;
@@ -398,20 +403,44 @@ export default {
             top: $position;
             cursor: nw-resize;
           }
+          &.circle-n {
+            left: 50%;
+            margin-left: -$halfSize;
+            top: $position;
+            cursor: n-resize;
+          }
           &.circle-ne {
             right: $position;
             top: $position;
             cursor: ne-resize;
+          }
+          &.circle-s {
+            left: 50%;
+            margin-left: -$halfSize;
+            bottom: $position;
+            cursor: s-resize;
           }
           &.circle-sw {
             left: $position;
             bottom: $position;
             cursor: sw-resize;
           }
+          &.circle-w {
+            left: $position;
+            top: 50%;
+            margin-top: -$halfSize;
+            cursor: w-resize;
+          }
           &.circle-se {
             right: $position;
             bottom: $position;
             cursor: se-resize;
+          }
+          &.circle-e {
+            right: $position;
+            top: 50%;
+            margin-top: -$halfSize;
+            cursor: e-resize;
           }
         }
       }

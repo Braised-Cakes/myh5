@@ -15,11 +15,23 @@ Vue.directive('my-changesize', {
         case 'nw':
           index = 0;
           break;
+        case 'n':
+          index = 1;
+          break;
         case 'ne':
           index = 2;
           break;
+        case 'w':
+          index = 3;
+          break;
+        case 'e':
+          index = 4;
+          break;
         case 'sw':
           index = 5;
+          break;
+        case 's':
+          index = 6;
           break;
         case 'se':
           index = 7;
