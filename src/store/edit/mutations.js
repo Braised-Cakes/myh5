@@ -122,6 +122,10 @@ export default {
       }
     } else {
       if (fill) {
+        // let json = item['fill'] || {};
+        // json[fill] = val.css;
+        console.log(val);
+        Vue.set(item['fill'], fill, val);
         Vue.set(item, key, $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
       } else {
         console.log(item);
@@ -130,7 +134,7 @@ export default {
         if (typeof val == 'string') {
           Vue.set(item, key, val);
         } else {
-          if(!item[key]){
+          if (!item[key]) {
             Vue.set(item, key, {});
           }
           for (const attr in val) {

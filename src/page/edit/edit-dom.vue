@@ -32,7 +32,7 @@
           <label>形状颜色{{index1 + 1}}</label>
           <el-color-picker @active-change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill" show-alpha></el-color-picker>
           <ul class="color-list">
-            <li @click="updateItem({key:'content', val:item1, fill : item1.fill}); item1.css = item2" :style="{'background-color':item2}" :key="item2" v-for="item2 in colorList"></li>
+            <li @click="updateItem({key:'content', val:item1.css, fill : item1.fill}); item1.css = item2" :style="{'background-color':item2}" :key="item2" v-for="item2 in colorList"></li>
           </ul>
         </div>
       </div>

@@ -160,7 +160,8 @@
         </div>
         <div class="right-content">
           <ul class="img-list">
-            <li @click="choiceShape(item.id)" :style="{'background-image':`url(//p7d4z759a.bkt.clouddn.com/${item.path})`}" :key="item.id" v-for="item in list"></li>
+            <li @click="choiceShape(item, $event)" :style="{'background-image':`url(store/${item.path})`}" :key="item.id" v-for="item in list">
+            </li>
           </ul>
           <div class="footer">
             <el-pagination :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
@@ -168,10 +169,11 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
-// import $ from "jquery";
+import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions } from "vuex";
@@ -189,7 +191,8 @@ export default {
       },
       typeList: [],
       typeIndex: 0,
-      tagIndex: 0
+      tagIndex: 0,
+      choiceSrc: ""
     };
   },
   computed: {
@@ -215,18 +218,34 @@ export default {
       this.pageInfo.currentPage = 1;
       this.get();
     },
-    choiceShape(id) {
+    choiceShape(item) {
+      let dom = $(`<embed src="store/${item.path}"></embed>`);
+      $(dom).on("load", () => {
+        let docs = dom[0].getSVGDocument();
+        $(dom).remove();
+        this.closePanel(types.SHAPE);
+        this.addItem({
+          type: types.SHAPE,
+          path: item.path,
+          content: $(docs)
+            .find("svg")
+            .prop("outerHTML")
+            .match(/<svg[\s\S]+/)[0]
+        });
+      });
+      $("#svg_cache").append(dom);
+      // embed
       api
         .getShapeContent({
-          id: id
+          id: item.id
         })
-        .then(({ result }) => {
-          this.closePanel(types.SHAPE);
-          console.log(result.match(/<svg[\s\S]+/)[0])
-          this.addItem({
-            type: types.SHAPE,
-            content: result.match(/<svg[\s\S]+/)[0]
-          });
+        .then(() => {
+          // this.closePanel(types.SHAPE);
+          // console.log(result.match(/<svg[\s\S]+/)[0])
+          // this.addItem({
+          //   type: types.SHAPE,
+          //   content: result.match(/<svg[\s\S]+/)[0]
+          // });
         });
     },
     get() {

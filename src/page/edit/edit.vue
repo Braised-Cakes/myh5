@@ -1,6 +1,7 @@
 <template>
   <div style="height:100%;">
     <v-header></v-header>
+    <div id="svg_cache" style="width:0px;height:0px;overflow:hidden;"></div>
     <el-scrollbar class="page-component__nav" style="height:100%;">
       <div class="main">
         <v-page :data="panel"></v-page>
@@ -12,9 +13,11 @@
           <div class="container">
             <div class="phone-bg"></div>
             <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
+              <!-- <embed id="aaabb" src="http://localhost:8081/store/a.svg"/> -->
               <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                 <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
                 <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
+                <!-- <div v-if="item.type == 'shape'" class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="highlight(item)"></div> -->
                 <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                   <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
                   <div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
@@ -150,6 +153,11 @@ export default {
       }
       return json;
     }
+  },
+  mounted() {
+    // setTimeout(()=>{
+    // console.log(      $('#aaabb')[0].getSVGDocument(f)  ) ;
+    // }, 1000)
   },
   computed: {
     ...mapGetters([

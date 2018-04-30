@@ -1,82 +1,94 @@
 <template>
-	<header>
-		<div class="creat-logo">
-			<router-link to="/list">
-				<svg class="icon" aria-hidden="true">
-					<use xlink:href="#icon-logo"></use>
-				</svg>
-			</router-link>
-		</div>
-		<div class="creat_con">
-			<ul>
-				<li @click="addItem(types.TXT)">
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-logo"></use>
-					</svg>
-					<span>文本</span>
-				</li>
+  <header>
+    <div class="creat-logo">
+      <router-link to="/list">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-logo"></use>
+        </svg>
+      </router-link>
+    </div>
+    <div class="creat_con">
+      <ul>
+        <li @click="addItem(types.TXT)">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-logo"></use>
+          </svg>
+          <span>文本</span>
+        </li>
         <li @click="openPanel(types.IMAGE)">
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-logo"></use>
-					</svg>
-					<span>图片</span>
-				</li>
-				<li @click="openPanel(types.SHAPE)">
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-logo"></use>
-					</svg>
-					<span>形状</span>
-				</li>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-logo"></use>
+          </svg>
+          <span>图片</span>
+        </li>
+        <li @click="openPanel(types.SHAPE)">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-logo"></use>
+          </svg>
+          <span>形状</span>
+        </li>
         <li @click="openPanel(types.MUSIC)">
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-logo"></use>
-					</svg>
-					<span>音乐</span>
-				</li>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-logo"></use>
+          </svg>
+          <span>音乐</span>
+        </li>
         <li @click="openPanel(types.QRCODE)">
-					<svg class="icon" aria-hidden="true">
-						<use xlink:href="#icon-logo"></use>
-					</svg>
-					<span>二维码</span>
-				</li>
-			</ul>
-		</div>
-		<div class="create-action">
-			<ul>
-				<li>
-					<span>预览和设置</span>
-				</li>
-				<li @click="save">
-					<span>保存</span>
-				</li>
-				<li>
-					<span>发布</span>
-				</li>
-				<li class="quit">
-					<span>退出</span>
-				</li>
-			</ul>
-		</div>
-	</header>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-logo"></use>
+          </svg>
+          <span>二维码</span>
+        </li>
+      </ul>
+    </div>
+    <div class="create-action">
+      <ul>
+        <li>
+          <span>预览和设置</span>
+        </li>
+        <li @click="save">
+          <span>保存</span>
+        </li>
+        <li>
+          <span>发布</span>
+        </li>
+        <li class="quit">
+          <span>退出</span>
+        </li>
+      </ul>
+    </div>
+  </header>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import * as api from "@/api/index";
 import * as types from "@/tpl/types.js";
+import $ from "jquery";
 export default {
   components: {},
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(["userInfo"]),
     ...mapGetters(["phoneData"])
   },
   methods: {
     ...mapActions(["addItem", "openPanel"]),
     save() {
+      let data = $.extend(true, {}, this.phoneData);
+      for (let i = 0; i < data.data.length; i++) {
+        let page = data.data[i];
+        for (let j = 0; j < page.data.length; j++) {
+          let item = page.data[j];
+          if (item.type == this.types.SHAPE) {
+            item.content = "";
+          }
+        }
+      }
+      console.log(this.phoneData)
       api
         .saveEdit({
           id: this.$route.params.id,
-          data: this.phoneData
+          data: data
         })
         .then(res => {
           console.log(res);

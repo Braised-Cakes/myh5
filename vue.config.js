@@ -10,7 +10,12 @@ module.exports = {
         target: 'http://localhost:3000', // 你接口的域名
         secure: true,
         changeOrigin: true
-      }
+      },
+      // '/svg': {
+      //   target: 'http://p7d4z759a.bkt.clouddn.com', // 你接口的域名
+      //   secure: true,
+      //   changeOrigin: true
+      // }
     }
   }
 }

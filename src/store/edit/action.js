@@ -117,7 +117,8 @@ export default {
     }
   },
   setPhone({
-    commit
+    commit,
+    dispatch
   }, {
     id
   }) {
@@ -125,6 +126,32 @@ export default {
       id: id
     }).then((res) => {
       commit(types.SET_PHONE, res.result.data.data);
+      let data = res.result.data.data.data;
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[i].data.length; j++) {
+          let dom = $(`<embed src="store/${data[i].data[j].path}"></embed>`);
+          $("#svg_cache").append(dom);
+          $(dom).on("load", () => {
+            let docs = dom[0].getSVGDocument();
+            $(dom).remove();
+            let svg = $(docs).find('svg')
+            if (!$(svg).attr('viewbox')) {
+              $(svg).attr('viewbox', `0 0 ${data[i].data[j].width} ${data[i].data[j].height}`);
+            }
+            $(svg).attr('width', '100%');
+            $(svg).attr('height', '100%');
+            $(svg).attr('preserveAspectRatio', 'none');
+            for (let attr in data[i].data[j].fill) {
+              $(svg).find(`*[fill="${attr}"]`).css('fill', data[i].data[j].fill[attr])
+            }
+            dispatch('updateItem', {
+              item: data[i].data[j],
+              key: 'content',
+              val: $(svg).prop('outerHTML')
+            });
+          });
+        }
+      }
       Vue.nextTick().then(() => {
         utils.runCurPhoneAni();
       })

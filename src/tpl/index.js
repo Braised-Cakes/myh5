@@ -26,7 +26,8 @@ export default {
   	形状
   */
   [types.SHAPE]: function ({
-    content
+    content,
+    path
   }) {
     content = $(content);
     let width = Math.round(parseFloat(content.attr('width')));
@@ -34,6 +35,7 @@ export default {
     if (!content.attr('viewbox')) {
       content.attr('viewbox', `0 0 ${width} ${height}`);
     }
+    content.attr('preserveAspectRatio', 'none');
     if (width >= height) {
       let radio = 100 / height;
       width = radio * width;
@@ -45,8 +47,6 @@ export default {
     }
     width = Math.round(width);
     height = Math.round(height);
-    // content.attr('width', width + 'px');
-    // content.attr('height', height + 'px');
     content.attr('width', '100%');
     content.attr('height', '100%');
     content = content.prop('outerHTML');
@@ -55,6 +55,10 @@ export default {
       content: content,
       class: types.SHAPE.toLowerCase(),
       animation: [],
+      fill: {},
+      width: width,
+      height: height,
+      path: path,
       style: {
         position: 'absolute',
         left: '0',
