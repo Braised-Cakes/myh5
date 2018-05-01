@@ -83,15 +83,7 @@ export default {
       state.phone = $.extend(true, {}, constant.initState.phone);
     }
   },
-  /**
-   * 更新某个元素的main字段
-   */
-  [types.UPDATE_PHONE](state, {
-    item,
-    val
-  }) {
-    Vue.set(item, 'main', val)
-  },
+
   /**
    * 添加元素
    */
@@ -156,10 +148,10 @@ export default {
    * 删除元素
    */
   [types.DEL_ITEM](state, {
-    curItemId,
-    curPageId
+    id,
+    page
   }) {
-    state.phone.data[curPageId].data.splice(curItemId, 1)
+    state.phone.data[page].data.splice(id, 1)
   },
   [types.ADD_CREATED_ID](state) {
     state.phone.main.createdDomId++;
@@ -175,6 +167,16 @@ export default {
    */
   [types.CLOSE_PANEL](state, type) {
     state.panel[type] = false;
+  },
+  /**
+   * 更新某个元素的main字段
+   */
+  [types.UPDATE_PHONE](state, {
+    item,
+    key,
+    val
+  }) {
+    Vue.set(item['main'], key, val)
   },
   /**
    * 更新phone的main字段

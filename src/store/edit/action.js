@@ -200,17 +200,22 @@ export default {
       fill: fill
     });
   },
-
-  updatePhone({
+  /**
+   * 更新phoneData某一page的main
+   * @param {*} param0 
+   * @param {*} param1 
+   */
+  updateSomePageMain({
     commit,
     getters
-
   }, {
+    key,
     val
   }) {
     console.log(val)
     commit(types.UPDATE_PHONE, {
       item: getters.currentPhone,
+      key: key,
       val: val
     });
   },
@@ -239,21 +244,35 @@ export default {
   },
   /**
    * 删除指定元素
-   * @param {Number} index
+   * @param {Number} id 被删除元素的id
    */
   async delItem({
     commit,
     dispatch,
     getters
-  }, curItemId) {
+  }, id) {
     await dispatch('cancelSelect');
     commit(types.DEL_ITEM, {
-      curItemId: curItemId,
-      curPageId: getters.currentPage
+      id: id,
+      page: getters.currentPage
     });
   },
-
-
+  /**
+   * 更新phone的main
+   * @param {String} key 
+   * @param {String} val 
+   */
+  updateMain({
+    commit
+  }, {
+    key,
+    val
+  }) {
+    commit(types.UPDATE_MAIN, {
+      key: key,
+      val: val
+    })
+  },
   /**
    * 打开指定panel
    */
@@ -271,16 +290,5 @@ export default {
   }, type) {
     utils.removeMask();
     commit(types.CLOSE_PANEL, type)
-  },
-  updateMain({
-    commit
-  }, {
-    key,
-    val
-  }) {
-    commit(types.UPDATE_MAIN, {
-      key: key,
-      val: val
-    })
   }
 }
