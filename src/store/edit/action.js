@@ -256,6 +256,29 @@ export default {
       id: id,
       page: getters.currentPage
     });
+    /**
+     * 调整z-index,  z-index从1开始，依次递增
+     */
+    let list = $.extend(true, [], getters.currentPhone.data);
+    list.sort((a, b) => {
+      return a.style['z-index'] - b.style['z-index']
+    })
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].style['z-index'] != i + 1) {
+        let item = getters.currentPhone.data.filter((item) => {
+          return item.id == list[i].id
+        })[0]
+        dispatch('updateItem', {
+          item: item,
+          key: 'style',
+          val: {
+            'z-index': i + 1
+          }
+        })
+      }
+    }
+
+
   },
   /**
    * 更新phone的main

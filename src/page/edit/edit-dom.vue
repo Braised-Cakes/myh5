@@ -161,7 +161,7 @@ export default {
       svgColorList: [],
       activeName: "1",
       nav: ["样式", "动画", "事件"],
-      navIndex: 2,
+      navIndex: 0,
       options: [
         {
           label: "12px",
