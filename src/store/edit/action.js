@@ -129,6 +129,9 @@ export default {
       let data = res.result.data.data.data;
       for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[i].data.length; j++) {
+          if (data[i].data[j].type != 'shape') {
+            continue;
+          }
           let dom = $(`<embed src="store/${data[i].data[j].path}"></embed>`);
           $("#svg_cache").append(dom);
           $(dom).on("load", () => {
