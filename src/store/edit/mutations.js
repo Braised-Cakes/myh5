@@ -216,6 +216,32 @@ export default {
       state.cacheData = data;
     }
   },
+  ['test'](state, {
+    type,
+    data,
+    page,
+    who,
+    curCache
+  }) {
+    data = $.extend(true, $.type(data) == 'array' ? [] : {}, data);
+    if (type == 'add' && who == 'list') {
+      if (curCache.index < curCache.list.length - 1) {
+        curCache.list.length = curCache.index + 1;
+        curCache.index = curCache.list.length - 1;
+      }
+      curCache.list.push(data);
+      curCache.index++;
+    } else if (type == 'add' && who == 'whole') {
+      state.cacheData.push({
+        index: 0,
+        list: [data]
+      })
+    } else if (type == 'assign' && who == 'whole') {
+      state.cacheData = data;
+    } else if (type == 'del' && who == 'whole') {
+      state.cacheData.splice(page, 1);
+    }
+  },
   // /**
   //  * 撤销
   //  */
