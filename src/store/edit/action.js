@@ -21,7 +21,8 @@ export default {
      */
     let oldPage = getters.currentPage;
     await dispatch('addPage', {
-      go: false
+      go: false,
+      record: false
     });
     Vue.nextTick().then(async () => {
       let data = $.extend(true, {}, state.phone.data[oldPage]);
@@ -36,6 +37,11 @@ export default {
       await dispatch('selectPage', {
         page: getters.currentPage + 1
       });
+      console.log(data)
+      dispatch('record', {
+        type: 'page',
+        data: data
+      })
     })
   },
 
@@ -59,13 +65,15 @@ export default {
   /**
    * 增加一页
    * @param {Boolean} go 是否选中新页面
+   * @param {Boolean} record 是否记录cache
    */
   async addPage({
     commit,
     dispatch,
     getters
   }, {
-    go = true
+    go = true,
+    record = true
   }) {
     commit(types.ADD_PAGE, {
       index: getters.currentPage,
@@ -74,21 +82,49 @@ export default {
     go && await dispatch('selectPage', {
       page: getters.currentPage + 1
     });
+    record && dispatch('record', {
+      type: 'page',
+      data: getters.currentPhone
+    })
   },
   /**
    * 排序
    */
   async sortPage({
     commit,
+    state,
+    getters,
     dispatch
   }, data) {
     await dispatch('selectPage', {
       page: data.futureIndex,
       ani: false
     });
+    // console.log(data)
+    // state.cacheData.forEach((item)=>{
+    //   for(let i = 0; i < data.value.length; i++){
+    //     if(JSON.stringify(data.value[i] == JSON.stringify(item.list[item.index]))){
+    //       console.log('有')
+    //       break;f
+    //     }
+    //   }
+
+    // })
+    let arr = [];
+    data.value.forEach((item) => {
+      for (let i = 0; i < getters.phoneData.data.length; i++) {
+        if (getters.phoneData.data[i] == item) {
+          arr.push(state.cacheData[i])
+        }
+      }
+    })
     commit(types.CHANGE_DATA, {
       data: data.value
     });
+    dispatch('record', {
+      type: 'init',
+      data: arr
+    })
   },
   /**
    * 删除指定页
@@ -109,6 +145,10 @@ export default {
           page: getters.phoneData.data.length - 1
         });
       }
+      dispatch('record', {
+        type: 'delPage',
+        page: page
+      })
     } else {
       app.$alert('最少保留一页内容', {
         closeOnClickModal: true,
@@ -126,6 +166,11 @@ export default {
       id: id
     }).then((res) => {
       commit(types.SET_PHONE, res.result.data.data);
+      //记录
+      dispatch('record', {
+        type: 'phone',
+        data: res.result.data.data.data
+      })
       let data = res.result.data.data.data;
       for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[i].data.length; j++) {
@@ -188,20 +233,29 @@ export default {
   },
   updateItem({
     commit,
-    getters
+    getters,
+    dispatch
   }, {
     item,
     key,
     val,
     fill
   }) {
-    console.log(val)
+    if (!key) {
+      console.log('key不存在')
+      return;
+    }
     commit(types.UPDATE_ITEM, {
       item: item || getters.curItem,
       key: key,
       val: val,
       fill: fill
     });
+    dispatch('record', {
+      type: 'item',
+      data: getters.currentPhone,
+      page: getters.currentPage
+    })
   },
   /**
    * 更新phoneData某一page的main
@@ -210,17 +264,22 @@ export default {
    */
   updateSomePageMain({
     commit,
-    getters
+    getters,
+    dispatch
   }, {
     key,
     val
   }) {
-    console.log(val)
     commit(types.UPDATE_PHONE, {
       item: getters.currentPhone,
       key: key,
       val: val
     });
+    dispatch('record', {
+      type: 'item',
+      data: getters.currentPhone,
+      page: getters.currentPage
+    })
   },
 
   /**
@@ -316,5 +375,73 @@ export default {
   }, type) {
     utils.removeMask();
     commit(types.CLOSE_PANEL, type)
+  },
+  /**
+   * 记录
+   */
+  record({
+    commit,
+    getters
+  }, {
+    type = 'item',
+    data,
+    page
+  }) {
+    //正常情况  index = list.length - 1
+    // console.log(getters.curCache)
+    if (getters.curCache && (getters.curCache.index < getters.curCache.list.length - 1)) {
+      commit(types.RECORD, {
+        type: 'del',
+        page: page
+      })
+    }
+    commit(types.RECORD, {
+      type,
+      data,
+      page
+    })
+  },
+  revoke({
+    state,
+    commit,
+    getters
+  }) {
+    console.log(state)
+    if (getters.curCache.index == 0) {
+      console.log('没有可撤销的了')
+      return;
+    }
+    //当前页是知道的，
+    commit(types.CHANGE_DATA, {
+      page: getters.currentPage,
+      data: getters.curCache.list[getters.curCache.index - 1]
+    });
+    commit(types.REVOKE, {
+      curCache: getters.curCache,
+      index: getters.curCache.index - 1
+    })
+  },
+  redo({
+    // state,
+    commit,
+    getters
+  }) {
+    console.log(getters.curCache.index, getters.curCache.list.length)
+    if (getters.curCache.index < getters.curCache.list.length - 1) {
+
+      //当前页是知道的，
+      commit(types.CHANGE_DATA, {
+        page: getters.currentPage,
+        data: getters.curCache.list[getters.curCache.index + 1]
+      });
+      commit(types.REDO, {
+        curCache: getters.curCache,
+        index: getters.curCache.index + 1
+      })
+      return;
+    } else {
+      console.log('没有可重做的了')
+    }
+
   }
 }

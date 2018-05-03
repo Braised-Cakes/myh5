@@ -29,3 +29,9 @@ export const ADD_CREATED_ID = 'ADD_CREATED_ID';
  */
 export const OPEN_PANEL = 'OPEN_PANEL';
 export const CLOSE_PANEL = 'CLOSE_PANEL';
+//记录
+export const RECORD = 'RECORD';
+//撤销
+export const REVOKE = 'REVOKE';
+//重做
+export const REDO = 'REDO';

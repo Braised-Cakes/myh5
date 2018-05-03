@@ -114,15 +114,9 @@ export default {
       }
     } else {
       if (fill) {
-        // let json = item['fill'] || {};
-        // json[fill] = val.css;
-        console.log(val);
         Vue.set(item['fill'], fill, val);
         Vue.set(item, key, $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
       } else {
-        console.log(item);
-        console.log(key);
-        console.log(val)
         if (typeof val == 'string') {
           Vue.set(item, key, val);
         } else {
@@ -130,7 +124,6 @@ export default {
             Vue.set(item, key, {});
           }
           for (const attr in val) {
-            console.log(attr);
             Vue.set(item[key], attr, val[attr]);
           }
         }
@@ -186,5 +179,61 @@ export default {
     val
   }) {
     Vue.set(state.phone.main, key, val);
+  },
+  /**
+   * 记录 记录某一步操作， 记录某一页， 记录整个
+   * type 'item'   'page' 'phone'
+   * data
+   */
+  [types.RECORD](state, {
+    type = 'item',
+    data,
+    page
+  }) {
+
+    if (type == 'phone') {
+      data.forEach((item) => {
+        state.cacheData.push({
+          index: 0,
+          list: [$.extend(true, {}, item)]
+        })
+      })
+    } else if (type == 'item') {
+      //如果当前index 不为 length - 1, 就把后面的清掉
+      state.cacheData[page].list.push($.extend(true, {}, data));
+      state.cacheData[page].index++;
+    } else if (type == 'page') {
+      state.cacheData.push({
+        index: 0,
+        list: [$.extend(true, {}, data)]
+      })
+    } else if (type == 'del') {
+      state.cacheData[page].list.splice(state.cacheData[page].index + 1, state.cacheData[page].list.length);
+      state.cacheData[page].index = state.cacheData[page].list.length - 1;
+    } else if (type == 'delPage') {
+      state.cacheData.splice(page, 1);
+    } else if (type == 'init') {
+      state.cacheData = data;
+    }
+  },
+  // /**
+  //  * 撤销
+  //  */
+  [types.REVOKE](state, {
+    curCache,
+    index
+  }) {
+    curCache.index = index;
+    //state/
+  },
+  // /**
+  //  * 重做
+  //  */
+  [types.REDO](state, {
+    curCache,
+    index
+  }) {
+    curCache.index = index;
+    //state
   }
 }

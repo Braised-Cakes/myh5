@@ -52,5 +52,11 @@ export default {
    */
   curItemId(state) {
     return state.curItemId;
+  },
+  /**
+   * 当前页的cache数据
+   */
+  curCache(state) {
+    return state.cacheData[state.currentPage];
   }
 }

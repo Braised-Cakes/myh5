@@ -12,7 +12,9 @@
         <div class="workspace" @mousedown.stop="cancelSelect">
           <div class="container">
             <div class="phone-bg"></div>
+
             <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
+              {{curCache}}
               <!-- <embed id="aaabb" src="http://localhost:8081/store/a.svg"/> -->
               <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                 <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
@@ -48,16 +50,16 @@
                 </el-button>
               </el-tooltip>
             </li>
-            <li>
+            <li @click="revoke">
               <el-tooltip class="item" content="撤销" placement="right">
-                <el-button type="text" disabled>
+                <el-button type="text">
                   <i class="icon iconfont icon-chexiao"></i>
                 </el-button>
               </el-tooltip>
             </li>
-            <li>
+            <li @click="redo">
               <el-tooltip class="item" content="重做" placement="right">
-                <el-button type="text" disabled>
+                <el-button type="text">
                   <i class="icon iconfont icon-zhongzuo"></i>
                 </el-button>
               </el-tooltip>
@@ -166,7 +168,8 @@ export default {
       "currentPhone",
       "curItem",
       "hasSelectedItems",
-      "curItemId"
+      "curItemId",
+      "curCache"
     ]),
     ...mapState({
       modulePanel: state => state.edit.panel
@@ -182,7 +185,9 @@ export default {
       "setPhone",
       "copyPage",
       "cancelSelect",
-      "openPanel"
+      "openPanel",
+      "revoke",
+      "redo"
     ]),
     select(index) {
       this.selectItem(index);
