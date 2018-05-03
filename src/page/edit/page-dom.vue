@@ -2,8 +2,7 @@
 	<div style="padding:12px 20px;">
 		<div class="style-item">
 			<label>纯色背景</label>
-			<!-- {{currentPhone}} -->
-			<el-color-picker @change="updateSomePageMain({  key : 'background',  val : $event})" :value="currentPhone.main['background'] || '#fff'" show-alpha></el-color-picker>
+			<el-color-picker @active-change="updateSomePageMain({  key : 'background',  val : $event})" :value="currentPhone.main['background'] || '#fff'" show-alpha></el-color-picker>
 		</div>
 	</div>
 </template>

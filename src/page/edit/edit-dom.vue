@@ -23,16 +23,16 @@
         </div>
         <div class="style-item" v-if="rules('color')">
           <label>文字颜色</label>
-          <el-color-picker @change="updateItem({key:'style', val:{'color':$event}})" :value="curItem.style['color'] || '#666'" show-alpha></el-color-picker>
+          <el-color-picker @active-change="updateItem({key:'style', val:{'color':$event}})" :value="curItem.style['color'] || '#666'" show-alpha></el-color-picker>
           <ul class="color-list">
-            <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background-color':item}" :key="item" v-for="item in colorList"></li>
+            <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
           </ul>
         </div>
         <div class="style-item" v-if="rules('fill')" :key="index1" v-for="(item1, index1) in data.fillColorList">
           <label>形状颜色{{index1 + 1}}</label>
-          <el-color-picker @change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill" show-alpha></el-color-picker>
+          <el-color-picker @active-change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill" show-alpha></el-color-picker>
           <ul class="color-list">
-            <li @click="updateItem({key:'content', val:item1.css, fill : item1.fill}); item1.css = item2" :style="{'background-color':item2}" :key="item2" v-for="item2 in colorList"></li>
+            <li @click="updateItem({key:'content', val:item1.css, fill : item1.fill}); item1.css = item2" :style="{'background':item2 == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item2}" :key="item2" v-for="item2 in colorList"></li>
           </ul>
         </div>
       </div>
@@ -41,9 +41,9 @@
           <div style="padding:12px 20px;">
             <div class="style-item">
               <label>背景颜色</label>
-              <el-color-picker @change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'rgba(0,0,0,0)'" show-alpha></el-color-picker>
+              <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'rgba(0,0,0,0)'" show-alpha></el-color-picker>
               <ul class="color-list">
-                <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background-color':item}" :key="item" v-for="item in colorList"></li>
+                <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
               </ul>
             </div>
             <div class="style-item">
@@ -78,9 +78,9 @@
             </div>
             <div class="style-item">
               <label>边框颜色</label>
-              <el-color-picker @change="updateItem({key:'style', val:{'border-color':$event}})" :value="curItem.style['border-color'] || '#000'" show-alpha></el-color-picker>
+              <el-color-picker @active-change="updateItem({key:'style', val:{'border-color':$event}})" :value="curItem.style['border-color'] || '#000'" show-alpha></el-color-picker>
               <ul class="color-list">
-                <li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background-color':item}" :key="item" v-for="item in colorList"></li>
+                <li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
               </ul>
             </div>
             <div class="style-item">
@@ -149,6 +149,12 @@ export default {
       } else {
         return rules[type].default;
       }
+    },
+    fffff() {
+      console.log("获得焦点");
+    },
+    bbbbb() {
+      console.log("失去焦点");
     }
   },
   props: {
@@ -178,10 +184,10 @@ export default {
       ],
       value: 12,
       colorList: [
+        "rgba(0,0,0,0)",
         "#fff",
         "rgba(255, 84, 72, 1)",
         "rgba(242, 166, 83, 1)",
-        "rgba(255, 202, 40, 1)",
         "rgba(24, 207, 161, 1)",
         "rgba(89, 199, 249, 1)",
         "rgba(77, 143, 243, 1)",

@@ -12,10 +12,7 @@
         <div class="workspace" @mousedown.stop="cancelSelect">
           <div class="container">
             <div class="phone-bg"></div>
-
             <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
-              {{curCache}}
-              <!-- <embed id="aaabb" src="http://localhost:8081/store/a.svg"/> -->
               <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                 <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
                 <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
@@ -50,14 +47,14 @@
                 </el-button>
               </el-tooltip>
             </li>
-            <li @click="revoke">
+            <li v-if="config.revoke" @click="revoke">
               <el-tooltip class="item" content="撤销" placement="right">
                 <el-button type="text">
                   <i class="icon iconfont icon-chexiao"></i>
                 </el-button>
               </el-tooltip>
             </li>
-            <li @click="redo">
+            <li v-if="config.revoke" @click="redo">
               <el-tooltip class="item" content="重做" placement="right">
                 <el-button type="text">
                   <i class="icon iconfont icon-zhongzuo"></i>
@@ -111,6 +108,7 @@ import vPage from "./page";
 import * as utils from "@/utils";
 import * as types from "@/tpl/types";
 import "@/directive/changesize";
+import config from "@/config";
 export default {
   components: {
     "v-header": vHeader,
@@ -155,11 +153,6 @@ export default {
       }
       return json;
     }
-  },
-  mounted() {
-    // setTimeout(()=>{
-    // console.log(      $('#aaabb')[0].getSVGDocument(f)  ) ;
-    // }, 1000)
   },
   computed: {
     ...mapGetters([
@@ -339,7 +332,8 @@ export default {
       panel: {
         fillColorList: []
       },
-      types: types
+      types: types,
+      config: config
     };
   }
 };

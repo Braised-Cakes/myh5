@@ -5,6 +5,7 @@ import * as api from '@/api'
 import tpl from '@/tpl'
 import app from '@/main'
 import * as utils from '@/utils'
+import config from '@/config'
 export default {
   /**
    * 复制某一页
@@ -221,6 +222,7 @@ export default {
     } else {
       itemTpl = tpl[payload.type](payload);
     }
+    commit(types.ADD_CREATED_ID)
     itemTpl.style['z-index'] = getters.curPageItemLen + 1;
     itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
     itemTpl.event = {};
@@ -229,7 +231,7 @@ export default {
       item: itemTpl
     });
     commit(types.SELECT_ITEM, getters.curPageItemLen - 1)
-    commit(types.ADD_CREATED_ID)
+
   },
   updateItem({
     commit,
@@ -387,8 +389,9 @@ export default {
     data,
     page
   }) {
-    //正常情况  index = list.length - 1
-    // console.log(getters.curCache)
+    if (!config.revoke) {
+      return;
+    }
     if (getters.curCache && (getters.curCache.index < getters.curCache.list.length - 1)) {
       commit(types.RECORD, {
         type: 'del',
@@ -402,16 +405,16 @@ export default {
     })
   },
   revoke({
-    state,
     commit,
     getters
   }) {
-    console.log(state)
+    if (!config.revoke) {
+      return;
+    }
     if (getters.curCache.index == 0) {
       console.log('没有可撤销的了')
       return;
     }
-    //当前页是知道的，
     commit(types.CHANGE_DATA, {
       page: getters.currentPage,
       data: getters.curCache.list[getters.curCache.index - 1]
@@ -422,11 +425,12 @@ export default {
     })
   },
   redo({
-    // state,
     commit,
     getters
   }) {
-    console.log(getters.curCache.index, getters.curCache.list.length)
+    if (!config.revoke) {
+      return;
+    }
     if (getters.curCache.index < getters.curCache.list.length - 1) {
 
       //当前页是知道的，
