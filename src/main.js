@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from '@/App'
 import router from '@/router'
+import VueResource  from 'vue-resource'
+console.log(VueResource)
 import 'animate.css'
 import '@/css/reset.css'
 import '@/css/index.css'
@@ -23,6 +25,7 @@ import {
   OptionGroup,
   MessageBox,
   Notification,
+  Upload,
   Message
 } from 'element-ui';
 import '@/css/element-variables.scss'
@@ -47,6 +50,7 @@ Vue.use(Radio);
 Vue.use(RadioGroup);
 Vue.use(Option);
 Vue.use(OptionGroup);
+Vue.use(Upload);
 Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;
@@ -55,7 +59,7 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
-
+Vue.use(VueResource);
 export default new Vue({
   router: router,
   store: store,

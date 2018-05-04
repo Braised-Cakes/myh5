@@ -6,9 +6,15 @@ let glob = require('glob')
 var QRCode = require('qrcode')
 let md5 = require('md5')
 const rimraf = require('rimraf')
+const sha1 = require('sha1')
+const {
+  AccessKey,
+  SecretKey
+} = require('../../.key.js')
 const {
   promisify
 } = require('util')
+const qiniu = require('qiniu')
 const {
   upload
 } = require('../qiniu/upload')
@@ -645,3 +651,27 @@ app.get('/aj/qrcode/create', async (req, res) => {
 //         result: 111
 //     })
 // })
+
+
+/**
+ * 用户上传图片
+ */
+app.get('/aj/image/token', async (req, res) => {
+  var accessKey = AccessKey
+  var secretKey = SecretKey
+  var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+  const fileName = `${sha1(req.query.fileName)}.${req.query.fileName.split('.').pop()}`
+  let bucketName = 'user'
+  var options = {
+    scope: bucketName,
+    // expires: 60 * 60 * 10,
+    returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)", "imageInfo":$(imageInfo)}'
+  };
+  var putPolicy = new qiniu.rs.PutPolicy(options);
+  var uploadToken = putPolicy.uploadToken(mac);
+  // http://up-z2.qiniup.com
+  res.send({
+    token: uploadToken,
+    key: fileName
+  })
+});

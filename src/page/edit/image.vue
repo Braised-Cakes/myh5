@@ -188,8 +188,11 @@
         </ul>
         <div class="operation">
           <div class="item">
-            <span>上传</span>
+            <el-upload :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :on-preview="handlePreview" :show-file-list="false">
+              <span>上传</span>
+            </el-upload>
           </div>
+
           <div class="item">
             <span>添加外链</span>
           </div>
@@ -218,7 +221,7 @@
   </div>
 </template>
 <script>
-// import $ from "jquery";
+import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions, mapGetters } from "vuex";
@@ -240,7 +243,12 @@ export default {
       audio: null,
       leftIndex: 0,
       loading1: true,
-      loading2: false
+      loading2: false,
+      fileList: [],
+      form: {
+        key: "",
+        token: ""
+      }
     };
   },
   computed: {
@@ -251,6 +259,22 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    uploadProgress(event, file, fileList) {
+      console.log("当前进度" + parseInt(event.percent));
+    },
+    beforeUpload(file) {
+      return api
+        .getToken({
+          fileName: file.name
+        })
+        .then(({ token, key }) => {
+          this.form.key = key;
+          this.form.token = token;
+        });
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
     /**
      * 关闭音乐面板
      */
@@ -316,6 +340,7 @@ export default {
     }
   },
   async mounted() {
+    console.log(this.$http);
     let { result = [] } = await api.getImageNav();
     this.navOption = result;
     this.get();
