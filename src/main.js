@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import App from '@/App'
 import router from '@/router'
-import VueResource  from 'vue-resource'
-console.log(VueResource)
 import 'animate.css'
 import '@/css/reset.css'
 import '@/css/index.css'
@@ -59,7 +57,6 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
-Vue.use(VueResource);
 export default new Vue({
   router: router,
   store: store,

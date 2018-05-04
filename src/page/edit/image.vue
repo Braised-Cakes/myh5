@@ -172,6 +172,23 @@
     }
   }
 }
+
+.progress-area {
+  position: absolute;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #5cc9f5;
+  z-index: 1;
+  animation: 0.2s;
+}
+.upload-demo {
+  position: relative;
+  z-index: 2;
+  span {
+    color: #526069;
+  }
+}
 </style>
 
 <template>
@@ -185,16 +202,14 @@
         <ul>
           <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">图片库</li>
           <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
+          <li @click="changeLeftIndex(2);" :class="{active : leftIndex == 2}">我的上传</li>
         </ul>
         <div class="operation">
           <div class="item">
-            <el-upload :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :on-preview="handlePreview" :show-file-list="false">
+            <div class="progress-area"></div>
+            <el-upload :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :on-preview="handlePreview" :show-file-list="false">
               <span>上传</span>
             </el-upload>
-          </div>
-
-          <div class="item">
-            <span>添加外链</span>
           </div>
         </div>
       </div>
@@ -244,7 +259,6 @@ export default {
       leftIndex: 0,
       loading1: true,
       loading2: false,
-      fileList: [],
       form: {
         key: "",
         token: ""
@@ -259,8 +273,15 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
-    uploadProgress(event, file, fileList) {
+    uploadProgress(event) {
+      $(".progress-area").css("width", parseInt(event.percent) + "%");
       console.log("当前进度" + parseInt(event.percent));
+    },
+    uploadSuccess(response) {
+      console.log(response);
+      api.userUpload(response).then(res => {
+        console.log(res);
+      });
     },
     beforeUpload(file) {
       return api
@@ -331,7 +352,8 @@ export default {
           limit: this.pageInfo.pageSize,
           page: this.pageInfo.currentPage,
           typeId: this.navOption[this.navIndex].typeId,
-          used: this.leftIndex == 0 ? "" : 1
+          used: this.leftIndex == 1 ? 1 : '',
+          isMy: this.leftIndex == 2 ? 1 : ''
         })
         .then(res => {
           this.list = res.result.data;
@@ -340,7 +362,6 @@ export default {
     }
   },
   async mounted() {
-    console.log(this.$http);
     let { result = [] } = await api.getImageNav();
     this.navOption = result;
     this.get();

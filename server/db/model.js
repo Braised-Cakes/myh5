@@ -128,44 +128,6 @@ module.exports = {
       required: true
     }
   },
-  'pics': {
-    'username': {
-      type: String,
-      required: false
-    },
-    'src': {
-      type: String,
-      required: true
-    },
-    'id': {
-      type: String,
-      required: true
-    },
-    'sourceId': {
-      type: String,
-      required: false
-    },
-    'width': {
-      type: Number,
-      required: false
-    },
-    'height': {
-      type: Number,
-      required: false
-    },
-    'type': {
-      type: Object,
-      required: false
-    },
-    'types': {
-      type: String,
-      required: false
-    },
-    'createTime': {
-      type: String,
-      required: false
-    },
-  },
   'images': {
     'uid': {
       type: Number,
@@ -178,6 +140,10 @@ module.exports = {
     'id': {
       type: Number,
       required: true
+    },
+    'size': {
+      type: Number,
+      required: false
     },
     'name': {
       type: String,

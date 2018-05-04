@@ -7,6 +7,7 @@ var QRCode = require('qrcode')
 let md5 = require('md5')
 const rimraf = require('rimraf')
 const sha1 = require('sha1')
+const uuid = require('uuid/v1');
 const {
   AccessKey,
   SecretKey
@@ -380,6 +381,27 @@ app.get('/aj/image/get', async (req, res) => {
         data: arrx
       }
     })
+  } else if (req.query.isMy) {
+    total = await collection.count({
+      uid: userId
+    })
+    data = await collection.find({
+        uid: userId
+      })
+      .skip((page - 1) * limit)
+      .limit(limit)
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: data
+      }
+    })
   } else {
     total = await collection.count(find)
     data = await collection.find(find)
@@ -660,8 +682,10 @@ app.get('/aj/image/token', async (req, res) => {
   var accessKey = AccessKey
   var secretKey = SecretKey
   var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-  const fileName = `${sha1(req.query.fileName)}.${req.query.fileName.split('.').pop()}`
-  let bucketName = 'user'
+  let id = uuid();
+  // userId
+  const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
+  let bucketName = 'image'
   var options = {
     scope: bucketName,
     // expires: 60 * 60 * 10,
@@ -675,3 +699,29 @@ app.get('/aj/image/token', async (req, res) => {
     key: fileName
   })
 });
+app.post('/aj/image/user_upload', async (req, res) => {
+  let id = uuid();
+  console.log(id);
+
+  const collection = dbHandel.getModel('images')
+  let lastData = await collection.find().sort({
+    id: -1
+  }).limit(1)
+  console.log(lastData[0])
+  let createTime =
+    await new collection({
+      uid: userId,
+      path: req.body.key,
+      width: req.body.imageInfo.width,
+      height: req.body.imageInfo.height,
+      size: req.body.imageInfo.size,
+      createTime: new Date().getTime(),
+      id: lastData[0].id + 1
+    }).save();
+  res.send({
+    message: '上传成功',
+    data: {
+      path: `http://p7m90pgef.bkt.clouddn.com/${req.body.key}`
+    }
+  })
+})
