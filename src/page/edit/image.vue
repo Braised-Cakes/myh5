@@ -105,7 +105,8 @@
             line-height: 30px;
             margin-right: 30px;
             cursor: pointer;
-            &.active {
+            &.active,
+            &:hover {
               color: #1593ff;
             }
           }
@@ -146,6 +147,10 @@
             //     color: #fff;
             //   }
             // }
+            &.img-loading {
+              background-image: url(data:image/svg+xml,<svg%20width%3D%2744%27%20height%3D%2744%27%20viewBox%3D%270%200%2044%2044%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20stroke%3D%27%23fff%27><g%20fill%3D%27none%27%20fill-rule%3D%27evenodd%27%20stroke-width%3D%272%27><circle%20stroke%3D%27%2376838f%27%20cx%3D%2722%27%20cy%3D%2722%27%20r%3D%271%27><animate%20attributeName%3D%27r%27%20begin%3D%270s%27%20dur%3D%271.8s%27%20values%3D%271%3B%2020%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.165%2C%200.84%2C%200.44%2C%201%27%20repeatCount%3D%27indefinite%27%20/><animate%20attributeName%3D%27stroke-opacity%27%20begin%3D%270s%27%20dur%3D%271.8s%27%20values%3D%271%3B%200%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.3%2C%200.61%2C%200.355%2C%201%27%20repeatCount%3D%27indefinite%27%20/></circle><circle%20stroke%3D%27%2376838f%27%20cx%3D%2722%27%20cy%3D%2722%27%20r%3D%271%27><animate%20attributeName%3D%27r%27%20begin%3D%27-0.9s%27%20dur%3D%271.8s%27%20values%3D%271%3B%2020%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.165%2C%200.84%2C%200.44%2C%201%27%20repeatCount%3D%27indefinite%27%20/><animate%20attributeName%3D%27stroke-opacity%27%20begin%3D%27-0.9s%27%20dur%3D%271.8s%27%20values%3D%271%3B%200%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.3%2C%200.61%2C%200.355%2C%201%27%20repeatCount%3D%27indefinite%27%20/></circle></g></svg>);
+              background-size: 40px 40px;
+            }
           }
         }
         .no-list {
@@ -185,8 +190,13 @@
 .upload-demo {
   position: relative;
   z-index: 2;
-  span {
+  .txt {
     color: #526069;
+  }
+  &:hover {
+    .txt {
+      color: #68cbf7;
+    }
   }
 }
 </style>
@@ -207,8 +217,8 @@
         <div class="operation">
           <div class="item">
             <div class="progress-area"></div>
-            <el-upload :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :on-preview="handlePreview" :show-file-list="false">
-              <span>上传</span>
+            <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="image/jpeg,image/jpg,image/png" :multiple="true" :limit="3" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
+              <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
             </el-upload>
           </div>
         </div>
@@ -221,7 +231,7 @@
         </div>
         <div class="right-content">
           <ul class="img-list">
-            <li @click="choiceImage(item)" :style="{'background-image':`url(//p7h1y3vg2.bkt.clouddn.com/${item.path}?imageView2/2/w/230/h/230/q/75|imageslim)`}" :key="item.id" v-for="item in list"></li>
+            <li @click="choiceImage(item)" class="img-loading" :style="item.style || {}" :key="item.id" v-for="item in list"></li>
           </ul>
           <div class="footer">
             <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
@@ -262,7 +272,10 @@ export default {
       form: {
         key: "",
         token: ""
-      }
+      },
+      txt: "上传",
+      progressList: {},
+      uploadSucLen: 0
     };
   },
   computed: {
@@ -273,17 +286,62 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
-    uploadProgress(event) {
-      $(".progress-area").css("width", parseInt(event.percent) + "%");
-      console.log("当前进度" + parseInt(event.percent));
+    uploadProgress(event, file, fileList) {
+      if (!file) {
+        return;
+      }
+      this.progressList[file.uid] = parseInt(event.percent);
+      let per = 0;
+      for (let attr in this.progressList) {
+        per += this.progressList[attr];
+      }
+      $(".progress-area").css("width", parseInt(per / fileList.length) + "%");
+    },
+    transition(type) {
+      switch (type) {
+        case "done":
+          this.txt = "上传";
+          $(".progress-area").css("width", 0);
+          this.$refs.upload.clearFiles();
+          break;
+        case "process":
+          this.txt = "上传中";
+          break;
+      }
     },
     uploadSuccess(response) {
-      console.log(response);
-      api.userUpload(response).then(res => {
-        console.log(res);
+      api.userUpload(response).then(() => {
+        this.uploadSucLen++;
+        this.leftIndex = 2;
+        this.pageInfo.currentPage = 1;
+        this.get();
+        if (this.uploadSucLen == Object.keys(this.progressList).length) {
+          this.transition("done");
+        }
       });
     },
+    uploadError(err, file) {
+      this.progressList[file.uid] = 100;
+      this.uploadSucLen++;
+      this.leftIndex = 2;
+      this.pageInfo.currentPage = 1;
+      if (this.uploadSucLen == Object.keys(this.progressList).length) {
+        this.transition("done");
+      }
+      this.showNotify(file);
+      throw err;
+    },
+    showNotify(file) {
+      this.$notify.error({
+        title: "上传失败",
+        message: `图片${file.name}上传失败`
+      });
+    },
+    uploadExceed() {
+      alert("最大3个");
+    },
     beforeUpload(file) {
+      this.transition("process");
       return api
         .getToken({
           fileName: file.name
@@ -292,9 +350,6 @@ export default {
           this.form.key = key;
           this.form.token = token;
         });
-    },
-    handlePreview(file) {
-      console.log(file);
     },
     /**
      * 关闭音乐面板
@@ -313,7 +368,6 @@ export default {
       this.get();
     },
     async choiceImage(item) {
-      console.log(item);
       await api.choiceImage({
         id: item.id
       });
@@ -336,14 +390,6 @@ export default {
      * 确认
      */
     async confirm() {
-      //   this.curMusic.id &&
-      // (await api.choiceImage({
-      //   id: this.curMusic.id
-      // }));
-      //   this.updateMain({
-      //     key: "music",
-      //     val: this.curMusic
-      //   });
       this.close();
     },
     get() {
@@ -352,11 +398,26 @@ export default {
           limit: this.pageInfo.pageSize,
           page: this.pageInfo.currentPage,
           typeId: this.navOption[this.navIndex].typeId,
-          used: this.leftIndex == 1 ? 1 : '',
-          isMy: this.leftIndex == 2 ? 1 : ''
+          used: this.leftIndex == 1 ? 1 : "",
+          isMy: this.leftIndex == 2 ? 1 : ""
         })
         .then(res => {
           this.list = res.result.data;
+          for (let i = 0; i < this.list.length; i++) {
+            let img = new Image();
+            img.src = `//p7h1y3vg2.bkt.clouddn.com/${
+              this.list[i].path
+            }?imageView2/2/w/230/h/230/q/75|imageslim`;
+            img.onload = () => {
+              this.$set(this.list[i], "load", true);
+              this.$set(this.list[i], "style", {
+                "background-image": `url(//p7h1y3vg2.bkt.clouddn.com/${
+                  this.list[i].path
+                }?imageView2/2/w/230/h/230/q/75|imageslim)`,
+                "background-size": "contain"
+              });
+            };
+          }
           this.pageInfo.total = res.result.info.total;
         });
     }

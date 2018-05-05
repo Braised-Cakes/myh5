@@ -33,3 +33,10 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
     font-size: 12px;
   }
 }
+
+.el-upload-dragger {
+  width: 160px;
+  height: 50px;
+  border-style: none;
+  background-color: inherit;
+}

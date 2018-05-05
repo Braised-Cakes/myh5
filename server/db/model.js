@@ -141,6 +141,10 @@ module.exports = {
       type: Number,
       required: true
     },
+    'createTime': {
+      type: Number,
+      required: true
+    },
     'size': {
       type: Number,
       required: false
@@ -161,10 +165,11 @@ module.exports = {
       type: Number,
       required: false
     },
-    'createTime': {
-      type: Number,
-      required: false
-    },
+    'isPublic': {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
   'musics': {
     'path': {

@@ -389,6 +389,9 @@ app.get('/aj/image/get', async (req, res) => {
         uid: userId
       })
       .skip((page - 1) * limit)
+      .sort({
+        createTime: -1
+      })
       .limit(limit)
     res.send({
       status: AJ_STATUS.success,
@@ -406,6 +409,9 @@ app.get('/aj/image/get', async (req, res) => {
     total = await collection.count(find)
     data = await collection.find(find)
       .skip((page - 1) * limit)
+      .sort({
+        createTime: -1
+      })
       .limit(limit)
     res.send({
       status: AJ_STATUS.success,
@@ -725,3 +731,20 @@ app.post('/aj/image/user_upload', async (req, res) => {
     }
   })
 })
+
+// app.get('/aj/bbb', async (req, res) => {
+//   const collection = dbHandel.getModel('images')
+//   let count = await collection.count();
+//   let time = 1525441262338;
+//   for (let i = 0; i < count; i++) {
+//     await collection.update({
+//       id: 200000000 + i
+//     }, {
+//       createTime: time--
+//     })
+//   }
+//   console.log('完事了');
+//   res.send({
+//     a: 10
+//   })
+// })
