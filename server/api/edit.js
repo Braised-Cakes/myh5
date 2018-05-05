@@ -708,28 +708,36 @@ app.get('/aj/image/token', async (req, res) => {
 app.post('/aj/image/user_upload', async (req, res) => {
   let id = uuid();
   console.log(id);
-
   const collection = dbHandel.getModel('images')
   let lastData = await collection.find().sort({
     id: -1
   }).limit(1)
-  console.log(lastData[0])
-  let createTime =
-    await new collection({
-      uid: userId,
-      path: req.body.key,
-      width: req.body.imageInfo.width,
-      height: req.body.imageInfo.height,
-      size: req.body.imageInfo.size,
-      createTime: new Date().getTime(),
-      id: lastData[0].id + 1
-    }).save();
-  res.send({
-    message: '上传成功',
-    data: {
-      path: `http://p7m90pgef.bkt.clouddn.com/${req.body.key}`
-    }
-  })
+  if (req.body.imageInfo) {
+    let createTime =
+      await new collection({
+        uid: userId,
+        path: req.body.key,
+        width: req.body.imageInfo.width,
+        height: req.body.imageInfo.height,
+        size: req.body.imageInfo.size,
+        createTime: new Date().getTime(),
+        id: lastData[0].id + 1
+      }).save();
+    res.send({
+      status: AJ_STATUS.error,
+      message: AJ_MESSAGE.success,
+      data: {
+        path: `http://p7m90pgef.bkt.clouddn.com/${req.body.key}`
+      }
+    })
+  } else {
+    //异常情况， 后缀为png,jpg等等，但是实际并不是图片
+    res.send({
+      status: AJ_STATUS.error,
+      message: '不是图片',
+      data: {}
+    })
+  }
 })
 
 // app.get('/aj/bbb', async (req, res) => {

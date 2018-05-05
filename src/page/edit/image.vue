@@ -217,8 +217,10 @@
         <div class="operation">
           <div class="item">
             <div class="progress-area"></div>
-            <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="image/jpeg,image/jpg,image/png" :multiple="true" :limit="3" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
-              <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
+            <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="image/jpeg,image/jpg,image/png,image/gif" :multiple="true" :limit="uploadLimit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
+              <el-tooltip effect="dark" :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadLimit}张`" placement="right">
+                <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
+              </el-tooltip>
             </el-upload>
           </div>
         </div>
@@ -274,6 +276,7 @@ export default {
         token: ""
       },
       txt: "上传",
+      uploadLimit: 5,
       progressList: {},
       uploadSucLen: 0
     };
@@ -309,8 +312,12 @@ export default {
           break;
       }
     },
-    uploadSuccess(response) {
-      api.userUpload(response).then(() => {
+    uploadSuccess(response, file) {
+      api.userUpload(response).then(({ status }) => {
+        //异常情况， 后缀为png,jpg等等，但是实际并不是图片
+        if (status != 0) {
+          this.showNotify(file);
+        }
         this.uploadSucLen++;
         this.leftIndex = 2;
         this.pageInfo.currentPage = 1;
@@ -338,7 +345,10 @@ export default {
       });
     },
     uploadExceed() {
-      alert("最大3个");
+      this.$alert(`一次最多上传${this.uploadLimit}张图片`, {
+        closeOnClickModal: true,
+        callback: () => {}
+      });
     },
     beforeUpload(file) {
       this.transition("process");
