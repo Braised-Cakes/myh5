@@ -32,4 +32,6 @@ export const userLogin = data => fetch('/aj/user/login', data, 'POST');
 export const getUserInfo = data => fetch('/aj/user/info', data);
 
 export const getToken = data => fetch('/aj/image/token', data);
+export const getMusicToken = data => fetch('/aj/music/token', data);
 export const userUpload = data => fetch('/aj/image/user_upload', data, 'POST');
+export const userUploadMusic = data => fetch('/aj/music/user_upload', data, 'POST');

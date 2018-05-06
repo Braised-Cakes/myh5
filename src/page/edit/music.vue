@@ -80,6 +80,7 @@
           display: flex;
           font-size: 14px;
           justify-content: center;
+          position: relative;
           cursor: pointer;
           &:nth-child(1) {
             border-top: 1px solid #e6ebed;
@@ -179,6 +180,28 @@
     }
   }
 }
+
+.progress-area {
+  position: absolute;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #5cc9f5;
+  z-index: 1;
+  animation: 0.2s;
+}
+.upload-demo {
+  position: relative;
+  z-index: 2;
+  .txt {
+    color: #526069;
+  }
+  &:hover {
+    .txt {
+      color: #68cbf7;
+    }
+  }
+}
 </style>
 
 <template>
@@ -194,14 +217,18 @@
         <ul>
           <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">音乐库</li>
           <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
+          <li @click="changeLeftIndex(2);" :class="{active : leftIndex == 2}">我的上传</li>
         </ul>
         <div class="operation">
           <div class="item">
-            <span>上传</span>
+            <div class="progress-area"></div>
+            <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="audio/*" :multiple="true" :limit="uploadLimit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
+              <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
+            </el-upload>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <span>添加外链</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="right" v-loading="loading1">
@@ -265,7 +292,15 @@ export default {
       audio: null,
       leftIndex: 0,
       loading1: true,
-      loading2: false
+      loading2: false,
+      form: {
+        key: "",
+        token: ""
+      },
+      txt: "上传",
+      uploadLimit: 5,
+      progressList: {},
+      uploadSucLen: 0
     };
   },
   computed: {
@@ -276,6 +311,79 @@ export default {
   },
   methods: {
     ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    uploadProgress(event, file, fileList) {
+      if (!file) {
+        return;
+      }
+      this.progressList[file.uid] = parseInt(event.percent);
+      let per = 0;
+      for (let attr in this.progressList) {
+        per += this.progressList[attr];
+      }
+      $(".progress-area").css("width", parseInt(per / fileList.length) + "%");
+    },
+    transition(type) {
+      switch (type) {
+        case "done":
+          this.txt = "上传";
+          $(".progress-area").css("width", 0);
+          this.$refs.upload.clearFiles();
+          break;
+        case "process":
+          this.txt = "上传中";
+          break;
+      }
+    },
+    uploadSuccess(response, file) {
+      response.name = file.name;
+      api.userUploadMusic(response).then(({ status }) => {
+        //异常情况， 后缀为png,jpg等等，但是实际并不是图片
+        if (status != 0) {
+          this.showNotify(file);
+        }
+        this.uploadSucLen++;
+        this.leftIndex = 2;
+        this.pageInfo.currentPage = 1;
+        this.get();
+        if (this.uploadSucLen == Object.keys(this.progressList).length) {
+          this.transition("done");
+        }
+      });
+    },
+    uploadError(err, file) {
+      this.progressList[file.uid] = 100;
+      this.uploadSucLen++;
+      this.leftIndex = 2;
+      this.pageInfo.currentPage = 1;
+      if (this.uploadSucLen == Object.keys(this.progressList).length) {
+        this.transition("done");
+      }
+      this.showNotify(file);
+      throw err;
+    },
+    showNotify(file) {
+      this.$notify.error({
+        title: "上传失败",
+        message: `图片${file.name}上传失败`
+      });
+    },
+    uploadExceed() {
+      this.$alert(`一次最多上传${this.uploadLimit}张图片`, {
+        closeOnClickModal: true,
+        callback: () => {}
+      });
+    },
+    beforeUpload(file) {
+      this.transition("process");
+      return api
+        .getMusicToken({
+          fileName: file.name
+        })
+        .then(({ token, key }) => {
+          this.form.key = key;
+          this.form.token = token;
+        });
+    },
     /**
      * 关闭音乐面板
      */
@@ -309,10 +417,10 @@ export default {
      * 确认
      */
     async confirm() {
-      
-      this.curMusic.id && await api.choiceMusic({
-        id: this.curMusic.id
-      });
+      this.curMusic.id &&
+        (await api.choiceMusic({
+          id: this.curMusic.id
+        }));
       this.updateMain({
         key: "music",
         val: this.curMusic
@@ -326,7 +434,8 @@ export default {
           limit: this.pageInfo.pageSize,
           page: this.pageInfo.currentPage,
           typeId: this.navOption[this.navIndex].typeId,
-          used: this.leftIndex == 0 ? "" : 1
+          used: this.leftIndex == 1 ? 1 : "",
+          isMy: this.leftIndex == 2 ? 1 : ""
         })
         .then(res => {
           this.list = res.result.data;

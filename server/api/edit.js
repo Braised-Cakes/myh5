@@ -255,6 +255,30 @@ app.get('/aj/music/get', async (req, res) => {
         data: arrx
       }
     })
+  } else if (req.query.isMy) {
+    total = await collection.count({
+      uid: userId
+    })
+    data = await collection.find({
+        uid: userId
+      })
+      .skip((page - 1) * limit)
+      .sort({
+        createTime: -1
+      })
+      .limit(limit)
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      result: {
+        info: {
+          page: Number(req.query.page || DEFAULT_PAGE.page),
+          total: total,
+          limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+        },
+        data: data
+      }
+    })
   } else {
     total = await collection.count(find)
     data = await collection.find(find)
@@ -691,7 +715,7 @@ app.get('/aj/image/token', async (req, res) => {
   let id = uuid();
   // userId
   const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-  let bucketName = 'image'
+  let bucketName = 'user'
   var options = {
     scope: bucketName,
     // expires: 60 * 60 * 10,
@@ -740,13 +764,68 @@ app.post('/aj/image/user_upload', async (req, res) => {
   }
 })
 
+
+app.get('/aj/music/token', async (req, res) => {
+  var accessKey = AccessKey
+  var secretKey = SecretKey
+  var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+  let id = uuid();
+  // userId
+  const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
+  let bucketName = 'music'
+  var options = {
+    scope: bucketName,
+    // expires: 60 * 60 * 10,
+    returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)", "avinfo":$(avinfo)}'
+  };
+  var putPolicy = new qiniu.rs.PutPolicy(options);
+  var uploadToken = putPolicy.uploadToken(mac);
+  // http://up-z2.qiniup.com
+  res.send({
+    token: uploadToken,
+    key: fileName
+  })
+});
+
+app.post('/aj/music/user_upload', async (req, res) => {
+  let id = uuid();
+  const collection = dbHandel.getModel('musics')
+  let lastData = await collection.find().sort({
+    id: -1
+  }).limit(1)
+  if (req.body.avinfo && req.body.avinfo.audio) {
+    let createTime =
+      await new collection({
+        uid: userId,
+        path: req.body.key,
+        createTime: new Date().getTime(),
+        id: lastData[0].id + 1,
+        name: req.body.name
+      }).save();
+    res.send({
+      status: AJ_STATUS.success,
+      message: AJ_MESSAGE.success,
+      data: {
+        path: `http://p7dremn1s.bkt.clouddn.com/${req.body.key}`
+      }
+    })
+  } else {
+    //异常情况， 后缀为png,jpg等等，但是实际并不是图片
+    res.send({
+      status: AJ_STATUS.error,
+      message: '不是音乐',
+      data: {}
+    })
+  }
+})
+
 // app.get('/aj/bbb', async (req, res) => {
-//   const collection = dbHandel.getModel('images')
+//   const collection = dbHandel.getModel('musics')
 //   let count = await collection.count();
 //   let time = 1525441262338;
 //   for (let i = 0; i < count; i++) {
 //     await collection.update({
-//       id: 200000000 + i
+//       id: 300000000 + i
 //     }, {
 //       createTime: time--
 //     })

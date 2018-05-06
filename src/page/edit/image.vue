@@ -418,14 +418,16 @@ export default {
             img.src = `//p7h1y3vg2.bkt.clouddn.com/${
               this.list[i].path
             }?imageView2/2/w/230/h/230/q/75|imageslim`;
+            let id = this.list[i].id;
             img.onload = () => {
-              this.$set(this.list[i], "load", true);
-              this.$set(this.list[i], "style", {
-                "background-image": `url(//p7h1y3vg2.bkt.clouddn.com/${
-                  this.list[i].path
-                }?imageView2/2/w/230/h/230/q/75|imageslim)`,
-                "background-size": "contain"
-              });
+              if (this.list[i] && this.list[i].id == id) {
+                this.$set(this.list[i], "style", {
+                  "background-image": `url(//p7h1y3vg2.bkt.clouddn.com/${
+                    this.list[i].path
+                  }?imageView2/2/w/230/h/230/q/75|imageslim)`,
+                  "background-size": "contain"
+                });
+              }
             };
           }
           this.pageInfo.total = res.result.info.total;

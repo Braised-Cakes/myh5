@@ -187,6 +187,14 @@ module.exports = {
     'id': {
       type: Number,
       required: true
+    },
+    'createTime': {
+      type: Number,
+      required: true
+    },
+    'uid': {
+      type: Number,
+      required: false
     }
   }
 }
