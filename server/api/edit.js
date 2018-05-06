@@ -724,7 +724,7 @@ app.post('/aj/image/user_upload', async (req, res) => {
         id: lastData[0].id + 1
       }).save();
     res.send({
-      status: AJ_STATUS.error,
+      status: AJ_STATUS.success,
       message: AJ_MESSAGE.success,
       data: {
         path: `http://p7m90pgef.bkt.clouddn.com/${req.body.key}`

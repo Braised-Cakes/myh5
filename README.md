@@ -20,6 +20,9 @@ npm run start
 npm run build
 
 ```
+## CHANGELOG
+
+[@CHANGELOG](./documents/changelog.md)
 
 ## TODU
 
