@@ -1,7 +1,7 @@
 <template>
 	<div class="header">
 		<router-link to="home">
-			<img class="logo" src="https://www.baidu.com/img/bd_logo1.png" />
+			<img class="logo" src="@/img/logo.png" />
 		</router-link>
 		<ul class="header-nav">
 			<router-link class="nav-item" :key="item.id" v-for="item in list" tag="li" :to="'/' + item.id">{{item.name}}</router-link>

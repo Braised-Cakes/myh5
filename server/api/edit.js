@@ -715,7 +715,7 @@ app.get('/aj/image/token', async (req, res) => {
   let id = uuid();
   // userId
   const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-  let bucketName = 'user'
+  let bucketName = 'image'
   var options = {
     scope: bucketName,
     // expires: 60 * 60 * 10,

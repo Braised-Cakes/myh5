@@ -2,9 +2,10 @@
   <header>
     <div class="creat-logo">
       <router-link to="/list">
-        <svg class="icon" aria-hidden="true">
+        <!-- <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-logo"></use>
-        </svg>
+        </svg> -->
+        <img src="@/img/logo.png"/>
       </router-link>
     </div>
     <div class="creat_con">
