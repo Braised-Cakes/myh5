@@ -135,7 +135,13 @@ export default {
    * 选择元素
    */
   [types.SELECT_ITEM](state, index) {
-    state.curItemId = index;
+    if (typeof index == 'number') {
+      state.curItemId = index;
+      state.curItemIds = [];
+    } else {
+      state.curItemIds = $.extend(true, [], index);
+      state.curItemId = -1;
+    }
   },
   /**
    * 删除元素

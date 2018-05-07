@@ -307,9 +307,20 @@ export default {
    * @param {Number} index
    */
   selectItem({
-    commit
+    commit,
+    getters
   }, index) {
-    commit(types.SELECT_ITEM, index);
+    
+    if (typeof index == 'number' && getters.hasSelectedMultiItems) {
+      return;
+    }
+    if (typeof index == 'number') {
+      commit(types.SELECT_ITEM, index);
+    } else if (typeof index == 'object' && index.length == 1) {
+      commit(types.SELECT_ITEM, index[0]);
+    } else {
+      commit(types.SELECT_ITEM, index);
+    }
   },
   /**
    * 删除指定元素
@@ -320,11 +331,16 @@ export default {
     dispatch,
     getters
   }, id) {
+    let d = $.extend(true, [], getters.selectedItemsForArray)
     await dispatch('cancelSelect');
-    commit(types.DEL_ITEM, {
-      id: id,
-      page: getters.currentPage
-    });
+    if (!id) {
+      for (let i = d.length - 1; i >= 0; i--) {
+        commit(types.DEL_ITEM, {
+          id: d[i],
+          page: getters.currentPage
+        });
+      }
+    }
     /**
      * 调整z-index,  z-index从1开始，依次递增
      */

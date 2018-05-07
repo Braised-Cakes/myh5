@@ -18,6 +18,7 @@ export const initState = {
   },
   currentPage: 0,
   curItemId: -1,
+  curItemIds: [],
   panel: {
     [types.SHAPE]: false,
     [types.MUSIC]: false, 

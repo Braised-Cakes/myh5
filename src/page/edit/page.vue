@@ -1,43 +1,43 @@
 <template>
-	<div class="create_right">
-		<div class="top">
-			<ul>
-				<li v-if="!hasSelectedItems" @click="nav=1" :class="{active:nav==1}">页面属性</li>
-				<li v-if="hasSelectedItems" @click="nav=1" :class="{active:nav==1}">元素属性</li>
-				<li @click="nav=0" :class="{active:nav==0}">页面管理</li>
-			</ul>
-		</div>
-		<div v-if="nav==0">
-			<el-scrollbar class="page-component__nav">
-				<ul class="page_ul">
-					<draggable v-model="myList" :move="move" @start="start" @end="end">
-						<transition-group>
-							<li @click.stop="selectPage({page:index})" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList" :key="index">
-								<div v-if="!(drag && index == oldIndex)">
-									<span>
-										<em>{{index + 1}}</em>
-									</span>
-									<span @click.stop="delPage(index)">
-										<i class="icon iconfont icon-fuzhi"></i>
-									</span>
-								</div>
-							</li>
-						</transition-group>
-					</draggable>
-				</ul>
-			</el-scrollbar>
-			<div class="bottom" draggable="false">
-				<ul>
-					<li @click="addPage">
-						<i>+</i>
-						<span>常规页</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<edit-dom :data="data" v-if="nav==1 && hasSelectedItems"></edit-dom>
-		<page-dom v-if="nav==1 && !hasSelectedItems"></page-dom>
-	</div>
+  <div class="create_right">
+    <div class="top">
+      <ul>
+        <li v-if="!hasSelectedItems" @click="nav=1" :class="{active:nav==1}">页面属性</li>
+        <li v-if="hasSelectedItems" @click="nav=1" :class="{active:nav==1}">元素属性</li>
+        <li @click="nav=0" :class="{active:nav==0}">页面管理</li>
+      </ul>
+    </div>
+    <div v-if="nav==0">
+      <el-scrollbar class="page-component__nav">
+        <ul class="page_ul">
+          <draggable v-model="myList" :move="move" @start="start" @end="end">
+            <transition-group>
+              <li @click.stop="selectPage({page:index})" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList" :key="index">
+                <div v-if="!(drag && index == oldIndex)">
+                  <span>
+                    <em>{{index + 1}}</em>
+                  </span>
+                  <span @click.stop="delPage(index)">
+                    <i class="icon iconfont icon-fuzhi"></i>
+                  </span>
+                </div>
+              </li>
+            </transition-group>
+          </draggable>
+        </ul>
+      </el-scrollbar>
+      <div class="bottom" draggable="false">
+        <ul>
+          <li @click="addPage">
+            <i>+</i>
+            <span>常规页</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <edit-dom :data="data" v-if="nav==1 && hasSelectedOneItem"></edit-dom>
+    <page-dom v-if="nav==1 && !hasSelectedOneItem"></page-dom>
+  </div>
 </template>
 
 <script>
@@ -60,7 +60,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["phoneData", "currentPage", "hasSelectedItems"]),
+    ...mapGetters([
+      "phoneData",
+      "currentPage",
+      "hasSelectedItems",
+      "hasSelectedOneItem"
+    ]),
     myList: {
       get() {
         return this.$store.getters.phoneData.data;

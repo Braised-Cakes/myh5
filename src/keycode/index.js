@@ -55,7 +55,7 @@ $(window).keydown(function (ev) {
       });
       break;
     case keyCode.delete:
-      store.dispatch('delItem', store.getters.curItemId)
+      store.dispatch('delItem')
       break;
   }
 });

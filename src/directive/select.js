@@ -13,13 +13,12 @@ Vue.directive('my-select', {
       height: 0,
       border: '1px solid #000',
       display: 'none',
+      'z-index': 9999,
       background: 'rgba(0,0,0,0.3)'
     })
   },
   bind: function (el) {
-    console.log(el);
     $(el).on('mousedown', (ev) => {
-
       let arr = store.getters.currentPhone.data;
       let oldX = ev.clientX;
       let oldY = ev.clientY;
@@ -60,18 +59,22 @@ Vue.directive('my-select', {
             width,
             height
           } = item.style;
-          left = parseFloat(left);
-          top = parseFloat(top);
+          // left = parseFloat(left);
+          // top = parseFloat(top);
+          // width = parseFloat(width);
+          // height = parseFloat(height);=
+          left = $('#' + item.id).offset().left - phoneLeft;
+          top = $('#' + item.id).offset().top - phoneTop;
           width = parseFloat(width);
           height = parseFloat(height);
+
           if (phoneLeft + left > x + w || phoneLeft + left + width < x || phoneTop + top > y + h || phoneTop + top + height < y) {
             // console.log(';')
           } else {
             list.push(index);
           }
         })
-
-        // store.dispatch('selectItem', list)
+        store.dispatch('selectItem', list)
       })
       $(document).on('mouseup', () => {
         $(document).off('mousemove');

@@ -29,6 +29,7 @@ import {
 import '@/css/element-variables.scss'
 import '@/directive/select'
 import '@/directive/drag'
+import "@/directive/changesize";
 import '@/iconfont/iconfont'
 import '@/iconfont/iconfont.css'
 import '@/keycode/index'

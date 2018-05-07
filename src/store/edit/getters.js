@@ -45,13 +45,41 @@ export default {
    * 是否有被选中元素
    */
   hasSelectedItems(state) {
+    return (state.curItemId >= 0 || state.curItemIds.length > 0) ? true : false;
+  },
+  /**
+   * 是否是单选
+   */
+  hasSelectedOneItem(state) {
     return state.curItemId >= 0 ? true : false;
+  },
+  /**
+   * 以数组格式返回
+   */
+  selectedItemsForArray(state) {
+    if (state.curItemId >= 0) {
+      return [state.curItemId]
+    } else {
+      return state.curItemIds;
+    }
+  },
+  /**
+   * 是否是多选
+   */
+  hasSelectedMultiItems(state) {
+    return state.curItemIds.length > 0 ? true : false;
   },
   /**
    * 被选中元素的id
    */
   curItemId(state) {
     return state.curItemId;
+  },
+  /**
+   * 被选中元素的id
+   */
+  curItemIds(state) {
+    return state.curItemIds;
   },
   /**
    * 当前页的cache数据

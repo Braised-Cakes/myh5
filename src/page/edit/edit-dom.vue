@@ -1,5 +1,5 @@
 <template>
-  <div v-if="curItem.style">
+  <div v-if="hasSelectedOneItem && curItem.style">
     <ul @click="updateItem" class="nav">
       <li @click="navIndex = index" :class="{'active':index == navIndex}" :key="item" v-for="(item, index) in nav">
         {{item}}
@@ -139,7 +139,7 @@ export default {
     "v-event": vEvent
   },
   computed: {
-    ...mapGetters(["curItem"])
+    ...mapGetters(["curItem", "hasSelectedOneItem"])
   },
   methods: {
     ...mapActions(["updateItem"]),

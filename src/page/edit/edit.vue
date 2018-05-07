@@ -9,7 +9,7 @@
         <v-music v-if="modulePanel[types.MUSIC]"></v-music>
         <v-image v-if="modulePanel[types.IMAGE]"></v-image>
         <v-qrcode v-if="modulePanel[types.QRCODE]"></v-qrcode>
-        <div class="workspace" @mousedown.stop="cancelSelect">
+        <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
           <div class="container">
             <div class="phone-bg"></div>
             <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
@@ -17,7 +17,7 @@
                 <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
                 <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
                 <!-- <div v-if="item.type == 'shape'" class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="highlight(item)"></div> -->
-                <div v-if="curItemId == index" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+                <div v-if="curItemId == index || curItemIds.indexOf(index) != -1" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
                   <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
                   <div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
                   <div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
@@ -107,7 +107,6 @@ import vHeader from "./header";
 import vPage from "./page";
 import * as utils from "@/utils";
 import * as types from "@/tpl/types";
-import "@/directive/changesize";
 import config from "@/config";
 export default {
   components: {
@@ -162,6 +161,7 @@ export default {
       "curItem",
       "hasSelectedItems",
       "curItemId",
+      "curItemIds",
       "curCache"
     ]),
     ...mapState({
