@@ -37,7 +37,9 @@ app.set('view options', {
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({
+  limit: '50mb'
+}));
 app.use(bodyParser.urlencoded({
   extended: false
 }));
@@ -65,6 +67,18 @@ app.get('/show', function (req, res) {
     });
   });
 
+});
+
+app.all('/*', function (req, res, next) {
+  if (req.session.username || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
+    next()
+  } else {
+    res.send({
+      status: AJ_STATUS.notlogin,
+      data: {},
+      message: AJ_MESSAGE.error
+    })
+  }
 });
 
 app.use(function (err, req, res, next) {

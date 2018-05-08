@@ -57,6 +57,8 @@ export default {
           console.log(res);
           this.list = res.result.data;
           this.total = res.result.info.total;
+        }).catch(res=>{
+          console.log(res)
         });
     },
     add() {
