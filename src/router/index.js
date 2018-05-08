@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import store from '@/store/index.js'
+import store from '@/store/index.js'
 // import * as api from '@/api'
 import Cookies from 'js-cookie'
 Vue.use(Router);
@@ -33,35 +33,42 @@ let routes = new Router({
 });
 routes.beforeEach((to, from, next) => {
   //如果token
+  // console.log(store.state.auth.username)
   let token = Cookies('username');
-  // if (!to.name) {
-  //   console.log(111)
-  //   routes.push('/list')
-  // } else if (to.name == 'login') {
-    
-  //   if (to.params.status == 2) {
-  //     console.log(333)
-  //     next();
-  //   } else {
-  //     console.log(444)
-  //     next({
-  //       name: 'list'
-  //     })
-  //   }
-  // } else if (to.params.status == 2 || (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null))) {
-  //   console.log(222)
-  //   routes.push({
-  //     path: '/login',
-  //     params: {
-  //       status: 2
-  //     }
-  //   })
-  //   next();
-  // } else {
-  //   next();
-  // }
+  console.log(store.state)
+  if (!to.name) {
+    console.log(111)
+    next({
+      name: 'list'
+    })
+  } else if (to.name == 'login') {
+    console.log(222)
+    if (!token || !store.state.auth.username) {
+      console.log(333)
+      next();
+    } else {
+      console.log(444)
+      next({
+        name: 'list'
+      })
+    }
+  } else if (to.params.status == 2 || (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null))) {
+    console.log(555)
+    // routes.push({
+    //   path: '/login',
+    //   params: {
+    //     status: 2
+    //   }
+    // })
+    next({
+      path : '/login'
+    });
+  } else {
+    console.log(666)
+    next();
+  }
 
-  next();
+  // next();
 })
 
 export default routes

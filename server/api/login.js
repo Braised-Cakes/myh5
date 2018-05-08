@@ -14,11 +14,13 @@ app.post(types.userRegister, async (req, res) => {
   const data = await collection.findOne({
     username: req.body.username
   })
+  const count = await collection.count()
   //没有找到,可以注册
   if (!data) {
     await new collection({
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+      uid: count + 1
     }).save()
     res.send({
       status: AJ_STATUS.success,
@@ -61,6 +63,7 @@ app.post(types.userLogin, async (req, res) => {
     res.clearCookie('username')
     req.session.isLogin = true
     req.session.username = req.body.username
+    req.session.uid = data.uid
     res.cookie('username', req.body.username, {
       expires: new Date(Date.now() + 10000 * 60 * 60 * 24 * 7)
     })
@@ -72,6 +75,18 @@ app.post(types.userLogin, async (req, res) => {
   }
 })
 
+/**
+ * 登出
+ */
+app.post(types.userLogout, async (req, res) => {
+  req.session.isLogin = null;
+  req.session.uid = null;
+  res.clearCookie('username')
+  res.send({
+    status: AJ_STATUS.success,
+    message: '登出成功'
+  })
+})
 
 /**
  * 获取用户信息
@@ -89,5 +104,4 @@ app.get(types.getUserInfo, async (req, res) => {
       message: '没有拿到用户信息'
     })
   }
-
 })

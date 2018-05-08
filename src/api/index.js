@@ -29,6 +29,7 @@ export const createQRCode = data => fetch('/aj/qrcode/create', data);
 
 export const userRegister = data => fetch('/aj/user/register', data, 'POST');
 export const userLogin = data => fetch('/aj/user/login', data, 'POST');
+export const userLogout = data => fetch('/aj/user/logout', data, 'POST');
 export const getUserInfo = data => fetch('/aj/user/info', data);
 
 export const getToken = data => fetch('/aj/image/token', data);

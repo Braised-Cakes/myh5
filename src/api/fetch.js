@@ -11,7 +11,6 @@ export default async function (url, data, type = 'GET') {
       success(rs) {
         //为登录
         if (rs.status == 2) {
-          console.log(99999)
           routes.push({
             name : 'login',
             params : {

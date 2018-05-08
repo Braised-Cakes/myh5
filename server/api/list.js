@@ -15,7 +15,9 @@ app.get('/aj/list/get', async (req, res) => {
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
   const total = await collection.count()
-  const data = await collection.find({}, ['id'])
+  const data = await collection.find({
+      uid: req.session.uid
+    }, ['id'])
     .skip((page - 1) * limit)
     .limit(limit)
   res.send({
@@ -41,7 +43,7 @@ app.get('/aj/list/add', async (req, res) => {
   const count = await collection.count()
   new collection({
     id: count + 1,
-    username: '9999'
+    uid: req.session.uid
   }).save((err, docs) => {
     if (err) throw err
     res.send({

@@ -8,17 +8,18 @@ module.exports = {
       type: Number,
       required: true
     },
+    "uid": {
+      type: Number,
+      required: true
+    },
     "bg": {
       type: String,
       required: false
     },
     "data": {
       type: Object,
-      required: false
-    },
-    "username": {
-      type: String,
-      required: false
+      required: false,
+      default: {}
     }
   },
   "shape": {
@@ -83,6 +84,10 @@ module.exports = {
     },
     'username': {
       type: String,
+      required: true
+    },
+    'uid': {
+      type: Number,
       required: true
     }
   },

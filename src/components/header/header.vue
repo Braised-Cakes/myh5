@@ -1,21 +1,32 @@
 <template>
-	<div class="header">
-		<router-link to="home">
-			<img class="logo" src="@/img/logo.png" />
-		</router-link>
-		<ul class="header-nav">
-			<router-link class="nav-item" :key="item.id" v-for="item in list" tag="li" :to="'/' + item.id">{{item.name}}</router-link>
-		</ul>
-		<div class="user-help">
-			<span>liushaopeng</span>
-			<span>|</span>
-			<a href="http://wiki.baidu.com/pages/viewpage.action?pageId=210683356">帮助</a>
-			<img src="@/img/git.png" />
-		</div>
-	</div>
+  <div class="header">
+    <router-link to="home">
+      <img class="logo" src="@/img/logo.png" />
+    </router-link>
+    <ul class="header-nav">
+      <router-link class="nav-item" :key="item.id" v-for="item in list" tag="li" :to="'/' + item.id">{{item.name}}</router-link>
+    </ul>
+    <div class="user-help">
+      <span>liushaopeng</span>
+      <span>|</span>
+      <a href="http://wiki.baidu.com/pages/viewpage.action?pageId=210683356">帮助</a>
+      <a @click="logout">登出</a>
+    </div>
+  </div>
 </template>
 <script>
+import * as api from "@/api";
 export default {
+  methods: {
+    logout() {
+      api.userLogout().then((res) => {
+        console.log(res)
+        this.$router.push({
+          name: "login"
+        });
+      });
+    }
+  },
   data() {
     return {
       list: [
