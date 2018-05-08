@@ -16,6 +16,10 @@ module.exports = {
       type: String,
       required: false
     },
+    "createTime": {
+      type: Number,
+      required: true
+    },
     "data": {
       type: Object,
       required: false,

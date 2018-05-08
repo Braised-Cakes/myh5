@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <v-header></v-header>
     <div class="contain">
       <button @click="add">新增一页</button>
@@ -27,7 +27,30 @@
             </div>
           </div>
           <div class="project-info">
-            <p>场景{{item.id}}</p>
+            <p>未命名场景</p>
+            <a>
+              <i class="icon iconfont icon-yulan"></i>
+              <span>0</span>
+            </a>
+            <div class="button">
+              <a class="erweima">
+                <i class="icon iconfont icon-erweima"></i>
+              </a>
+              <div class="set">
+                <a class="set-delete">
+                  <i class="icon iconfont icon-erweima"></i>
+                  <span>删除</span>
+                </a>
+                <a class="set-fabu">
+                  <i class="icon iconfont icon-erweima"></i>
+                  <span>发布</span>
+                </a>
+                <a class="set-set">
+                  <i class="icon iconfont icon-erweima"></i>
+                  <span>设置</span>
+                </a>
+              </div>
+            </div>
           </div>
         </li>
       </ul>
@@ -57,8 +80,9 @@ export default {
           console.log(res);
           this.list = res.result.data;
           this.total = res.result.info.total;
-        }).catch(res=>{
-          console.log(res)
+        })
+        .catch(res => {
+          console.log(res);
         });
     },
     add() {
@@ -89,6 +113,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.container {
+  height: 100%;
+  background: #f1f4f5;
+}
 .contain {
   width: 1180px;
   position: relative;
@@ -166,6 +194,67 @@ ul {
       z-index: 1;
       padding: 20px;
       transition: transform 0.2s ease;
+      .button {
+        display: flex;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        padding: 0 10px;
+        bottom: -30px;
+        justify-content: space-between;
+        .erweima {
+          background: #f0f3f4;
+          border: 5px solid #f0f3f4;
+          border-radius: 3px;
+          width: 30px;
+          height: 30px;
+          cursor: pointer;
+          &:hover {
+            background: #5ec8f7;
+            border: 5px solid #5ec8f7;
+            color: #fff;
+          }
+        }
+        .set {
+          a {
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-left: 3px;
+            border: 1px solid #ccd5db;
+            border-radius: 3px;
+            text-align: left;
+            background: #fff;
+            i {
+              padding: 0 10px 0 8px;
+              line-height: 28px;
+            }
+            span {
+              margin-right: 10px;
+              color: #fff;
+            }
+            &:hover {
+              width: 70px;
+              i {
+                color: #fff;
+              }
+            }
+            &.set-delete:hover {
+              background-color: #fd7f80;
+            }
+            &.set-fabu:hover {
+              background-color: #4fd4b2;
+            }
+            &.set-set:hover {
+              background-color: #5ec8f7;
+            }
+          }
+        }
+      }
     }
     &:hover {
       .overlay {

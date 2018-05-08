@@ -20,7 +20,6 @@ const {
   upload
 } = require('../qiniu/upload')
 
-const userId = 999;
 const {
   DEFAULT_PAGE,
   AJ_STATUS,
@@ -98,10 +97,10 @@ app.get('/aj/shape/get', async (req, res) => {
   let total, data;
   if (req.query.used) {
     let total = await usedCollection.count({
-      uid: userId
+      uid: req.session.uid
     })
     let ddd = await usedCollection.find({
-        uid: userId
+        uid: req.session.uid
       })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -168,19 +167,19 @@ app.get('/aj/shape/getContent', async (req, res) => {
   /* 添加到最近使用 */
   const usedCollection = dbHandel.getModel('used_shapes')
   let docs = await usedCollection.findOne({
-    uid: userId,
+    uid: req.session.uid,
     shapeId: Number(req.query.id)
   });
   if (docs) {
     await usedCollection.update({
-      uid: userId,
+      uid: req.session.uid,
       shapeId: Number(req.query.id),
     }, {
       usedTime: new Date().getTime()
     })
   } else {
     await new usedCollection({
-      uid: userId,
+      uid: req.session.uid,
       shapeId: Number(req.query.id),
       usedTime: new Date().getTime()
     }).save();
@@ -224,10 +223,10 @@ app.get('/aj/music/get', async (req, res) => {
   let data, total;
   if (req.query.used) {
     total = await usedCollection.count({
-      uid: userId
+      uid: req.session.uid
     })
     let ddd = await usedCollection.find({
-        uid: userId
+        uid: req.session.uid
       })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -257,10 +256,10 @@ app.get('/aj/music/get', async (req, res) => {
     })
   } else if (req.query.isMy) {
     total = await collection.count({
-      uid: userId
+      uid: req.session.uid
     })
     data = await collection.find({
-        uid: userId
+        uid: req.session.uid
       })
       .skip((page - 1) * limit)
       .sort({
@@ -316,19 +315,19 @@ app.get('/aj/music/choice', async (req, res) => {
   }
   const usedCollection = dbHandel.getModel('used_musics')
   let docs = await usedCollection.findOne({
-    uid: userId,
+    uid: req.session.uid,
     musicId: Number(req.query.id)
   });
   if (docs) {
     await usedCollection.update({
-      uid: userId,
+      uid: req.session.uid,
       musicId: Number(req.query.id),
     }, {
       usedTime: new Date().getTime()
     })
   } else {
     await new usedCollection({
-      uid: userId,
+      uid: req.session.uid,
       musicId: Number(req.query.id),
       usedTime: new Date().getTime()
     }).save();
@@ -374,10 +373,10 @@ app.get('/aj/image/get', async (req, res) => {
   let data, total;
   if (req.query.used) {
     total = await usedCollection.count({
-      uid: userId
+      uid: req.session.uid
     })
     let ddd = await usedCollection.find({
-        uid: userId
+        uid: req.session.uid
       })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -407,10 +406,10 @@ app.get('/aj/image/get', async (req, res) => {
     })
   } else if (req.query.isMy) {
     total = await collection.count({
-      uid: userId
+      uid: req.session.uid
     })
     data = await collection.find({
-        uid: userId
+        uid: req.session.uid
       })
       .skip((page - 1) * limit)
       .sort({
@@ -469,19 +468,19 @@ app.get('/aj/image/choice', async (req, res) => {
   }
   const usedCollection = dbHandel.getModel('used_images')
   let docs = await usedCollection.findOne({
-    uid: userId,
+    uid: req.session.uid,
     imageId: Number(req.query.id)
   });
   if (docs) {
     await usedCollection.update({
-      uid: userId,
+      uid: req.session.uid,
       imageId: Number(req.query.id),
     }, {
       usedTime: new Date().getTime()
     })
   } else {
     await new usedCollection({
-      uid: userId,
+      uid: req.session.uid,
       imageId: Number(req.query.id),
       usedTime: new Date().getTime()
     }).save();
@@ -713,7 +712,7 @@ app.get('/aj/image/token', async (req, res) => {
   var secretKey = SecretKey
   var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
   let id = uuid();
-  // userId
+  // req.session.uid
   const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
   let bucketName = 'image'
   var options = {
@@ -739,7 +738,7 @@ app.post('/aj/image/user_upload', async (req, res) => {
   if (req.body.imageInfo) {
     let createTime =
       await new collection({
-        uid: userId,
+        uid: req.session.uid,
         path: req.body.key,
         width: req.body.imageInfo.width,
         height: req.body.imageInfo.height,
@@ -770,7 +769,7 @@ app.get('/aj/music/token', async (req, res) => {
   var secretKey = SecretKey
   var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
   let id = uuid();
-  // userId
+  // req.session.uid
   const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
   let bucketName = 'music'
   var options = {
@@ -796,7 +795,7 @@ app.post('/aj/music/user_upload', async (req, res) => {
   if (req.body.avinfo && req.body.avinfo.audio) {
     let createTime =
       await new collection({
-        uid: userId,
+        uid: req.session.uid,
         path: req.body.key,
         createTime: new Date().getTime(),
         id: lastData[0].id + 1,

@@ -19,6 +19,9 @@ app.get('/aj/list/get', async (req, res) => {
       uid: req.session.uid
     }, ['id'])
     .skip((page - 1) * limit)
+    .sort({
+      createTime: -1
+    })
     .limit(limit)
   res.send({
     status: AJ_STATUS.success,
@@ -43,7 +46,8 @@ app.get('/aj/list/add', async (req, res) => {
   const count = await collection.count()
   new collection({
     id: count + 1,
-    uid: req.session.uid
+    uid: req.session.uid,
+    createTime: new Date().getTime()
   }).save((err, docs) => {
     if (err) throw err
     res.send({
