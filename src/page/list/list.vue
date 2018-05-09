@@ -4,7 +4,7 @@
     <div class="contain">
       <button @click="add">新增一页</button>
       <ul>
-        <li :key="item.id" v-for="item in list">
+        <li ref="list" :key="item.id" v-for="(item, index) in list">
           <div class="image">
             <div class="front"></div>
             <div class="overlay">
@@ -27,13 +27,13 @@
             </div>
           </div>
           <div class="project-info">
-            <p>未命名场景</p>
+            <p class="project-title">未命名场景</p>
             <a>
               <i class="icon iconfont icon-yulan"></i>
               <span>0</span>
             </a>
             <div class="button">
-              <a class="erweima">
+              <a @mouseover="fff(index)" @mouseout="ffff(index)" class="erweima">
                 <i class="icon iconfont icon-erweima"></i>
               </a>
               <div class="set">
@@ -63,6 +63,7 @@
 import Header from "@/components/header/header.vue";
 // import Sidebar from '@/components/sidebar/sidebar.vue'
 import * as api from "@/api/index";
+import $ from "jquery";
 export default {
   components: {
     vHeader: Header
@@ -70,6 +71,22 @@ export default {
   },
   computed: {},
   methods: {
+    fff(i) {
+      $(".front")
+        .eq(i)
+        .addClass("front2");
+      $(".overlay")
+        .eq(i)
+        .hide();
+    },
+    ffff(i) {
+      $(".front")
+        .eq(i)
+        .removeClass("front2");
+      $(".overlay")
+        .eq(i)
+        .show();
+    },
     get(page) {
       api
         .getJobList({
@@ -113,6 +130,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@-webkit-keyframes zoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
 .container {
   height: 100%;
   background: #f1f4f5;
@@ -145,10 +172,16 @@ ul {
       transition: 0.2s;
       .front {
         height: 280px;
-        background: url(~@/img/logo.png) no-repeat;
+        background: url(~@/img/logo2.png) no-repeat;
         background-size: 100%;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
+      }
+      .front2 {
+        background: url(http://p7m90pgef.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg)
+          center 0px no-repeat;
+        background-size: 240px;
+        -webkit-animation: zoomIn 0.5s ease-in-out 0s 1 both;
       }
       .overlay {
         display: none;
@@ -194,13 +227,17 @@ ul {
       z-index: 1;
       padding: 20px;
       transition: transform 0.2s ease;
+      .project-title {
+        font-size: 14px;
+        line-height: 30px;
+      }
       .button {
         display: flex;
         position: absolute;
         width: 100%;
         left: 0;
         padding: 0 10px;
-        bottom: -30px;
+        bottom: -35px;
         justify-content: space-between;
         .erweima {
           background: #f0f3f4;
@@ -245,12 +282,15 @@ ul {
             }
             &.set-delete:hover {
               background-color: #fd7f80;
+              border-color: #fd7f80;
             }
             &.set-fabu:hover {
               background-color: #4fd4b2;
+              border-color: #4fd4b2;
             }
             &.set-set:hover {
               background-color: #5ec8f7;
+              border-color: #5ec8f7;
             }
           }
         }
