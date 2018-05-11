@@ -141,7 +141,7 @@ export default {
   }
 }
 .container {
-  height: 100%;
+  min-height: 100vh;
   background: #f1f4f5;
 }
 .contain {

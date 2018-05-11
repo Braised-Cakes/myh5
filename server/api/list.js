@@ -14,7 +14,9 @@ app.get('/aj/list/get', async (req, res) => {
   const collection = dbHandel.getModel('myh5')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
-  const total = await collection.count()
+  const total = await collection.count({
+    uid: req.session.uid
+  })
   const data = await collection.find({
       uid: req.session.uid
     }, ['id'])

@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%;">
+  <div style="height:100%;width:100%;position:absolute;">
     <v-header></v-header>
     <div id="svg_cache" style="width:0px;height:0px;overflow:hidden;"></div>
     <el-scrollbar class="page-component__nav" style="height:100%;">
