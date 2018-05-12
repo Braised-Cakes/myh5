@@ -28,6 +28,7 @@ let routes = new Router({
       import ('@/page/login/login.vue')
   }]
 });
+
 routes.beforeEach((to, from, next) => {
   let token = Cookies('username');
   if (!to.name) {
