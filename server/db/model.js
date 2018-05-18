@@ -8,6 +8,11 @@ module.exports = {
       type: Number,
       required: true
     },
+    "show": {
+      type: Boolean,
+      required: false,
+      default: true
+    },
     "uid": {
       type: Number,
       required: true
@@ -24,6 +29,14 @@ module.exports = {
       type: Object,
       required: false,
       default: {}
+    },
+    "title": {
+      type: String,
+      required: true
+    },
+    "desc": {
+      type: String,
+      required: false
     }
   },
   "shape": {

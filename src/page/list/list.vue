@@ -2,12 +2,33 @@
   <div class="container">
     <v-header></v-header>
     <div class="contain">
-      <button @click="add">新增一页</button>
+      <button @click="showCreateArea">新增一页</button>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" v-if="createArea" style="width:460px;padding:0 20px;position:absolute;background:#fff;border:1px solid #000;z-index:1293912;">
+        <h3>创建场景</h3>
+        <el-form-item prop="title" label="名称">
+          <el-input v-model="ruleForm.title"></el-input>
+        </el-form-item>
+        <el-form-item prop="desc" label="描述">
+          <el-input v-model="ruleForm.desc"></el-input>
+        </el-form-item>
+        <div>
+          <el-button type="success" @click="create('ruleForm')">确定</el-button>
+          <el-button @click="hideCreateArea">取消</el-button>
+        </div>
+      </el-form>
       <ul>
         <li ref="list" :key="item.id" v-for="(item, index) in list">
           <div class="image">
             <div class="front"></div>
             <div class="overlay">
+              <a class="edit">
+                <div>
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-logo"></use>
+                  </svg>
+                </div>
+                <span>详情</span>
+              </a>
               <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
                 <div>
                   <svg class="icon" aria-hidden="true">
@@ -16,18 +37,10 @@
                 </div>
                 <span>编辑</span>
               </router-link>
-              <a class="edit" @click="del(item)">
-                <div>
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-logo"></use>
-                  </svg>
-                </div>
-                <span>删除</span>
-              </a>
             </div>
           </div>
           <div class="project-info">
-            <p class="project-title">未命名场景</p>
+            <p class="project-title">{{item.title}}</p>
             <a>
               <i class="icon iconfont icon-yulan"></i>
               <span>0</span>
@@ -37,18 +50,18 @@
                 <i class="icon iconfont icon-erweima"></i>
               </a>
               <div class="set">
-                <a class="set-delete">
+                <a class="set-delete" @click="del(item)">
                   <i class="icon iconfont icon-erweima"></i>
                   <span>删除</span>
                 </a>
                 <a class="set-fabu">
                   <i class="icon iconfont icon-erweima"></i>
-                  <span>发布</span>
+                  <span>复制</span>
                 </a>
-                <a class="set-set">
+                <!-- <a class="set-set">
                   <i class="icon iconfont icon-erweima"></i>
                   <span>设置</span>
-                </a>
+                </a> -->
               </div>
             </div>
           </div>
@@ -63,6 +76,7 @@
 import Header from "@/components/header/header.vue";
 import * as api from "@/api/index";
 import $ from "jquery";
+import * as utils from '@/utils'
 export default {
   components: {
     vHeader: Header
@@ -100,10 +114,34 @@ export default {
           console.log(res);
         });
     },
-    add() {
-      api.addList({}).then(res => {
-        console.log(res);
-      });
+    create(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            api
+        .addList({
+          title: this.ruleForm.title,
+          desc: this.ruleForm.desc
+        })
+        .then(res => {
+          console.log(res);
+          this.hideCreateArea();
+          this.get();
+        });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    },
+    showCreateArea() {
+      utils.openMask();
+      this.createArea = true;
+    },
+    hideCreateArea() {
+      this.title = '';
+      this.desc = '';
+      utils.removeMask();
+      this.createArea = false;
     },
     del(item) {
       api
@@ -112,6 +150,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.get();
         });
     }
   },
@@ -122,7 +161,17 @@ export default {
     return {
       list: [],
       currentPage: 1,
-      total: 0
+      total: 0,
+      createArea: false,
+      ruleForm : {
+        title: "",
+        desc: "",
+      },
+      rules:{
+        title : [{
+          required: true, message : '不能为空'
+        }]
+      }
     };
   }
 };

@@ -18,8 +18,9 @@ app.get('/aj/list/get', async (req, res) => {
     uid: req.session.uid
   })
   const data = await collection.find({
-      uid: req.session.uid
-    }, ['id'])
+      uid: req.session.uid,
+      show: true
+    }, ['id', 'title', 'desc'])
     .skip((page - 1) * limit)
     .sort({
       createTime: -1
@@ -43,11 +44,20 @@ app.get('/aj/list/get', async (req, res) => {
  * 列表页， 添加
  */
 
-app.get('/aj/list/add', async (req, res) => {
+app.post('/aj/list/add', async (req, res) => {
+  if (!req.body.title) {
+    res.send({
+      a: 1
+    })
+    return;
+  }
   const collection = dbHandel.getModel('myh5')
   const count = await collection.count()
+  console.log(count);
   new collection({
     id: count + 1,
+    title: req.body.title,
+    desc: req.body.desc,
     uid: req.session.uid,
     createTime: new Date().getTime()
   }).save((err, docs) => {
@@ -75,8 +85,10 @@ app.get('/aj/list/del', async (req, res) => {
       result: {}
     })
   } else {
-    await collection.remove({
+    await collection.update({
       id: req.query.id
+    }, {
+      show: false
     })
     res.send({
       status: AJ_STATUS.success,

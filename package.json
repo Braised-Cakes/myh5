@@ -1,6 +1,6 @@
 {
   "name": "myh5",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --open",

@@ -8,6 +8,7 @@ import '@/css/index.scss'
 import {
   Pagination,
   Scrollbar,
+  Form,
   Tooltip,
   Loading,
   Button,
@@ -24,6 +25,7 @@ import {
   MessageBox,
   Notification,
   Upload,
+  FormItem,
   Message
 } from 'element-ui';
 import '@/css/element-variables.scss'
@@ -37,6 +39,7 @@ import store from '@/store'
 // Vue.config.productionTip = false
 Vue.use(Pagination);
 Vue.use(Scrollbar);
+Vue.use(Form);
 Vue.use(Tooltip);
 Vue.use(Button);
 Vue.use(ColorPicker);
@@ -50,6 +53,7 @@ Vue.use(RadioGroup);
 Vue.use(Option);
 Vue.use(OptionGroup);
 Vue.use(Upload);
+Vue.use(FormItem);
 Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;
