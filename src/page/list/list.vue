@@ -4,7 +4,7 @@
     <div class="contain">
       <button @click="showCreateArea">新增一页</button>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" v-if="createArea" style="width:460px;padding:0 20px;position:absolute;background:#fff;border:1px solid #000;z-index:1293912;">
-        <h3>创建场景</h3>
+        <h3>{{isCopy ? '复制场景' : '创建场景'}}</h3>
         <el-form-item prop="title" label="名称">
           <el-input v-model="ruleForm.title"></el-input>
         </el-form-item>
@@ -21,14 +21,14 @@
           <div class="image">
             <div class="front"></div>
             <div class="overlay">
-              <a class="edit">
+              <!-- <a class="edit">
                 <div>
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-logo"></use>
                   </svg>
                 </div>
                 <span>详情</span>
-              </a>
+              </a> -->
               <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
                 <div>
                   <svg class="icon" aria-hidden="true">
@@ -46,7 +46,7 @@
               <span>0</span>
             </a>
             <div class="button">
-              <a @mouseover="fff(index)" @mouseout="ffff(index)" class="erweima">
+              <a @mouseenter="qrCodeEnter(index)" @mouseleave="qrCodeLeave(index)" class="erweima">
                 <i class="icon iconfont icon-erweima"></i>
               </a>
               <div class="set">
@@ -54,7 +54,7 @@
                   <i class="icon iconfont icon-erweima"></i>
                   <span>删除</span>
                 </a>
-                <a class="set-fabu">
+                <a class="set-fabu" @click="copy(item)">
                   <i class="icon iconfont icon-erweima"></i>
                   <span>复制</span>
                 </a>
@@ -76,27 +76,26 @@
 import Header from "@/components/header/header.vue";
 import * as api from "@/api/index";
 import $ from "jquery";
-import * as utils from '@/utils'
+import * as utils from "@/utils";
 export default {
   components: {
     vHeader: Header
   },
-  computed: {},
   methods: {
-    fff(i) {
+    qrCodeEnter(index) {
       $(".front")
-        .eq(i)
+        .eq(index)
         .addClass("front2");
       $(".overlay")
-        .eq(i)
+        .eq(index)
         .hide();
     },
-    ffff(i) {
+    qrCodeLeave(index) {
       $(".front")
-        .eq(i)
+        .eq(index)
         .removeClass("front2");
       $(".overlay")
-        .eq(i)
+        .eq(index)
         .show();
     },
     get(page) {
@@ -115,33 +114,37 @@ export default {
         });
     },
     create(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            api
-        .addList({
-          title: this.ruleForm.title,
-          desc: this.ruleForm.desc
-        })
-        .then(res => {
-          console.log(res);
-          this.hideCreateArea();
-          this.get();
-        });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          api
+            .addList({
+              title: this.ruleForm.title,
+              desc: this.ruleForm.desc,
+              type: this.isCopy ? "copy" : "",
+              id: this.copyId
+            })
+            .then(res => {
+              console.log(res);
+              this.hideCreateArea();
+              this.get();
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     showCreateArea() {
       utils.openMask();
       this.createArea = true;
     },
     hideCreateArea() {
-      this.title = '';
-      this.desc = '';
+      this.ruleForm.title = "";
+      this.ruleForm.desc = "";
       utils.removeMask();
       this.createArea = false;
+      this.isCopy = false;
+      this.copyId = null;
     },
     del(item) {
       api
@@ -152,6 +155,13 @@ export default {
           console.log(res);
           this.get();
         });
+    },
+    copy(item) {
+      this.ruleForm.title = item.title;
+      this.ruleForm.desc = item.desc;
+      this.isCopy = true;
+      this.copyId = item.id;
+      this.showCreateArea();
     }
   },
   mounted() {
@@ -163,14 +173,19 @@ export default {
       currentPage: 1,
       total: 0,
       createArea: false,
-      ruleForm : {
+      isCopy: false,
+      copyId: null,
+      ruleForm: {
         title: "",
-        desc: "",
+        desc: ""
       },
-      rules:{
-        title : [{
-          required: true, message : '不能为空'
-        }]
+      rules: {
+        title: [
+          {
+            required: true,
+            message: "不能为空"
+          }
+        ]
       }
     };
   }
@@ -292,6 +307,7 @@ ul {
           border-radius: 3px;
           width: 30px;
           height: 30px;
+          // padding:5px;
           cursor: pointer;
           &:hover {
             background: #5ec8f7;

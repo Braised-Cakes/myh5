@@ -15,7 +15,8 @@ app.get('/aj/list/get', async (req, res) => {
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
   const total = await collection.count({
-    uid: req.session.uid
+    uid: req.session.uid,
+    show: true
   })
   const data = await collection.find({
       uid: req.session.uid,
@@ -47,18 +48,25 @@ app.get('/aj/list/get', async (req, res) => {
 app.post('/aj/list/add', async (req, res) => {
   if (!req.body.title) {
     res.send({
-      a: 1
+      status: AJ_STATUS.error,
+      message: '场景title为空'
     })
-    return;
+    return
   }
   const collection = dbHandel.getModel('myh5')
   const count = await collection.count()
-  console.log(count);
+  let copyItem
+  if (req.body.type == 'copy') {
+    copyItem = await collection.findOne({
+      id: req.body.id
+    })
+  }
   new collection({
     id: count + 1,
     title: req.body.title,
     desc: req.body.desc,
     uid: req.session.uid,
+    data: (copyItem && copyItem.data) || {},
     createTime: new Date().getTime()
   }).save((err, docs) => {
     if (err) throw err
