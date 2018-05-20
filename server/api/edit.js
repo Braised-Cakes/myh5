@@ -52,7 +52,8 @@ app.post('/aj/edit/save', async (req, res) => {
   await collection.update({
     id: req.body.id
   }, {
-    data: req.body.data
+    data: req.body.data,
+    updateTime: new Date().getTime()
   })
 
   res.send({

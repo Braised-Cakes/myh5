@@ -1,42 +1,45 @@
 module.exports = {
   "myh5": {
-    "type": {
-      type: String,
-      required: false
-    },
     "id": {
       type: Number,
-      required: true
+      required: true,
+      description: '作品id'
     },
-    "show": {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    "uid": {
-      type: Number,
-      required: true
-    },
-    "bg": {
+    "title": {
       type: String,
-      required: false
+      required: true,
+      description: '作品title'
+    },
+    "desc": {
+      type: String,
+      required: false,
+      description: '作品描述'
     },
     "createTime": {
       type: Number,
-      required: true
+      required: true,
+      description: '创建时间'
+    },
+    "updateTime": {
+      type: Number,
+      required: true,
+      description: '编辑时间'
     },
     "data": {
       type: Object,
       required: false,
-      default: {}
+      default: {},
+      description: '作品数据'
     },
-    "title": {
-      type: String,
-      required: true
+    "status": {
+      type: Number,
+      default: 0,
+      description: '作品状态，0:正常，1:回收站，2:彻底清空'
     },
-    "desc": {
-      type: String,
-      required: false
+    "uid": {
+      type: Number,
+      required: true,
+      description: '创建者的uid'
     }
   },
   "shape": {

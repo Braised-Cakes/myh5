@@ -11,20 +11,24 @@ const {
  * 列表页， 获取
  */
 app.get('/aj/list/get', async (req, res) => {
+  /**
+   * page,limit,uid,status
+   */
   const collection = dbHandel.getModel('myh5')
   const page = Number(req.query.page) || DEFAULT_PAGE.page
   const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
+  const status = Number(req.query.status) || 0
   const total = await collection.count({
     uid: req.session.uid,
-    show: true
+    status: status
   })
   const data = await collection.find({
       uid: req.session.uid,
-      show: true
+      status: status
     }, ['id', 'title', 'desc'])
     .skip((page - 1) * limit)
     .sort({
-      createTime: -1
+      updateTime: -1
     })
     .limit(limit)
   res.send({
@@ -67,7 +71,8 @@ app.post('/aj/list/add', async (req, res) => {
     desc: req.body.desc,
     uid: req.session.uid,
     data: (copyItem && copyItem.data) || {},
-    createTime: new Date().getTime()
+    createTime: new Date().getTime(),
+    updateTime: new Date().getTime()
   }).save((err, docs) => {
     if (err) throw err
     res.send({
@@ -96,7 +101,7 @@ app.get('/aj/list/del', async (req, res) => {
     await collection.update({
       id: req.query.id
     }, {
-      show: false
+      status: 1
     })
     res.send({
       status: AJ_STATUS.success,

@@ -3,6 +3,7 @@
     <v-header></v-header>
     <div class="contain">
       <button @click="showCreateArea">新增一页</button>
+      <button @click="goTrash">{{trash ? '我的场景' : '回收站'}}</button>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" v-if="createArea" style="width:460px;padding:0 20px;position:absolute;background:#fff;border:1px solid #000;z-index:1293912;">
         <h3>{{isCopy ? '复制场景' : '创建场景'}}</h3>
         <el-form-item prop="title" label="名称">
@@ -16,7 +17,7 @@
           <el-button @click="hideCreateArea">取消</el-button>
         </div>
       </el-form>
-      <ul>
+      <ul class="list">
         <li ref="list" :key="item.id" v-for="(item, index) in list">
           <div class="image">
             <div class="front"></div>
@@ -102,7 +103,8 @@ export default {
       api
         .getJobList({
           limit: 12,
-          page: page || 1
+          page: page || 1,
+          status: this.trash ? 1 : 0
         })
         .then(res => {
           console.log(res);
@@ -162,6 +164,10 @@ export default {
       this.isCopy = true;
       this.copyId = item.id;
       this.showCreateArea();
+    },
+    goTrash() {
+      this.trash = this.trash ? false : true;
+      this.get();
     }
   },
   mounted() {
@@ -179,6 +185,7 @@ export default {
         title: "",
         desc: ""
       },
+      trash: false,
       rules: {
         title: [
           {
@@ -213,7 +220,7 @@ export default {
   // justify-content: center;
 }
 
-ul {
+.list {
   display: flex;
   flex-wrap: wrap;
   li {
