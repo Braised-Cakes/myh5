@@ -22,6 +22,14 @@ let routes = new Router({
     component: () =>
       import ('@/page/edit/edit.vue')
   }, {
+    path: '/detail/:id',
+    name: 'detail',
+    meta: {
+      requiresAuth: true
+    },
+    component: () =>
+      import ('@/page/detail/detail.vue')
+  }, {
     path: '/login',
     name: 'login',
     component: () =>

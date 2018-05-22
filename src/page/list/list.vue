@@ -19,17 +19,20 @@
       </el-form>
       <ul class="list">
         <li ref="list" :key="item.id" v-for="(item, index) in list">
+          <div class="publish-status">
+            <span class="unpublish">未发布</span>
+          </div>
           <div class="image">
             <div class="front"></div>
             <div class="overlay">
-              <!-- <a class="edit">
+              <router-link class="edit" :to="{ name: 'detail', params: { id: item.id }}">
                 <div>
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-logo"></use>
                   </svg>
                 </div>
                 <span>详情</span>
-              </a> -->
+              </router-link>
               <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
                 <div>
                   <svg class="icon" aria-hidden="true">
@@ -59,10 +62,6 @@
                   <i class="icon iconfont icon-erweima"></i>
                   <span>复制</span>
                 </a>
-                <!-- <a class="set-set">
-                  <i class="icon iconfont icon-erweima"></i>
-                  <span>设置</span>
-                </a> -->
               </div>
             </div>
           </div>
@@ -90,12 +89,18 @@ export default {
       $(".overlay")
         .eq(index)
         .hide();
+      $(".ribbon")
+        .eq(index)
+        .hide();
     },
     qrCodeLeave(index) {
       $(".front")
         .eq(index)
         .removeClass("front2");
       $(".overlay")
+        .eq(index)
+        .show();
+      $(".ribbon")
         .eq(index)
         .show();
     },
@@ -233,7 +238,27 @@ export default {
     overflow: hidden;
     margin-right: 20px;
     margin-bottom: 20px;
-
+    .publish-status {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      width: 140px;
+      height: 80px;
+      text-align: center;
+      z-index: 4;
+      .unpublish {
+        position: absolute;
+        left: -40px;
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        top: 16px;
+        padding: 0 20px;
+        background-color: #a3afb7;
+        transform: rotate(-45deg);
+      }
+    }
     .image {
       width: 280px;
       height: 260px;
