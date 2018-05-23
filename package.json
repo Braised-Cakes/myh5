@@ -12,6 +12,7 @@
   "dependencies": {
     "animate.css": "^3.6.1",
     "art-template": "^4.12.2",
+    "clipboard": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "element-ui": "^2.3.6",
     "express-art-template": "^1.0.1",

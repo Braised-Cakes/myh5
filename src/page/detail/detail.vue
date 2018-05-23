@@ -33,8 +33,24 @@
     }
   }
 }
+.wrapper {
+  height: 100vh;
+  background: #f1f4f5;
+}
+.container {
+  position: relative;
+  margin: 30px auto;
+  width: 1120px;
+  height: 486px;
+  padding: 30px;
+  background: #fff;
+}
+.area-right {
+  margin-left: 400px;
+}
 .base-info {
   display: flex;
+  margin-bottom: 30px;
   img {
     width: 100px;
     height: 100px;
@@ -62,6 +78,7 @@
     padding-top: 40px;
     text-align: center;
     border: 1px solid #e6ebed;
+    margin-right: 20px;
     .share-wx {
       height: 45px;
       line-height: 45px;
@@ -87,6 +104,17 @@
         font-size: 14px;
         color: #59c7f9;
         border: 1px solid #59c7f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.1s;
+        .iconfont {
+          font-size: 16px;
+          line-height: 16px;
+        }
+        span {
+          margin-left: 10px;
+        }
       }
       &:hover {
         .share-btn {
@@ -96,33 +124,39 @@
       }
     }
   }
+  .share-url {
+    display: flex;
+    align-items: center;
+    .copy-btn {
+      margin-left: 10px;
+    }
+  }
 }
 </style>
 
 <template>
-    <div>
+    <div class="wrapper">
         <v-header></v-header>
         <ul class="nav">
-            <li>
-                <a>数据汇总</a>
-            </li>
             <li class="active">
-                <a>数据汇总</a>
+                <a>社交分享</a>
             </li>
             <li>
-                <a>数据汇总</a>
+                <a>效果统计</a>
             </li>
             <li>
                 <a>数据汇总</a>
             </li>
         </ul>
-        <div>
-            <div class="left"></div>
-            <div class="right">
+        <div class="container">
+            <div class="area-left">
+
+            </div>
+            <div class="area-right">
                 <div class="base-info">
-                    <img class="left" src="http://res.eqxiu.com/group2/M00/7F/9B/yq0KXlZNGfWAbZo_AAAdI0Feqt0138.png" />
+                    <img class="left" src="@/img/logo2.png" />
                     <div class="right">
-                        <p class="title">副本-未命名场景</p>
+                        <p class="title">副本-未命名场景4</p>
                         <p class="description">我用易企秀做了一个超酷炫的H5，快来看看吧。</p>
                         <p class="create-time">创建时间： 2018年05月18日 </p>
                     </div>
@@ -136,13 +170,29 @@
                         <p class="hot-share">热门分享</p>
                         <ul class="share-group">
                             <li>
-                                <a class="share-btn">QQ</a>
+                                <a class="share-btn">
+                                    <i class="icon iconfont icon-qq"></i>
+                                    <span>QQ</span>
+                                </a>
                             </li>
                             <li>
-                                <a class="share-btn">QQ</a>
+                                <a class="share-btn">
+                                    <i class="icon iconfont icon-qqkongjian"></i>
+                                    <span>QQ空间</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="share-btn">
+                                    <i class="icon iconfont icon-weibo"></i>
+                                    <span>微博</span>
+                                </a>
                             </li>
                         </ul>
-                        链接分享 https://c.eqxiu.com/s/2maJI1PF
+                        <p class="hot-share">链接分享</p>
+                        <div class="share-url">
+                            <p>https://c.eqxiu.com/s/2maJI1PF</p>
+                            <el-button data-clipboard-text="https://c.eqxiu.com/s/2maJI1PF" class="copy-btn" size="mini">复制链接</el-button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,9 +202,25 @@
 
 <script>
 import Header from "@/components/header/header.vue";
+import ClipboardJS from "clipboard";
 export default {
   components: {
     vHeader: Header
+  },
+  mounted() {
+    var clipboard = new ClipboardJS(".copy-btn");
+    clipboard.on("success", e => {
+      console.info("Action:", e.action);
+      console.info("Text:", e.text);
+      console.info("Trigger:", e.trigger);
+      this.$message("复制成功");
+      e.clearSelection();
+    });
+
+    clipboard.on("error", function(e) {
+      console.error("Action:", e.action);
+      console.error("Trigger:", e.trigger);
+    });
   }
 };
 </script>
