@@ -30,7 +30,24 @@ const {
 /**
  * 列表页， 获取
  */
-app.get('/aj/edit/get', async (req, res) => {
+app.get('/aj/scene/get', async (req, res) => {
+  const collection = dbHandel.getModel('myh5')
+  const data = await collection.findOne({
+    id: req.query.id
+  })
+  res.send({
+    status: AJ_STATUS.success,
+    message: AJ_MESSAGE.success,
+    result: {
+      data: data
+    }
+  })
+})
+
+/**
+ * 列表页， 获取发布后的数据
+ */
+app.get('/aj/scene/getPublishData', async (req, res) => {
   const collection = dbHandel.getModel('myh5')
   const data = await collection.findOne({
     id: req.query.id

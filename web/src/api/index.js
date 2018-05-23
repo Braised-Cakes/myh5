@@ -1,2 +1,2 @@
 import fetch from './fetch'
-export const getJobList = data => fetch('/aj/list/get', data);
+export const getSceneData = data => fetch('/aj/scene/getPublishData', data);

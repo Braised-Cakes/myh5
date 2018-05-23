@@ -55,15 +55,15 @@
               </a>
               <div class="set">
                 <a class="set-delete" @click="del(item)">
-                  <i class="icon iconfont icon-erweima"></i>
+                  <i class="icon iconfont icon-shanchu"></i>
                   <span>删除</span>
                 </a>
                 <a v-if="item.publishStatus != 1" class="set-fabu" @click="publish(item)">
-                  <i class="icon iconfont icon-erweima"></i>
+                  <i class="icon iconfont icon-fabu"></i>
                   <span>发布</span>
                 </a>
                 <a class="set-set" @click="copy(item)">
-                  <i class="icon iconfont icon-erweima"></i>
+                  <i class="icon iconfont icon-fuzhi"></i>
                   <span>复制</span>
                 </a>
               </div>

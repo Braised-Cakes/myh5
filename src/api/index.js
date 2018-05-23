@@ -6,7 +6,7 @@ export const delList = data => fetch('/aj/list/del', data);
 export const scenePublish = data => fetch('/aj/scene/publish', data, 'POST');
 
 
-export const getEdit = data => fetch('/aj/edit/get', data);
+export const getEdit = data => fetch('/aj/scene/get', data);
 export const saveEdit = data => fetch('/aj/edit/save', data, 'POST');
 
 

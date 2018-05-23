@@ -61,16 +61,16 @@ app.get('/show', function (req, res) {
   myh5.findOne({
     id: id
   }, (err, docs) => {
-    console.log(docs)
-    res.render('index.art', {
+    res.render(path.resolve(process.cwd(), 'web/public/index.art'), {
       info: docs.data
     });
   });
 
 });
 
-app.all('/*', function (req, res, next) {
-  if (req.session.username || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
+app.all('/aj/*', function (req, res, next) {
+  console.log(req.path)
+  if (req.session.username || req.path == '/app.js' || req.path == types.getScene || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
     next()
   } else {
     res.send({
