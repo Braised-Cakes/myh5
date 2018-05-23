@@ -31,10 +31,21 @@ module.exports = {
       default: {},
       description: '作品数据'
     },
+    "publishData": {
+      type: Object,
+      required: false,
+      default: {},
+      description: '发布时的数据'
+    },
     "status": {
       type: Number,
       default: 0,
-      description: '作品状态，0:正常，1:回收站，2:彻底清空'
+      description: '保存状态，0:正常 1:回收站，2:彻底删除'
+    },
+    "publishStatus": {
+      type: Number,
+      default: 0,
+      description: '发布状态，0:未发布，1:已发布且无修改，2:已发布且有修改'
     },
     "uid": {
       type: Number,

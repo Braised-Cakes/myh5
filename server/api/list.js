@@ -25,7 +25,7 @@ app.get('/aj/list/get', async (req, res) => {
   const data = await collection.find({
       uid: req.session.uid,
       status: status
-    }, ['id', 'title', 'desc'])
+    }, ['id', 'title', 'desc', 'status', 'publishStatus'])
     .skip((page - 1) * limit)
     .sort({
       updateTime: -1
@@ -106,6 +106,35 @@ app.get('/aj/list/del', async (req, res) => {
     res.send({
       status: AJ_STATUS.success,
       message: '删除成功',
+      result: {}
+    })
+  }
+})
+
+/**
+ * 发布
+ */
+app.post('/aj/scene/publish', async (req, res) => {
+  const collection = dbHandel.getModel('myh5')
+  const scene = await collection.findOne({
+    id: req.body.id
+  })
+  if (!scene) {
+    res.send({
+      status: AJ_STATUS.error,
+      message: 'id不存在',
+      result: {}
+    })
+  } else {
+    await collection.update({
+      id: req.body.id
+    }, {
+      publishStatus: 1,
+      publishData: scene.data
+    })
+    res.send({
+      status: AJ_STATUS.success,
+      message: '发布成功',
       result: {}
     })
   }

@@ -20,7 +20,7 @@
       <ul class="list">
         <li ref="list" :key="item.id" v-for="(item, index) in list">
           <div class="publish-status">
-            <span class="unpublish">未发布</span>
+            <span :class="publishStatus[item.publishStatus].ename">{{publishStatus[item.publishStatus].name}}</span>
           </div>
           <div class="image">
             <div class="front"></div>
@@ -58,7 +58,11 @@
                   <i class="icon iconfont icon-erweima"></i>
                   <span>删除</span>
                 </a>
-                <a class="set-fabu" @click="copy(item)">
+                <a v-if="item.publishStatus != 1" class="set-fabu" @click="publish(item)">
+                  <i class="icon iconfont icon-erweima"></i>
+                  <span>发布</span>
+                </a>
+                <a class="set-set" @click="copy(item)">
                   <i class="icon iconfont icon-erweima"></i>
                   <span>复制</span>
                 </a>
@@ -89,7 +93,7 @@ export default {
       $(".overlay")
         .eq(index)
         .hide();
-      $(".ribbon")
+      $(".publish-status")
         .eq(index)
         .hide();
     },
@@ -100,7 +104,7 @@ export default {
       $(".overlay")
         .eq(index)
         .show();
-      $(".ribbon")
+      $(".publish-status")
         .eq(index)
         .show();
     },
@@ -173,6 +177,15 @@ export default {
     goTrash() {
       this.trash = this.trash ? false : true;
       this.get();
+    },
+    publish(item) {
+      api
+        .scenePublish({
+          id: item.id
+        })
+        .then(res => {
+          console.log(res);
+        });
     }
   },
   mounted() {
@@ -198,6 +211,20 @@ export default {
             message: "不能为空"
           }
         ]
+      },
+      publishStatus: {
+        0: {
+          name: "未发布",
+          ename: "unpublish"
+        },
+        1: {
+          name: "已发布",
+          ename: "publish"
+        },
+        2: {
+          name: "有修改",
+          ename: "changed"
+        }
       }
     };
   }
@@ -246,17 +273,27 @@ export default {
       height: 80px;
       text-align: center;
       z-index: 4;
-      .unpublish {
+      span {
         position: absolute;
         left: -40px;
         width: 100%;
         height: 30px;
         line-height: 30px;
-        color: #fff;
         top: 16px;
         padding: 0 20px;
-        background-color: #a3afb7;
         transform: rotate(-45deg);
+      }
+      .unpublish {
+        color: #fff;
+        background-color: #a3afb7;
+      }
+      .publish {
+        color: #fff;
+        background-color: green;
+      }
+      .changed {
+        color: #fff;
+        background-color: #f1a55e;
       }
     }
     .image {

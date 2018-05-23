@@ -49,11 +49,16 @@ app.get('/aj/edit/get', async (req, res) => {
  */
 app.post('/aj/edit/save', async (req, res) => {
   const collection = dbHandel.getModel('myh5')
+  let data = await collection.findOne({
+    id: req.body.id
+  })
+  //如果还是未发布状态， 修改数据，发布状态还是0 ， 如果是已发布状态， 就改成已修改
   await collection.update({
     id: req.body.id
   }, {
     data: req.body.data,
-    updateTime: new Date().getTime()
+    updateTime: new Date().getTime(),
+    publishStatus: data.publishStatus != 0 ? 2 : 0
   })
 
   res.send({
