@@ -11,7 +11,7 @@ const utils = require('../utils')
 /**
  * 列表页， 获取
  */
-app.get('/aj/list/get', async (req, res) => {
+app.get('/aj/scene/list', async (req, res) => {
   /**
    * page,limit,uid,status
    */
@@ -50,7 +50,7 @@ app.get('/aj/list/get', async (req, res) => {
  * 列表页， 添加
  */
 
-app.post('/aj/list/add', async (req, res) => {
+app.post('/aj/scene/add', async (req, res) => {
   if (!req.body.title) {
     res.send({
       status: AJ_STATUS.error,
@@ -87,7 +87,7 @@ app.post('/aj/list/add', async (req, res) => {
 /**
  * 列表页， 删除
  */
-app.get('/aj/list/del', async (req, res) => {
+app.get('/aj/scene/del', async (req, res) => {
   const collection = dbHandel.getModel('myh5')
   const data = await collection.findOne({
     id: req.query.id

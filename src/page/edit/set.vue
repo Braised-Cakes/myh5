@@ -1,28 +1,28 @@
 <template>
-	<div>
-		<div class="setting-bg"></div>
-		<div class="left">
-			<div class="phone"></div>
-		</div>
-		<div class="right">
-			<div class="basic-info">
-				<div class="cover-img">
-					<img src="@/img/logo2.png" />
-					<span>更换封面</span>
-				</div>
-				<div>
-					<span>标题</span>
-					<el-input v-model="form.title"></el-input>
-					<span>描述</span>
-					<el-input v-model="form.desc"></el-input>
-				</div>
-			</div>
-			<div class="setting-operations">
-				<el-button @click="save">确定</el-button>
-				<el-button>取消</el-button>
-			</div>
-		</div>
-	</div>
+  <div>
+    <div class="setting-bg"></div>
+    <div class="left">
+      <div class="phone"></div>
+    </div>
+    <div class="right">
+      <div class="basic-info">
+        <div class="cover-img">
+          <img src="@/img/logo2.png" />
+          <span>更换封面</span>
+        </div>
+        <div>
+          <span>标题</span>
+          <el-input v-model="formData.title"></el-input>
+          <span>描述</span>
+          <el-input v-model="formData.desc"></el-input>
+        </div>
+      </div>
+      <div class="setting-operations">
+        <el-button @click="save">确定</el-button>
+        <el-button>取消</el-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -35,16 +35,16 @@ export default {
   },
   watch: {
     otherInfo: {
-      handler: function(val, oldVal) {
-        this.form = $.extend(true, {}, val);
-        this.form.id = this.$route.params.id;
+      handler: function(val) {
+        this.formData = $.extend(true, {}, val);
+        this.formData.id = this.$route.params.id;
       },
       deep: true
     }
   },
   data() {
     return {
-      form: {
+      formData: {
         id: this.$route.params.id,
         title: "",
         desc: ""
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     save() {
-      api.sceneUpdate(this.form).then(res => {
+      api.updateScene(this.formData).then(res => {
         console.log(res);
       });
     }

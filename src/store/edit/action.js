@@ -16,7 +16,7 @@ export default {
   }, {
     id
   }) {
-    api.getEdit({
+    api.getScene({
       id: id
     }).then((res) => {
       commit(types.SET_PHONE, res.result.data.data);

@@ -65,7 +65,7 @@ app.get('/aj/scene/getPublishData', async (req, res) => {
 /**
  * 列表页， 保存
  */
-app.post('/aj/edit/save', async (req, res) => {
+app.post('/aj/scene/save', async (req, res) => {
   const collection = dbHandel.getModel('myh5')
   let data = await collection.findOne({
     id: req.body.id

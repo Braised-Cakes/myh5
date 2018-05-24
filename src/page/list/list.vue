@@ -18,7 +18,7 @@
         </div>
       </el-form>
       <ul class="list">
-        <li ref="list" :key="item.id" v-for="(item, index) in list">
+        <li :style="{'animation-delay': `${50*index}ms` }" ref="list" :key="item.id" v-for="(item, index) in list">
           <div class="publish-status">
             <span :class="publishStatus[item.publishStatus].ename">{{publishStatus[item.publishStatus].name}}</span>
           </div>
@@ -73,7 +73,7 @@
       </ul>
       <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
     </div>
-    
+
   </div>
 </template>
 
@@ -111,7 +111,7 @@ export default {
     },
     get(page) {
       api
-        .getJobList({
+        .getSceneList({
           limit: 12,
           page: page || 1,
           status: this.trash ? 1 : 0
@@ -129,7 +129,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           api
-            .addList({
+            .addScene({
               title: this.ruleForm.title,
               desc: this.ruleForm.desc,
               type: this.isCopy ? "copy" : "",
@@ -160,7 +160,7 @@ export default {
     },
     del(item) {
       api
-        .delList({
+        .delScene({
           id: item.id
         })
         .then(res => {
@@ -181,7 +181,7 @@ export default {
     },
     publish(item) {
       api
-        .scenePublish({
+        .publishScene({
           id: item.id
         })
         .then(res => {
@@ -257,6 +257,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   li {
+    animation: fade-scale-02 0.25s backwards;
     position: relative;
     font-size: 12px;
     background-color: #fff;

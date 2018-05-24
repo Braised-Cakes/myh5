@@ -103,3 +103,31 @@ div {
 .pause {
   animation-play-state: paused;
 }
+
+@-webkit-keyframes fade-scale-02 {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(.2);
+    transform: scale(.2)
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1)
+  }
+}
+
+@keyframes fade-scale-02 {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(.2);
+    -o-transform: scale(.2);
+    transform: scale(.2)
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1)
+  }
+}

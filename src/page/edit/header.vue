@@ -86,7 +86,7 @@ export default {
         }
       }
       api
-        .saveEdit({
+        .saveScene({
           id: this.$route.params.id,
           data: data
         })
@@ -105,7 +105,7 @@ export default {
     },
     publish() {
       api
-        .scenePublish({
+        .publishScene({
           id: this.$route.params.id
         })
         .then(res => {

@@ -1,15 +1,47 @@
 import fetch from './fetch'
 
-export const getJobList = data => fetch('/aj/list/get', data);
-export const addList = data => fetch('/aj/list/add', data, 'POST');
-export const delList = data => fetch('/aj/list/del', data);
-export const scenePublish = data => fetch('/aj/scene/publish', data, 'POST');
-export const sceneUpdate = data => fetch('/aj/scene/update', data, 'POST');
 
+/**
+ * 获取场景列表
+ */
 
-export const getEdit = data => fetch('/aj/scene/get', data);
-export const saveEdit = data => fetch('/aj/edit/save', data, 'POST');
+export const getSceneList = data => fetch('/aj/scene/list', data);
 
+/**
+ * 创建场景
+ */
+
+export const addScene = data => fetch('/aj/scene/add', data, 'POST');
+
+/**
+ * 删除场景
+ */
+
+export const delScene = data => fetch('/aj/scene/del', data);
+
+/**
+ * 发布场景
+ */
+
+export const publishScene = data => fetch('/aj/scene/publish', data, 'POST');
+
+/**
+ * 更新场景
+ */
+
+export const updateScene = data => fetch('/aj/scene/update', data, 'POST');
+
+/**
+ * 获取指定场景
+ */
+
+export const getScene = data => fetch('/aj/scene/get', data);
+
+/**
+ * 保存场景
+ */
+
+export const saveScene = data => fetch('/aj/scene/save', data, 'POST');
 
 export const getShapeNav = () => fetch('/aj/shape/nav');
 export const getShape = data => fetch('/aj/shape/get', data);
@@ -25,14 +57,36 @@ export const getImageNav = () => fetch('/aj/image/nav');
 export const getImage = data => fetch('/aj/image/get', data);
 export const choiceImage = data => fetch('/aj/image/choice', data);
 
+/**
+ * 创建二维码
+ */
 
 export const createQRCode = data => fetch('/aj/qrcode/create', data);
 
+/**
+ * 用户注册
+ */
 
 export const userRegister = data => fetch('/aj/user/register', data, 'POST');
+
+/**
+ * 用户登录
+ */
+
 export const userLogin = data => fetch('/aj/user/login', data, 'POST');
+
+/**
+ * 用户登出
+ */
+
 export const userLogout = data => fetch('/aj/user/logout', data, 'POST');
+
+/**
+ * 获取用户信息
+ */
+
 export const getUserInfo = data => fetch('/aj/user/info', data);
+
 
 export const getToken = data => fetch('/aj/image/token', data);
 export const getMusicToken = data => fetch('/aj/music/token', data);
