@@ -35,3 +35,5 @@ export const RECORD = 'RECORD';
 export const REVOKE = 'REVOKE';
 //重做
 export const REDO = 'REDO';
+//更新otherInfo
+export const OTHERINFO = 'OTHERINFO';

@@ -20,6 +20,7 @@ export default {
       id: id
     }).then((res) => {
       commit(types.SET_PHONE, res.result.data.data);
+      commit(types.OTHERINFO, res.result.data)
       //记录
       if (res.result.data.data) {
         dispatch('record', {

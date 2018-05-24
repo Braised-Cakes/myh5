@@ -86,5 +86,11 @@ export default {
    */
   curCache(state) {
     return state.cacheData[state.currentPage];
+  },
+  /**
+   * otherInfo
+   */
+  otherInfo(state) {
+    return state.otherInfo;
   }
 }

@@ -5,6 +5,7 @@ const {
   AJ_STATUS,
   AJ_MESSAGE
 } = require('../const/index')
+const utils = require('../utils')
 
 
 /**
@@ -71,8 +72,8 @@ app.post('/aj/list/add', async (req, res) => {
     desc: req.body.desc,
     uid: req.session.uid,
     data: (copyItem && copyItem.data) || {},
-    createTime: new Date().getTime(),
-    updateTime: new Date().getTime()
+    createTime: utils.getTime(),
+    updateTime: utils.getTime()
   }).save((err, docs) => {
     if (err) throw err
     res.send({

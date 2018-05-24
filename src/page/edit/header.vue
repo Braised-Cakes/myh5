@@ -5,7 +5,7 @@
         <!-- <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-logo"></use>
         </svg> -->
-        <img src="@/img/logo.png"/>
+        <img src="@/img/logo.png" />
       </router-link>
     </div>
     <div class="creat_con">
@@ -50,12 +50,12 @@
         <li @click="save">
           <span>保存</span>
         </li>
-        <li>
+        <li @click="publish">
           <span>发布</span>
         </li>
-        <li class="quit">
+        <router-link class="quit" tag="li" :to="'/list'">
           <span>退出</span>
-        </li>
+        </router-link>
       </ul>
     </div>
   </header>
@@ -85,7 +85,6 @@ export default {
           }
         }
       }
-      console.log(this.phoneData)
       api
         .saveEdit({
           id: this.$route.params.id,
@@ -102,6 +101,15 @@ export default {
               // });
             }
           });
+        });
+    },
+    publish() {
+      api
+        .scenePublish({
+          id: this.$route.params.id
+        })
+        .then(res => {
+          console.log(res);
         });
     }
   },

@@ -267,5 +267,12 @@ export default {
   }) {
     curCache.index = index;
     //state
+  },
+  [types.OTHERINFO](state, {
+    title,
+    desc
+  }) {
+    state.otherInfo.title = title;
+    state.otherInfo.desc = desc;
   }
 }

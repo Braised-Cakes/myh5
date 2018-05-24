@@ -8,6 +8,7 @@ let md5 = require('md5')
 const rimraf = require('rimraf')
 const sha1 = require('sha1')
 const uuid = require('uuid/v1');
+const utils = require('../utils')
 const {
   AccessKey,
   SecretKey
@@ -74,7 +75,7 @@ app.post('/aj/edit/save', async (req, res) => {
     id: req.body.id
   }, {
     data: req.body.data,
-    updateTime: new Date().getTime(),
+    updateTime: utils.getTime(),
     publishStatus: data.publishStatus != 0 ? 2 : 0
   })
 
@@ -198,13 +199,13 @@ app.get('/aj/shape/getContent', async (req, res) => {
       uid: req.session.uid,
       shapeId: Number(req.query.id),
     }, {
-      usedTime: new Date().getTime()
+      usedTime: utils.getTime()
     })
   } else {
     await new usedCollection({
       uid: req.session.uid,
       shapeId: Number(req.query.id),
-      usedTime: new Date().getTime()
+      usedTime: utils.getTime()
     }).save();
   }
 
@@ -346,13 +347,13 @@ app.get('/aj/music/choice', async (req, res) => {
       uid: req.session.uid,
       musicId: Number(req.query.id),
     }, {
-      usedTime: new Date().getTime()
+      usedTime: utils.getTime()
     })
   } else {
     await new usedCollection({
       uid: req.session.uid,
       musicId: Number(req.query.id),
-      usedTime: new Date().getTime()
+      usedTime: utils.getTime()
     }).save();
   }
   res.send({
@@ -499,13 +500,13 @@ app.get('/aj/image/choice', async (req, res) => {
       uid: req.session.uid,
       imageId: Number(req.query.id),
     }, {
-      usedTime: new Date().getTime()
+      usedTime: utils.getTime()
     })
   } else {
     await new usedCollection({
       uid: req.session.uid,
       imageId: Number(req.query.id),
-      usedTime: new Date().getTime()
+      usedTime: utils.getTime()
     }).save();
   }
   res.send({
@@ -534,7 +535,7 @@ app.get('/aj/qrcode/create', async (req, res) => {
     return
   }
   url = decodeURIComponent(url)
-  let fileName = `${md5(`url=${url};time:${new Date().getTime()};margin:${margin}`)}.svg`
+  let fileName = `${md5(`url=${url};time:${utils.getTime()};margin:${margin}`)}.svg`
   toFileSync = promisify(QRCode.toFile);
   let toFilePath = path.resolve(process.cwd(), 'cache', fileName);
   await toFileSync(toFilePath, url, {
@@ -766,7 +767,7 @@ app.post('/aj/image/user_upload', async (req, res) => {
         width: req.body.imageInfo.width,
         height: req.body.imageInfo.height,
         size: req.body.imageInfo.size,
-        createTime: new Date().getTime(),
+        createTime: utils.getTime(),
         id: lastData[0].id + 1
       }).save();
     res.send({
@@ -820,7 +821,7 @@ app.post('/aj/music/user_upload', async (req, res) => {
       await new collection({
         uid: req.session.uid,
         path: req.body.key,
-        createTime: new Date().getTime(),
+        createTime: utils.getTime(),
         id: lastData[0].id + 1,
         name: req.body.name
       }).save();
@@ -836,11 +837,30 @@ app.post('/aj/music/user_upload', async (req, res) => {
     res.send({
       status: AJ_STATUS.error,
       message: '不是音乐',
-      data: {}
+      result: {}
     })
   }
 })
 
+app.post('/aj/scene/update', async (req, res) => {
+  const collection = dbHandel.getModel('myh5')
+  let item = await collection.findOne({
+    id: req.body.id
+  })
+  let title = req.body.title || item.title
+  let desc = req.body.desc || item.desc
+  await collection.update({
+    id: req.body.id
+  }, {
+    title: title,
+    desc: desc
+  })
+  res.send({
+    status: AJ_STATUS.success,
+    message: '更新成功',
+    result: {}
+  })
+})
 // app.get('/aj/bbb', async (req, res) => {
 //   const collection = dbHandel.getModel('musics')
 //   let count = await collection.count();

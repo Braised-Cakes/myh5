@@ -19,13 +19,17 @@ export const initState = {
   currentPage: 0,
   curItemId: -1,
   curItemIds: [],
+  otherInfo: {
+    title: '',
+    desc: ''
+  },
   panel: {
     [types.SHAPE]: false,
-    [types.MUSIC]: false, 
+    [types.MUSIC]: false,
     [types.IMAGE]: false,
     [types.QRCODE]: false,
   },
-  cacheData : []
+  cacheData: []
 }
 
 

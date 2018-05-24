@@ -71,8 +71,9 @@
           </div>
         </li>
       </ul>
+      <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
     </div>
-    <el-pagination @current-change="get" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
+    
   </div>
 </template>
 
