@@ -26,13 +26,13 @@ import {
   Notification,
   Upload,
   FormItem,
-  Message
+  Message,
+  Dialog
 } from 'element-ui';
 import '@/css/element-variables.scss'
 import '@/directive/select'
 import '@/directive/drag'
 import "@/directive/changesize";
-import '@/iconfont/iconfont'
 import '@/iconfont/iconfont.css'
 import '@/keycode/index'
 import store from '@/store'
@@ -54,6 +54,7 @@ Vue.use(Option);
 Vue.use(OptionGroup);
 Vue.use(Upload);
 Vue.use(FormItem);
+Vue.use(Dialog);
 Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;

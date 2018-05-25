@@ -158,7 +158,7 @@ export default {
   /**
    * 打开panel
    */
-  [types.OPEN_PANEL](state, type) {
+   [types.OPEN_PANEL](state, type) {
     state.panel[type] = true;
   },
   /**

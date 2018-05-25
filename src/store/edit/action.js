@@ -6,10 +6,8 @@ import tpl from '@/tpl'
 import * as utils from '@/utils'
 import config from '@/config'
 import page from './action/page'
-import panel from './action/panel'
 export default {
   ...page,
-  ...panel,
   setPhone({
     commit,
     dispatch

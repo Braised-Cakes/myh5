@@ -251,9 +251,8 @@
 import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 export default {
-  //   name: "image",
   data() {
     return {
       types: types,
@@ -288,7 +287,8 @@ export default {
     ...mapGetters(["phoneData"])
   },
   methods: {
-    ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    ...mapActions(["addItem", "updateMain"]),
+    ...mapMutations(["CLOSE_PANEL"]),
     uploadProgress(event, file, fileList) {
       if (!file) {
         return;
@@ -365,7 +365,7 @@ export default {
      * 关闭音乐面板
      */
     close() {
-      this.closePanel(types.IMAGE);
+      this.CLOSE_PANEL(types.IMAGE);
     },
     changeLeftIndex(index) {
       this.leftIndex = index;
@@ -394,7 +394,7 @@ export default {
           height: img.height
         });
       };
-      this.closePanel(types.IMAGE);
+      this.CLOSE_PANEL(types.IMAGE);
     },
     /**
      * 确认

@@ -70,7 +70,7 @@
   <div class="wrapper">
     <div class="header">
       <h4>二维码</h4>
-      <span @click="closePanel(types.QRCODE)" class="close">x</span>
+      <span @click="CLOSE_PANEL(types.QRCODE)" class="close">x</span>
     </div>
     <div class="main" style="height:280px;display:flex;">
       <div style="display:flex;flex-direction:column;" class="left">
@@ -90,7 +90,7 @@
       <div class="right">
         <img :src="src" style="width:200px;border:1px solid #dce0e2" />
         <footer>
-          <el-button @click="closePanel(types.QRCODE)" size="mini">取消</el-button>
+          <el-button @click="CLOSE_PANEL(types.QRCODE)" size="mini">取消</el-button>
           <el-button @click="confirm" size="mini" type="success">确定</el-button>
         </footer>
       </div>
@@ -100,7 +100,7 @@
 <script>
 import * as api from "@/api";
 import * as types from "@/tpl/types";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -112,7 +112,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addItem", "openPanel", "closePanel"]),
+    ...mapActions(["addItem"]),
+    ...mapMutations(["CLOSE_PANEL"]),
     create() {
       api
         .createQRCode({
@@ -128,7 +129,7 @@ export default {
         type: this.types.QRCODE,
         url: this.src
       });
-      this.closePanel(types.QRCODE);
+      this.CLOSE_PANEL(types.QRCODE);
     }
   }
 };

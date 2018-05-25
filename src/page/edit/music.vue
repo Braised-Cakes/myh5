@@ -273,7 +273,7 @@
 import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "music",
   data() {
@@ -310,7 +310,8 @@ export default {
     ...mapGetters(["phoneData"])
   },
   methods: {
-    ...mapActions(["addItem", "openPanel", "closePanel", "updateMain"]),
+    ...mapActions(["addItem", "updateMain"]),
+    ...mapMutations(["CLOSE_PANEL"]),
     uploadProgress(event, file, fileList) {
       if (!file) {
         return;
@@ -389,7 +390,7 @@ export default {
      */
     close() {
       this.pause();
-      this.closePanel(types.MUSIC);
+      this.CLOSE_PANEL(types.MUSIC);
     },
     changeLeftIndex(index) {
       this.leftIndex = index;

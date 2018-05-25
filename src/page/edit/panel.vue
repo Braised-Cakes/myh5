@@ -140,7 +140,7 @@
       <h4>形状库
         <span>矢量素材，可更换颜色，放大不失真</span>
       </h4>
-      <span @click="closePanel(types.SHAPE)" class="close">x</span>
+      <span @click="CLOSE_PANEL(types.SHAPE)" class="close">x</span>
     </div>
     <div class="main">
       <div class="left">
@@ -176,7 +176,7 @@
 import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions,mapMutations } from "vuex";
 export default {
   name: "panel",
   data() {
@@ -201,7 +201,8 @@ export default {
     })
   },
   methods: {
-    ...mapActions(["addItem", "openPanel", "closePanel"]),
+    ...mapActions(["addItem"]),
+    ...mapMutations(["CLOSE_PANEL"]),
     changeNav(index) {
       this.navIndex = index;
       this.pageInfo.currentPage = 1;
@@ -223,7 +224,7 @@ export default {
       $(dom).on("load", () => {
         let docs = dom[0].getSVGDocument();
         $(dom).remove();
-        this.closePanel(types.SHAPE);
+        this.CLOSE_PANEL(types.SHAPE);
         this.addItem({
           type: types.SHAPE,
           path: item.path,
@@ -240,7 +241,7 @@ export default {
           id: item.id
         })
         .then(() => {
-          // this.closePanel(types.SHAPE);
+          // this.CLOSE_PANEL(types.SHAPE);
           // console.log(result.match(/<svg[\s\S]+/)[0])
           // this.addItem({
           //   type: types.SHAPE,
