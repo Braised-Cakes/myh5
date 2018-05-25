@@ -2,7 +2,7 @@
     <div class="list-page">
         <v-header></v-header>
         <section v-if="createSceneVisible">
-            <el-dialog width="500px" @close="closeCreate" :close-on-click-modal="false" :visible.sync="createSceneVisible" :title="isCopy ? '复制场景' : '创建场景'">
+            <el-dialog width="500px" @close="createSceneVisible = false" :close-on-click-modal="false" :visible.sync="createSceneVisible" :title="isCopy ? '复制场景' : '创建场景'">
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" style="">
                     <el-form-item prop="title" label="标题">
                         <el-input v-model="ruleForm.title"></el-input>
@@ -13,13 +13,17 @@
                 </el-form>
                 <div slot="footer">
                     <el-button @click="createSceneVisible = false">取消</el-button>
-                    <el-button type="success" @click="create('ruleForm')">确定</el-button>
+                    <el-button type="success" @click="create">确定</el-button>
                 </div>
             </el-dialog>
         </section>
+        <section class="entrance">
+            <div class="same-content">
+                <el-button size="small" type="primary" @click="createSceneVisible = true" icon="el-icon-plus">创建场景</el-button>
+                <el-button size="small" type="primary" @click="goTrash" icon="el-icon-delete">{{trash ? '我的场景' : '回收站'}}</el-button>
+            </div>
+        </section>
         <section class="container">
-            <button @click="showCreateArea">新增一页</button>
-            <button @click="goTrash">{{trash ? '我的场景' : '回收站'}}</button>
             <ul class="scene-list">
                 <li :style="{'animation-delay': 50 * index + 'ms'}" :key="item.id" v-for="(item, index) in list">
                     <div class="publish-status">
@@ -76,12 +80,22 @@
 </template>
 
 <script>
-import Header from "@/components/header/header.vue";
+import Header from "./header.vue";
 import * as api from "@/api/index";
 import $ from "jquery";
 export default {
     components: {
         vHeader: Header
+    },
+    watch: {
+        createSceneVisible: function(val) {
+            if (!val) {
+                this.ruleForm.title = "";
+                this.ruleForm.desc = "";
+                this.isCopy = false;
+                this.copyId = null;
+            }
+        }
     },
     methods: {
         qrCodeEnter(index) {
@@ -114,74 +128,76 @@ export default {
                     status: this.trash ? 1 : 0
                 })
                 .then(res => {
-                    console.log(res);
                     this.list = res.result.data;
                     this.total = res.result.info.total;
                 })
-                .catch(res => {
-                    console.log(res);
-                });
+                .catch(() => {});
         },
-        create(formName) {
-            this.$refs[formName].validate(valid => {
+        create() {
+            this.$refs.ruleForm.validate(async valid => {
                 if (valid) {
-                    api
-                        .addScene({
-                            title: this.ruleForm.title,
-                            desc: this.ruleForm.desc,
-                            type: this.isCopy ? "copy" : "",
-                            id: this.copyId
-                        })
-                        .then(res => {
-                            console.log(res);
-                            this.createSceneVisible = false;
-                            this.get();
-                        });
+                    await api.addScene({
+                        title: this.ruleForm.title,
+                        desc: this.ruleForm.desc,
+                        type: this.isCopy ? "copy" : "",
+                        id: this.copyId
+                    });
+                    this.$notify({
+                        title: this.isCopy ? "复制成功" : "创建成功",
+                        type: "success"
+                    });
+                    this.createSceneVisible = false;
+                    this.get();
                 } else {
                     console.log("error submit!!");
                     return false;
                 }
             });
         },
-        showCreateArea() {
-            this.createSceneVisible = true;
-        },
         del(item) {
-            api
-                .delScene({
-                    id: item.id
-                })
-                .then(res => {
-                    console.log(res);
+            this.$confirm("确定删除此场景?", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            })
+                .then(async () => {
+                    await api.delScene({ id: item.id });
+                    this.$notify({
+                        title: "删除成功",
+                        message: "可以到回收站里找回场景",
+                        type: "success"
+                    });
                     this.get();
-                });
+                })
+                .catch(() => {});
         },
         copy(item) {
             this.ruleForm.title = item.title;
             this.ruleForm.desc = item.desc;
             this.isCopy = true;
             this.copyId = item.id;
-            this.showCreateArea();
+            this.createSceneVisible = true;
         },
         goTrash() {
             this.trash = this.trash ? false : true;
             this.get();
         },
         publish(item) {
-            api
-                .publishScene({
-                    id: item.id
+            this.$confirm("确定发布此场景?", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "info"
+            })
+                .then(async () => {
+                    await api.publishScene({
+                        id: item.id
+                    });
+                    this.$notify({
+                        title: "发布成功",
+                        type: "success"
+                    });
                 })
-                .then(res => {
-                    console.log(res);
-                });
-        },
-        closeCreate() {
-            this.ruleForm.title = "";
-            this.ruleForm.desc = "";
-            this.createSceneVisible = false;
-            this.isCopy = false;
-            this.copyId = null;
+                .catch(() => {});
         }
     },
     mounted() {
@@ -228,15 +244,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "~@/css/mixin";
-
-@-webkit-keyframes zoomIn {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale3d(0.3, 0.3, 0.3);
-        transform: scale3d(0.3, 0.3, 0.3);
-    }
-    50% {
-        opacity: 1;
+.entrance {
+    background: #fff;
+    border-bottom: 1px solid #e6ebed;
+    margin-bottom: 20px;
+    .same-content {
+        @include wh(1180px, 60px);
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 .list-page {
@@ -248,6 +265,7 @@ export default {
     width: 1180px;
     position: relative;
     margin: 0 auto;
+    padding-bottom: 20px;
 }
 .scene-list {
     display: flex;
@@ -258,17 +276,18 @@ export default {
         font-size: 12px;
         background-color: #fff;
         border-radius: 3px;
-        width: 280px;
-        height: 360px;
+        @include wh(280px, 360px);
         overflow: hidden;
         margin-right: 20px;
         margin-bottom: 20px;
+        &:nth-child(4n) {
+            margin-right: 0;
+        }
         .publish-status {
             position: absolute;
             top: -2px;
             left: -2px;
-            width: 140px;
-            height: 80px;
+            @include wh(140px, 80px);
             text-align: center;
             z-index: 4;
             span {
@@ -295,8 +314,7 @@ export default {
             }
         }
         .image {
-            width: 280px;
-            height: 260px;
+            @include wh(280px, 260px);
             overflow: hidden;
             transition: 0.2s;
             .front {
@@ -310,7 +328,7 @@ export default {
                 background: url(http://p7m90pgef.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg)
                     center 0px no-repeat;
                 background-size: 240px;
-                -webkit-animation: zoomIn 0.5s ease-in-out 0s 1 both;
+                animation: zoomIn 0.5s ease-in-out 0s 1 both;
             }
             .overlay {
                 display: none;
@@ -339,8 +357,7 @@ export default {
                         border-radius: 50%;
                         background-color: hsla(0, 0%, 100%, 0.2);
                         text-align: center;
-                        width: 50px;
-                        height: 50px;
+                        @include wh(50px, 50px);
                         line-height: 50px;
                         margin-bottom: 10px;
                         transition: 0.2s;
@@ -392,8 +409,7 @@ export default {
                 }
                 .button {
                     font-size: 12px;
-                    width: 30px;
-                    height: 30px;
+                    @include wh(30px, 30px);
                     display: inline-block;
                     overflow: hidden;
                     cursor: pointer;
@@ -439,9 +455,6 @@ export default {
             .image {
                 height: 220px;
             }
-        }
-        &:nth-child(4n) {
-            margin-right: 0;
         }
     }
 }

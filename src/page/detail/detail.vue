@@ -1,136 +1,136 @@
 <style lang="scss" scoped>
 .nav {
-  display: flex;
-  li {
-    margin-right: 60px;
-    position: relative;
-    a {
-      font-size: 14px;
-      line-height: 40px;
-      height: 40px;
-      &::before {
-        content: "";
-        height: 2px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: #59c7f9;
-        transform: scaleX(0);
-        transition: transform 0.25s ease;
-      }
-    }
-    &:hover {
-      a::before {
-        transform: scaleX(1);
-      }
-    }
-    &.active {
-      color: #59c7f9;
-      a::before {
-        transform: scaleX(1);
-      }
-    }
-  }
-}
-.wrapper {
-  height: 100vh;
-  background: #f1f4f5;
-}
-.container {
-  position: relative;
-  margin: 30px auto;
-  width: 1120px;
-  height: 486px;
-  padding: 30px;
-  background: #fff;
-}
-.area-right {
-  margin-left: 400px;
-}
-.base-info {
-  display: flex;
-  margin-bottom: 30px;
-  img {
-    width: 100px;
-    height: 100px;
-  }
-  .right {
-    margin-left: 20px;
-    .title {
-      font-size: 18px;
-      line-height: 30px;
-      margin-bottom: 14px;
-    }
-    .description {
-      margin: 10px 0;
-    }
-    .create-time {
-      margin: 10px 0;
-    }
-  }
-}
-.share-area {
-  display: flex;
-  .qrcode-wrap {
-    width: 240px;
-    height: 250px;
-    padding-top: 40px;
-    text-align: center;
-    border: 1px solid #e6ebed;
-    margin-right: 20px;
-    .share-wx {
-      height: 45px;
-      line-height: 45px;
-    }
-  }
-  .hot-share {
-    line-height: 40px;
-    height: 40px;
-  }
-  .share-group {
     display: flex;
     li {
-      cursor: pointer;
-      .share-btn {
-        display: inline-block;
+        margin-right: 60px;
+        position: relative;
+        a {
+            font-size: 14px;
+            line-height: 40px;
+            height: 40px;
+            &::before {
+                content: "";
+                height: 2px;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: #59c7f9;
+                transform: scaleX(0);
+                transition: transform 0.25s ease;
+            }
+        }
+        &:hover {
+            a::before {
+                transform: scaleX(1);
+            }
+        }
+        &.active {
+            color: #59c7f9;
+            a::before {
+                transform: scaleX(1);
+            }
+        }
+    }
+}
+.wrapper {
+    height: 100vh;
+    background: #f1f4f5;
+}
+.container {
+    position: relative;
+    margin: 30px auto;
+    width: 1120px;
+    height: 486px;
+    padding: 30px;
+    background: #fff;
+}
+.area-right {
+    margin-left: 400px;
+}
+.base-info {
+    display: flex;
+    margin-bottom: 30px;
+    img {
+        width: 100px;
+        height: 100px;
+    }
+    .right {
+        margin-left: 20px;
+        .title {
+            font-size: 18px;
+            line-height: 30px;
+            margin-bottom: 14px;
+        }
+        .description {
+            margin: 10px 0;
+        }
+        .create-time {
+            margin: 10px 0;
+        }
+    }
+}
+.share-area {
+    display: flex;
+    .qrcode-wrap {
+        width: 240px;
+        height: 250px;
+        padding-top: 40px;
         text-align: center;
-        border-radius: 3px;
-        height: 40px;
+        border: 1px solid #e6ebed;
+        margin-right: 20px;
+        .share-wx {
+            height: 45px;
+            line-height: 45px;
+        }
+    }
+    .hot-share {
         line-height: 40px;
-        width: 120px;
-        padding: 0;
-        margin-right: 15px;
-        font-size: 14px;
-        color: #59c7f9;
-        border: 1px solid #59c7f9;
+        height: 40px;
+    }
+    .share-group {
+        display: flex;
+        li {
+            cursor: pointer;
+            .share-btn {
+                display: inline-block;
+                text-align: center;
+                border-radius: 3px;
+                height: 40px;
+                line-height: 40px;
+                width: 120px;
+                padding: 0;
+                margin-right: 15px;
+                font-size: 14px;
+                color: #59c7f9;
+                border: 1px solid #59c7f9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.1s;
+                .iconfont {
+                    font-size: 16px;
+                    line-height: 16px;
+                }
+                span {
+                    margin-left: 10px;
+                }
+            }
+            &:hover {
+                .share-btn {
+                    background: #5ec8f7;
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .share-url {
         display: flex;
         align-items: center;
-        justify-content: center;
-        transition: 0.1s;
-        .iconfont {
-          font-size: 16px;
-          line-height: 16px;
+        .copy-btn {
+            margin-left: 10px;
         }
-        span {
-          margin-left: 10px;
-        }
-      }
-      &:hover {
-        .share-btn {
-          background: #5ec8f7;
-          color: #fff;
-        }
-      }
     }
-  }
-  .share-url {
-    display: flex;
-    align-items: center;
-    .copy-btn {
-      margin-left: 10px;
-    }
-  }
 }
 </style>
 
@@ -201,26 +201,26 @@
 </template>
 
 <script>
-import Header from "@/components/header/header.vue";
+import Header from "../list/header.vue";
 import ClipboardJS from "clipboard";
 export default {
-  components: {
-    vHeader: Header
-  },
-  mounted() {
-    var clipboard = new ClipboardJS(".copy-btn");
-    clipboard.on("success", e => {
-      console.info("Action:", e.action);
-      console.info("Text:", e.text);
-      console.info("Trigger:", e.trigger);
-      this.$message("复制成功");
-      e.clearSelection();
-    });
+    components: {
+        vHeader: Header
+    },
+    mounted() {
+        var clipboard = new ClipboardJS(".copy-btn");
+        clipboard.on("success", e => {
+            console.info("Action:", e.action);
+            console.info("Text:", e.text);
+            console.info("Trigger:", e.trigger);
+            this.$message("复制成功");
+            e.clearSelection();
+        });
 
-    clipboard.on("error", function(e) {
-      console.error("Action:", e.action);
-      console.error("Trigger:", e.trigger);
-    });
-  }
+        clipboard.on("error", function(e) {
+            console.error("Action:", e.action);
+            console.error("Trigger:", e.trigger);
+        });
+    }
 };
 </script>

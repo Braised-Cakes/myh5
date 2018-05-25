@@ -11,3 +11,9 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+//宽高
+@mixin wh($width, $height) {
+    width: $width;
+    height: $height;
+}
