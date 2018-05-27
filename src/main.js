@@ -6,28 +6,28 @@ import '@/css/reset.css'
 import '@/css/index.css'
 import '@/css/index.scss'
 import {
-  Pagination,
-  Scrollbar,
-  Form,
-  Tooltip,
-  Loading,
-  Button,
-  ColorPicker,
-  Collapse,
-  CollapseItem,
-  InputNumber,
-  Input,
-  Select,
-  Option,
-  Radio,
-  RadioGroup,
-  OptionGroup,
-  MessageBox,
-  Notification,
-  Upload,
-  FormItem,
-  Message,
-  Dialog
+    Pagination,
+    Scrollbar,
+    Form,
+    Tooltip,
+    Loading,
+    Button,
+    ColorPicker,
+    Collapse,
+    CollapseItem,
+    InputNumber,
+    Input,
+    Select,
+    Option,
+    Radio,
+    RadioGroup,
+    OptionGroup,
+    MessageBox,
+    Notification,
+    Upload,
+    FormItem,
+    Message,
+    Dialog
 } from 'element-ui';
 import '@/css/element-variables.scss'
 import '@/directive/select'
@@ -64,7 +64,7 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 export default new Vue({
-  router: router,
-  store: store,
-  render: h => h(App)
+    router: router,
+    store: store,
+    render: h => h(App)
 }).$mount('#app')
