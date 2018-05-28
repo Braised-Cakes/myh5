@@ -2,9 +2,7 @@
     <div>
         <div class="setting-bg"></div>
         <div class="left">
-            <div class="phone">
-                <div class="swiper-container" id="wrapAll" v-html="html"></div>
-            </div>
+            <div class="phone" v-html="html"></div>
         </div>
         <div class="right">
             <div class="basic-info">
@@ -21,27 +19,34 @@
             </div>
             <div>
                 <h4>翻页方式</h4>
-                <el-select size="mini" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                <el-select @change="fff" size="mini" v-model="value" placeholder="请选择">
+                    <el-option v-for="item in options" :key="item.key" :label="item.label" :value="item.key">
                     </el-option>
                 </el-select>
             </div>
             <div class="setting-operations">
                 <el-button @click="save">确定</el-button>
-                <el-button>取消</el-button>
+                <el-button @click="CLOSE_PANEL('SET')">取消</el-button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import $ from "jquery";
 import * as api from "@/api/index";
 import dataTpl from "@/tpl/tpl.art";
-// var template = require('art-template');
-// console.log(template);
-console.log(dataTpl)
+import runtime from "art-template/lib/runtime";
+// import Swiper from "@/dep/swiper.jquery.js";
+runtime.parseStyle = function(date) {
+    let str = "";
+    for (let attr in date) {
+        str += attr + ":" + date[attr] + ";";
+    }
+    return str;
+};
+
 export default {
     computed: {
         ...mapGetters(["otherInfo", "phoneData"])
@@ -64,39 +69,68 @@ export default {
             },
             options: [
                 {
-                    value: "选项1",
-                    label: "黄金糕"
+                    key: "slide",
+                    label: "位移切换"
                 },
                 {
-                    value: "选项2",
-                    label: "双皮奶"
+                    key: "fade",
+                    label: "淡入"
                 },
                 {
-                    value: "选项3",
-                    label: "蚵仔煎"
+                    key: "cube",
+                    label: "方块"
                 },
                 {
-                    value: "选项4",
-                    label: "龙须面"
+                    key: "coverflow",
+                    label: "3d流"
                 },
                 {
-                    value: "选项5",
-                    label: "北京烤鸭"
+                    key: "flip",
+                    label: "3d翻转"
                 }
             ],
-            value: "选项1",
-            html: "laskdfj"
+            value: "cube",
+            html: "",
+            swiper: null
         };
     },
     methods: {
+        ...mapMutations(["CLOSE_PANEL"]),
         save() {
             api.updateScene(this.formData).then(res => {
                 console.log(res);
             });
+        },
+        fff() {
+            this.resetSwiper();
+        },
+        resetSwiper() {
+            let realIndex = this.swiper && this.swiper.realIndex;
+            // console.log(realIndex);
+            this.swiper && this.swiper.destroy();
+            this.html = "";
+            this.$nextTick(() => {
+                this.html = dataTpl({
+                    data: this.phoneData.data
+                });
+                this.$nextTick(() => {
+                    this.swiper = new Swiper(".swiper-container", {
+                        direction: "vertical",
+                        effect: this.value,
+                        loop: true,
+                        initialSlide: realIndex
+                    });
+                });
+            });
         }
     },
     mounted() {
-        // this.html = this.phoneData.data;
+        this.html = dataTpl({
+            data: this.phoneData.data
+        });
+        this.$nextTick(() => {
+            this.resetSwiper();
+        });
     }
 };
 </script>
@@ -127,15 +161,6 @@ export default {
         margin-left: -163px;
         margin-top: -298px;
         background: url(~@/img/bg.svg);
-        #wrapAll {
-            width: 318px;
-            height: 486px;
-            overflow: hidden;
-            position: absolute;
-            left: 50%;
-            top: 83px;
-            margin-left: -159px;
-        }
     }
 }
 .right {

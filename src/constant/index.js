@@ -28,6 +28,7 @@ export const initState = {
         [types.MUSIC]: false,
         [types.IMAGE]: false,
         [types.QRCODE]: false,
+        'SET': false,
     },
     cacheData: []
 }

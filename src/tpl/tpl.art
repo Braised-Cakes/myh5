@@ -1,13 +1,15 @@
-<div class="swiper-wrapper">
-    {{ each info.data }}
-    <div class="swiper-slide" style="position:position;width:100%;height:100%;background:{{ $value.main.background }};">
-        <div style="width:320px;height:486px;position:absolute;margin-top:41px;">
-            {{each $value.data}}
-            <div data-id="{{$value.id}}" class='items {{ $value.id }}' v-data='{{@ $imports.JSON.stringify($value.animation) }}' style="{{$value.style | parseStyle}}">
-                {{@ $value.content }}
+<div class="swiper-container" id="wrapAll">
+    <div class="swiper-wrapper">
+        {{ each data }}
+        <div class="swiper-slide" style="position:position;width:100%;height:100%;background:{{ $value.main.background }};">
+            <div style="width:320px;height:486px;position:absolute;margin-top:41px;">
+                {{each $value.data}}
+                <div data-id="{{$value.id}}" class='items {{ $value.id }}' v-data='{{@ $imports.JSON.stringify($value.animation) }}' style="{{$value.style | parseStyle}}">
+                    {{@ $value.content }}
+                </div>
+                {{/each}}
             </div>
-            {{/each}}
         </div>
+        {{/each}}
     </div>
-    {{/each}}
 </div>

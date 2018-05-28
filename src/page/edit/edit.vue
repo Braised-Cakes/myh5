@@ -92,7 +92,7 @@
 					</ul>
 				</div>
 			</div>
-			<v-set class="set-area"></v-set>
+			<v-set  v-if="modulePanel['SET']" class="set-area"></v-set>
 		</el-scrollbar>
 	</div>
 </template>

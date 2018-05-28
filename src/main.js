@@ -5,6 +5,8 @@ import 'animate.css'
 import '@/css/reset.css'
 import '@/css/index.css'
 import '@/css/index.scss'
+// import '@/dep/swiper.css'
+// require('@/dep/swiper.jquery.js')
 import {
     Pagination,
     Scrollbar,

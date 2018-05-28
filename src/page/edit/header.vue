@@ -31,7 +31,7 @@
     </div>
     <div class="create-action">
       <ul>
-        <li>
+        <li @click="OPEN_PANEL('SET')">
           <span>预览和设置</span>
         </li>
         <li @click="save">
