@@ -92,7 +92,7 @@
 					</ul>
 				</div>
 			</div>
-			<v-set  v-if="modulePanel['SET']" class="set-area"></v-set>
+			<v-set v-if="modulePanel['SET']" class="set-area"></v-set>
 		</el-scrollbar>
 	</div>
 </template>
@@ -111,368 +111,370 @@ import * as utils from "@/utils";
 import * as types from "@/tpl/types";
 import config from "@/config";
 export default {
-  components: {
-    "v-header": vHeader,
-    "v-page": vPage,
-    "v-panel": vPanel,
-    "v-music": vMusic,
-    "v-image": vImage,
-    "v-qrcode": vQrcode,
-    "v-set": vSet
-  },
-  filters: {
-    filterItemWrap(res) {
-      var json = {};
-      for (let attr in res) {
-        if (
-          attr == "position" ||
-          attr == "left" ||
-          attr == "width" ||
-          attr == "height" ||
-          attr == "top" ||
-          attr == "z-index"
-        ) {
-          json[attr] = res[attr];
-        }
-      }
-      return json;
+    components: {
+        "v-header": vHeader,
+        "v-page": vPage,
+        "v-panel": vPanel,
+        "v-music": vMusic,
+        "v-image": vImage,
+        "v-qrcode": vQrcode,
+        "v-set": vSet
     },
-    filterItem(res) {
-      var json = {};
-      for (let attr in res) {
-        if (
-          attr == "position" ||
-          attr == "left" ||
-          attr == "top" ||
-          attr == "width" ||
-          attr == "height" ||
-          attr == "z-index"
-        ) {
-          //console.log(2)
-        } else {
-          json[attr] = res[attr];
+    filters: {
+        filterItemWrap(res) {
+            var json = {};
+            for (let attr in res) {
+                if (
+                    attr == "position" ||
+                    attr == "left" ||
+                    attr == "width" ||
+                    attr == "height" ||
+                    attr == "top" ||
+                    attr == "z-index"
+                ) {
+                    json[attr] = res[attr];
+                }
+            }
+            return json;
+        },
+        filterItem(res) {
+            var json = {};
+            for (let attr in res) {
+                if (
+                    attr == "position" ||
+                    attr == "left" ||
+                    attr == "top" ||
+                    attr == "width" ||
+                    attr == "height" ||
+                    attr == "z-index"
+                ) {
+                    //console.log(2)
+                } else {
+                    json[attr] = res[attr];
+                }
+            }
+            return json;
         }
-      }
-      return json;
-    }
-  },
-  computed: {
-    ...mapGetters([
-      "phoneData",
-      "currentPage",
-      "currentPhone",
-      "curItem",
-      "hasSelectedItems",
-      "curItemId",
-      "curItemIds",
-      "curCache"
-    ]),
-    ...mapState({
-      modulePanel: state => state.edit.panel
-    })
-  },
-  methods: {
-    ...mapActions([
-      "selectItem",
-      "updateItem",
-      "reset",
-      "addPage",
-      "delPage",
-      "setPhone",
-      "copyPage",
-      "cancelSelect",
-      "revoke",
-      "redo"
-    ]),
-    select(index) {
-      this.selectItem(index);
-      if (this.curItem.type == "shape") {
-        var arr = [];
-        $(this.curItem.content)
-          .find("*")
-          .each((index, item) => {
+    },
+    computed: {
+        ...mapGetters([
+            "phoneData",
+            "currentPage",
+            "currentPhone",
+            "curItem",
+            "hasSelectedItems",
+            "curItemId",
+            "curItemIds",
+            "curCache"
+        ]),
+        ...mapState({
+            modulePanel: state => state.edit.panel
+        })
+    },
+    methods: {
+        ...mapActions([
+            "selectItem",
+            "updateItem",
+            "reset",
+            "addPage",
+            "delPage",
+            "setPhone",
+            "copyPage",
+            "cancelSelect",
+            "revoke",
+            "redo"
+        ]),
+        select(index) {
+            this.selectItem(index);
+            if (this.curItem.type == "shape") {
+                var arr = [];
+                $(this.curItem.content)
+                    .find("*")
+                    .each((index, item) => {
+                        if (
+                            $(item).attr("fill") &&
+                            arr.every(item2 => {
+                                return item2.fill != $(item).attr("fill");
+                            })
+                        ) {
+                            arr.push({
+                                fill: $(item).attr("fill"),
+                                css: $(item).css("fill")
+                            });
+                        }
+                    });
+                console.log(arr);
+                this.panel.fillColorList = arr;
+            }
+        },
+        runCurPhoneAni: utils.runCurPhoneAni,
+        setZIndex(type) {
+            if (!this.curItem) return;
+            let minZIndex = 1;
+            let maxZIndex = this.currentPhone.data.length;
+
+            /**
+             * 找到选中元素的z-index,
+             *
+             * 当删除元素的时候， 一次可以删一个， 也可以删多个  调整z-index
+             *
+             * 如果是上移一层，就找z-index = now + 1的元素
+             *
+             * 如果是置顶，就找z-index比他大的所有元素
+             *
+             * 遍历所有元素 ， 如果z-index > now,  z-index - 1,  最后now =
+             */
+            // const index = this.currentPhone.data.findIndex((item) => {
+            //     return item === this.curItem;
+            // })
+            const zIndex = this.curItem.style["z-index"];
             if (
-              $(item).attr("fill") &&
-              arr.every(item2 => {
-                return item2.fill != $(item).attr("fill");
-              })
+                (zIndex == minZIndex && (type == "-" || type == "--")) ||
+                (zIndex == maxZIndex && (type == "+" || type == "++"))
             ) {
-              arr.push({
-                fill: $(item).attr("fill"),
-                css: $(item).css("fill")
-              });
+                return;
             }
-          });
-        console.log(arr);
-        this.panel.fillColorList = arr;
-      }
-    },
-    runCurPhoneAni: utils.runCurPhoneAni,
-    setZIndex(type) {
-      if (!this.curItem) return;
-      let minZIndex = 1;
-      let maxZIndex = this.currentPhone.data.length;
 
-      /**
-       * 找到选中元素的z-index,
-       *
-       * 当删除元素的时候， 一次可以删一个， 也可以删多个  调整z-index
-       *
-       * 如果是上移一层，就找z-index = now + 1的元素
-       *
-       * 如果是置顶，就找z-index比他大的所有元素
-       *
-       * 遍历所有元素 ， 如果z-index > now,  z-index - 1,  最后now =
-       */
-      // const index = this.currentPhone.data.findIndex((item) => {
-      //     return item === this.curItem;
-      // })
-      const zIndex = this.curItem.style["z-index"];
-      if (
-        (zIndex == minZIndex && (type == "-" || type == "--")) ||
-        (zIndex == maxZIndex && (type == "+" || type == "++"))
-      ) {
-        return;
-      }
+            for (let i = 0; i < this.currentPhone.data.length; i++) {
+                if (
+                    type == "+" &&
+                    this.currentPhone.data[i].style["z-index"] == zIndex + 1
+                ) {
+                    this.updateItem({
+                        item: this.currentPhone.data[i],
+                        key: "style",
+                        val: {
+                            "z-index": zIndex
+                        }
+                    });
+                } else if (
+                    type == "-" &&
+                    this.currentPhone.data[i].style["z-index"] == zIndex - 1
+                ) {
+                    this.updateItem({
+                        item: this.currentPhone.data[i],
+                        key: "style",
+                        val: {
+                            "z-index": zIndex
+                        }
+                    });
+                } else if (
+                    type == "++" &&
+                    this.currentPhone.data[i].style["z-index"] >= zIndex + 1
+                ) {
+                    this.updateItem({
+                        item: this.currentPhone.data[i],
+                        key: "style",
+                        val: {
+                            "z-index":
+                                this.currentPhone.data[i].style["z-index"] - 1
+                        }
+                    });
+                } else if (
+                    type == "--" &&
+                    this.currentPhone.data[i].style["z-index"] <= zIndex + 1
+                ) {
+                    this.updateItem({
+                        item: this.currentPhone.data[i],
+                        key: "style",
+                        val: {
+                            "z-index":
+                                this.currentPhone.data[i].style["z-index"] + 1
+                        }
+                    });
+                }
+            }
 
-      for (let i = 0; i < this.currentPhone.data.length; i++) {
-        if (
-          type == "+" &&
-          this.currentPhone.data[i].style["z-index"] == zIndex + 1
-        ) {
-          this.updateItem({
-            item: this.currentPhone.data[i],
-            key: "style",
-            val: {
-              "z-index": zIndex
+            switch (type) {
+                case "+":
+                    this.updateItem({
+                        item: this.curItem,
+                        key: "style",
+                        val: {
+                            "z-index": zIndex + 1
+                        }
+                    });
+                    break;
+                case "-":
+                    this.updateItem({
+                        item: this.curItem,
+                        key: "style",
+                        val: {
+                            "z-index": zIndex - 1
+                        }
+                    });
+                    break;
+                case "++":
+                    this.updateItem({
+                        item: this.curItem,
+                        key: "style",
+                        val: {
+                            "z-index": maxZIndex
+                        }
+                    });
+                    break;
+                case "--":
+                    this.updateItem({
+                        item: this.curItem,
+                        key: "style",
+                        val: {
+                            "z-index": minZIndex
+                        }
+                    });
+                    break;
             }
-          });
-        } else if (
-          type == "-" &&
-          this.currentPhone.data[i].style["z-index"] == zIndex - 1
-        ) {
-          this.updateItem({
-            item: this.currentPhone.data[i],
-            key: "style",
-            val: {
-              "z-index": zIndex
-            }
-          });
-        } else if (
-          type == "++" &&
-          this.currentPhone.data[i].style["z-index"] >= zIndex + 1
-        ) {
-          this.updateItem({
-            item: this.currentPhone.data[i],
-            key: "style",
-            val: {
-              "z-index": this.currentPhone.data[i].style["z-index"] - 1
-            }
-          });
-        } else if (
-          type == "--" &&
-          this.currentPhone.data[i].style["z-index"] <= zIndex + 1
-        ) {
-          this.updateItem({
-            item: this.currentPhone.data[i],
-            key: "style",
-            val: {
-              "z-index": this.currentPhone.data[i].style["z-index"] + 1
-            }
-          });
         }
-      }
-
-      switch (type) {
-        case "+":
-          this.updateItem({
-            item: this.curItem,
-            key: "style",
-            val: {
-              "z-index": zIndex + 1
-            }
-          });
-          break;
-        case "-":
-          this.updateItem({
-            item: this.curItem,
-            key: "style",
-            val: {
-              "z-index": zIndex - 1
-            }
-          });
-          break;
-        case "++":
-          this.updateItem({
-            item: this.curItem,
-            key: "style",
-            val: {
-              "z-index": maxZIndex
-            }
-          });
-          break;
-        case "--":
-          this.updateItem({
-            item: this.curItem,
-            key: "style",
-            val: {
-              "z-index": minZIndex
-            }
-          });
-          break;
-      }
+    },
+    beforeCreate() {},
+    created() {
+        this.setPhone({
+            id: this.$route.params.id
+        });
+    },
+    data() {
+        return {
+            panel: {
+                fillColorList: []
+            },
+            types: types,
+            config: config
+        };
     }
-  },
-  beforeCreate() {},
-  created() {
-    this.setPhone({
-      id: this.$route.params.id
-    });
-  },
-  data() {
-    return {
-      panel: {
-        fillColorList: []
-      },
-      types: types,
-      config: config
-    };
-  }
 };
 </script>
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
 .help {
-  width: 40px;
-  box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
-  background: #fff;
-  position: absolute;
-  z-index: $helpZIndex;
-  left: 770px;
-  top: 200px;
-  ul {
-    li {
-      color: #999;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-      cursor: pointer;
-      .item {
-        width: 40px;
-        height: 40px;
-      }
-      &:hover {
-        background: #2495fc;
-      }
+    width: 40px;
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
+    background: #fff;
+    position: absolute;
+    z-index: $helpZIndex;
+    left: 770px;
+    top: 200px;
+    ul {
+        li {
+            color: #999;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+            .item {
+                width: 40px;
+                height: 40px;
+            }
+            &:hover {
+                background: #2495fc;
+            }
+        }
     }
-  }
 }
 
 .workspace {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 260px;
-  z-index: $workspaceZIndex;
-  .container {
-    width: 328px;
-    height: 560px;
     position: absolute;
-    top: 5%;
-    left: 20%;
-    .phone-bg {
-      background: url(~@/img/phonewhite.svg);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      border-radius: 40px;
-      width: 328px;
-      height: 560px;
-    }
-    .phone-area {
-      position: absolute;
-      height: 486px;
-      width: 320px;
-      top: 37px;
-      left: 4px;
-      background: #fff;
-      .phone-item {
-        $size: 12px;
-        $halfSize: 6px;
-        $position: -6px;
-        .circle {
-          width: $size;
-          height: $size;
-          background-color: #fff;
-          border: 1px solid #59c7f9;
-          border-radius: 12px;
-          position: absolute;
-          &.circle-nw {
-            left: $position;
-            top: $position;
-            cursor: nw-resize;
-          }
-          &.circle-n {
-            left: 50%;
-            margin-left: -$halfSize;
-            top: $position;
-            cursor: n-resize;
-          }
-          &.circle-ne {
-            right: $position;
-            top: $position;
-            cursor: ne-resize;
-          }
-          &.circle-s {
-            left: 50%;
-            margin-left: -$halfSize;
-            bottom: $position;
-            cursor: s-resize;
-          }
-          &.circle-sw {
-            left: $position;
-            bottom: $position;
-            cursor: sw-resize;
-          }
-          &.circle-w {
-            left: $position;
-            top: 50%;
-            margin-top: -$halfSize;
-            cursor: w-resize;
-          }
-          &.circle-se {
-            right: $position;
-            bottom: $position;
-            cursor: se-resize;
-          }
-          &.circle-e {
-            right: $position;
-            top: 50%;
-            margin-top: -$halfSize;
-            cursor: e-resize;
-          }
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 260px;
+    z-index: $workspaceZIndex;
+    .container {
+        width: 328px;
+        height: 560px;
+        position: absolute;
+        top: 5%;
+        left: 20%;
+        .phone-bg {
+            background: url(~@/img/phonewhite.svg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 40px;
+            width: 328px;
+            height: 560px;
         }
-      }
+        .phone-area {
+            position: absolute;
+            height: 486px;
+            width: 320px;
+            top: 37px;
+            left: 4px;
+            background: #fff;
+            .phone-item {
+                $size: 12px;
+                $halfSize: 6px;
+                $position: -6px;
+                .circle {
+                    width: $size;
+                    height: $size;
+                    background-color: #fff;
+                    border: 1px solid #59c7f9;
+                    border-radius: 12px;
+                    position: absolute;
+                    &.circle-nw {
+                        left: $position;
+                        top: $position;
+                        cursor: nw-resize;
+                    }
+                    &.circle-n {
+                        left: 50%;
+                        margin-left: -$halfSize;
+                        top: $position;
+                        cursor: n-resize;
+                    }
+                    &.circle-ne {
+                        right: $position;
+                        top: $position;
+                        cursor: ne-resize;
+                    }
+                    &.circle-s {
+                        left: 50%;
+                        margin-left: -$halfSize;
+                        bottom: $position;
+                        cursor: s-resize;
+                    }
+                    &.circle-sw {
+                        left: $position;
+                        bottom: $position;
+                        cursor: sw-resize;
+                    }
+                    &.circle-w {
+                        left: $position;
+                        top: 50%;
+                        margin-top: -$halfSize;
+                        cursor: w-resize;
+                    }
+                    &.circle-se {
+                        right: $position;
+                        bottom: $position;
+                        cursor: se-resize;
+                    }
+                    &.circle-e {
+                        right: $position;
+                        top: 50%;
+                        margin-top: -$halfSize;
+                        cursor: e-resize;
+                    }
+                }
+            }
+        }
     }
-  }
 }
 
 .main,
 .set-area {
-  background-color: #eee;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  margin-top: 56px;
-  min-width: 1180px;
+    background-color: #eee;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin-top: 56px;
+    min-width: 1180px;
 }
 
 .icon.disabled {
-  color: #ccc;
+    color: #ccc;
 }
 .el-button {
-  color: #999;
+    color: #999;
 }
 </style>

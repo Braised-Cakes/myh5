@@ -38,7 +38,6 @@ import $ from "jquery";
 import * as api from "@/api/index";
 import dataTpl from "@/tpl/tpl.art";
 import runtime from "art-template/lib/runtime";
-// import Swiper from "@/dep/swiper.jquery.js";
 runtime.parseStyle = function(date) {
     let str = "";
     for (let attr in date) {
@@ -106,7 +105,6 @@ export default {
         },
         resetSwiper() {
             let realIndex = this.swiper && this.swiper.realIndex;
-            // console.log(realIndex);
             this.swiper && this.swiper.destroy();
             this.html = "";
             this.$nextTick(() => {

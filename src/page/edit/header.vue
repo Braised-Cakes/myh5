@@ -1,194 +1,178 @@
 <template>
-  <header>
-    <div class="creat-logo">
-      <router-link to="/list">
-        <img src="@/img/logo.png" />
-      </router-link>
-    </div>
-    <div class="creat_con">
-      <ul>
-        <li @click="addItem(types.TXT)">
-          <i class="icon iconfont icon-erweima"></i>
-          <span>文本</span>
-        </li>
-        <li @click="OPEN_PANEL(types.IMAGE)">
-          <i class="icon iconfont icon-erweima"></i>
-          <span>图片</span>
-        </li>
-        <li @click="OPEN_PANEL(types.SHAPE)">
-          <i class="icon iconfont icon-erweima"></i>
-          <span>形状</span>
-        </li>
-        <li @click="OPEN_PANEL(types.MUSIC)">
-          <i class="icon iconfont icon-erweima"></i>
-          <span>音乐</span>
-        </li>
-        <li @click="OPEN_PANEL(types.QRCODE)">
-          <i class="icon iconfont icon-erweima"></i>
-          <span>二维码</span>
-        </li>
-      </ul>
-    </div>
-    <div class="create-action">
-      <ul>
-        <li @click="OPEN_PANEL('SET')">
-          <span>预览和设置</span>
-        </li>
-        <li @click="save">
-          <span>保存</span>
-        </li>
-        <li @click="publish">
-          <span>发布</span>
-        </li>
-        <router-link class="quit" tag="li" :to="'/list'">
-          <span>退出</span>
-        </router-link>
-      </ul>
-    </div>
-  </header>
+    <header>
+        <div class="logo">
+            <router-link to="/list">
+                <img src="@/img/logo.png" />
+            </router-link>
+        </div>
+        <ul class="create-panel">
+            <li :key="item.label" v-for="item in panelList" @click="beforeCreate(item.type)">
+                <i class="icon iconfont" :class="{['icon-' + item.type]: true}"></i>
+                <span>{{item.label}}</span>
+            </li>
+        </ul>
+        <ul class="user-operation">
+            <li @click="OPEN_PANEL('SET')">
+                <span>预览和设置</span>
+            </li>
+            <li @click="save">
+                <span>保存</span>
+            </li>
+            <li @click="publish">
+                <span>发布</span>
+            </li>
+            <router-link class="quit" tag="li" :to="'/list'">
+                <span>退出</span>
+            </router-link>
+        </ul>
+    </header>
 </template>
-
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
+import $ from "jquery";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import * as api from "@/api/index";
 import * as types from "@/tpl/types.js";
-import $ from "jquery";
+
 export default {
-    components: {},
     computed: {
-        ...mapState(["userInfo"]),
         ...mapGetters(["phoneData"])
     },
     methods: {
         ...mapActions(["addItem"]),
         ...mapMutations(["OPEN_PANEL"]),
-        save() {
+        //保存场景
+        async save() {
             let data = $.extend(true, {}, this.phoneData);
-            for (let i = 0; i < data.data.length; i++) {
-                let page = data.data[i];
-                for (let j = 0; j < page.data.length; j++) {
-                    let item = page.data[j];
-                    if (item.type == this.types.SHAPE) {
+            //干掉形状的content
+            data.data.forEach(item => {
+                item.data.forEach(item => {
+                    if (item.type == types.SHAPE) {
                         item.content = "";
                     }
-                }
-            }
-            api
-                .saveScene({
-                    id: this.$route.params.id,
-                    data: data
-                })
-                .then(res => {
-                    console.log(res);
-                    this.$alert("保存成功", {
-                        closeOnClickModal: true,
-                        callback: () => {
-                            // this.$message({
-                            //     type: 'info',
-                            //     message: `action: ${ action }`
-                            // });
-                        }
-                    });
                 });
+            });
+            await api.saveScene({
+                id: this.$route.params.id,
+                data: data
+            });
+            this.$alert("保存成功", {
+                closeOnClickModal: true,
+                callback: () => {}
+            });
         },
-        publish() {
-            api
-                .publishScene({
-                    id: this.$route.params.id
-                })
-                .then(res => {
-                    console.log(res);
-                });
+        //发布场景
+        async publish() {
+            await api.publishScene({
+                id: this.$route.params.id
+            });
+            this.$alert("发布成功", {
+                closeOnClickModal: true,
+                callback: () => {}
+            });
+        },
+        //创建元素前
+        beforeCreate(type) {
+            if (type != types.TXT) {
+                this.OPEN_PANEL(type);
+            } else {
+                this.addItem(type);
+            }
         }
-    },
-    mounted() {
-        // this.$route.params.id
     },
     data() {
         return {
-            types: types
+            panelList: [
+                {
+                    label: "文本",
+                    type: types.TXT
+                },
+                {
+                    label: "图片",
+                    type: types.IMAGE
+                },
+                {
+                    label: "形状",
+                    type: types.SHAPE
+                },
+                {
+                    label: "音乐",
+                    type: types.MUSIC
+                },
+                {
+                    label: "二维码",
+                    type: types.QRCODE
+                }
+            ]
         };
     }
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/css/mixin";
 @import "~@/css/variables.scss";
 header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     height: $headerHeight;
     position: fixed;
-    width: 100%;
     left: 0;
     right: 0;
     top: 0;
     z-index: $headerZIndex;
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.16);
-    align-items: center;
-    .creat-logo {
-        width: 72px;
+}
+.logo {
+    @include wh(72px, 100%);
+    border-right: 1px solid #e6ebed;
+    a {
+        font-size: 45px;
+        display: block;
+        width: 100%;
         height: 100%;
-        border-right: 1px solid #e6ebed;
-        a {
-            font-size: 45px;
-            display: block;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            color: #1593ff;
+        text-align: center;
+        color: #1593ff;
+    }
+}
+.create-panel {
+    display: flex;
+    li {
+        @include wh(60px, $headerHeight);
+        @include sc(13px, #333);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        .icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        &:hover {
+            background: #2495fc;
+            color: #fff;
         }
     }
-    .creat_con {
-        ul {
-            display: flex;
-            align-items: center;
-            li {
-                height: $headerHeight;
-                justify-content: center;
-                width: 60px;
-                cursor: pointer;
-                text-align: center;
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                color: #333;
-                font-size: 13px;
-                svg {
-                    font-size: 20px;
-                }
-                &:hover {
-                    background: #2495fc;
-                    color: #fff;
-                }
-            }
+}
+.user-operation {
+    display: flex;
+    li {
+        padding: 0 8px;
+        margin-right: 8px;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 3px;
+        background-color: #1593ff;
+        transition: 0.3s;
+        line-height: 32px;
+        @include sc(12px, #fff);
+        &:hover {
+            background: #258ce4;
         }
-    }
-    .create-action {
-        ul {
-            display: flex;
-            li {
-                padding: 0 8px;
-                margin-right: 8px;
-                cursor: pointer;
-                text-align: center;
-                border-radius: 3px;
-                color: #fff;
-                background-color: #1593ff;
-                transition: 0.3s;
-                span {
-                    font-size: 12px;
-                    line-height: 32px;
-                }
-                &:hover {
-                    background: #258ce4;
-                }
-                &.quit {
-                    background: #666;
-                    &:hover {
-                        background: #fc2f6c;
-                    }
-                }
+        &.quit {
+            background: #666;
+            &:hover {
+                background: #fc2f6c;
             }
         }
     }
