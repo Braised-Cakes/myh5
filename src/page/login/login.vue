@@ -2,8 +2,7 @@
 @import "~@/css/mixin";
 .particles-js {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    @include wh(100%, 100%);
     background-color: #1bbbc6;
     background-image: url("");
     background-repeat: no-repeat;
@@ -28,21 +27,28 @@
         <div class="container">
             <h3>登录</h3>
             <div>
-                <el-form :model="ruleForm" :rules="rules" label-width="60px">
+                <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="60px">
                     <el-form-item label="账号" prop="username">
-                        <el-input v-model="ruleForm.username" placeholder="请输入账号"></el-input>
+                        <el-input v-model="loginForm.username" placeholder="请输入账号"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input v-model="ruleForm.password" placeholder="请输入密码"></el-input>
+                        <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
                     </el-form-item>
                 </el-form>
                 <el-button @click="login" type="primary">登录</el-button>
             </div>
-            <!-- <div>
-                <el-input v-model="username" placeholder="账号"></el-input>
-                <el-input v-model="password" placeholder="密码"></el-input>
+            <h3>注册</h3>
+            <div>
+                <el-form ref="registerForm" :model="registerForm" :rules="rules" label-width="60px">
+                    <el-form-item label="账号" prop="username">
+                        <el-input v-model="registerForm.username" placeholder="请输入账号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input v-model="registerForm.password" placeholder="请输入密码"></el-input>
+                    </el-form-item>
+                </el-form>
                 <el-button @click="register" type="primary">注册</el-button>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
@@ -51,7 +57,11 @@ import * as api from "@/api";
 export default {
     data() {
         return {
-            ruleForm: {
+            loginForm: {
+                username: "",
+                password: ""
+            },
+            registerForm: {
                 username: "",
                 password: ""
             },
@@ -89,31 +99,47 @@ export default {
         // });
     },
     methods: {
+        //用户注册
         register() {
-            api
-                .userRegister({
-                    username: this.ruleForm.username,
-                    password: this.ruleForm.password
-                })
-                .then(res => {
-                    console.log(res);
-                });
+            this.$refs.registerForm.validate(async valid => {
+                if (valid) {
+                    const { message } = await api.userRegister({
+                        username: this.registerForm.username,
+                        password: this.registerForm.password
+                    });
+                    this.$alert(message, {
+                        closeOnClickModal: true,
+                        callback: () => {}
+                    });
+                } else {
+                    console.log("error submit!!");
+                    return false;
+                }
+            });
         },
+        //用户登录
         login() {
-            console.log("点击了登录");
-            api
-                .userLogin({
-                    username: this.ruleForm.username,
-                    password: this.ruleForm.password
-                })
-                .then(res => {
-                    console.log(res);
-                    if (res.status == 0) {
+            this.$refs.loginForm.validate(async valid => {
+                if (valid) {
+                    const { status, message = "" } = await api.userLogin({
+                        username: this.loginForm.username,
+                        password: this.loginForm.password
+                    });
+                    if (status == 0) {
                         this.$router.push({
                             name: "list"
                         });
+                    } else {
+                        this.$alert(message, {
+                            closeOnClickModal: true,
+                            callback: () => {}
+                        });
                     }
-                });
+                } else {
+                    console.log("error submit!!");
+                    return false;
+                }
+            });
         }
     }
 };
