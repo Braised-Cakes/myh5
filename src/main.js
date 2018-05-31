@@ -28,7 +28,8 @@ import {
     Upload,
     FormItem,
     Message,
-    Dialog
+    Dialog,
+    Checkbox
 } from 'element-ui';
 import '@/css/element-variables.scss'
 import '@/directive/select'
@@ -56,6 +57,7 @@ Vue.use(OptionGroup);
 Vue.use(Upload);
 Vue.use(FormItem);
 Vue.use(Dialog);
+Vue.use(Checkbox);
 Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;

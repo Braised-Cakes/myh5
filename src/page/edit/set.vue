@@ -23,7 +23,9 @@
                     <el-option v-for="item in options" :key="item.key" :label="item.label" :value="item.key">
                     </el-option>
                 </el-select>
+                <el-checkbox @change="fff" v-model="checked">是否循环播放</el-checkbox>
             </div>
+            
             <div class="setting-operations">
                 <el-button @click="save">确定</el-button>
                 <el-button @click="CLOSE_PANEL('SET')">取消</el-button>
@@ -38,6 +40,13 @@ import $ from "jquery";
 import * as api from "@/api/index";
 import dataTpl from "@/tpl/tpl.art";
 import runtime from "art-template/lib/runtime";
+import * as utils from "../../../utils/index";
+/**
+ * 翻页方式 effect
+ * 是否循环播放 loop
+ * 自动播放->时间   autoplay
+ * 
+ */
 runtime.parseStyle = function(date) {
     let str = "";
     for (let attr in date) {
@@ -89,6 +98,7 @@ export default {
                 }
             ],
             value: "cube",
+            checked : false,
             html: "",
             swiper: null
         };
@@ -115,8 +125,32 @@ export default {
                     this.swiper = new Swiper(".swiper-container", {
                         direction: "vertical",
                         effect: this.value,
-                        loop: true,
-                        initialSlide: realIndex
+                        loop: this.checked,
+                        initialSlide: realIndex,
+                        onSlideChangeStart(swiper) {
+                            $(".swiper-slide")
+                                .eq(swiper.activeIndex)
+                                .each((index, item) => {
+                                    $(item)
+                                        .find(".items")
+                                        .each((index2, item2) => {
+                                            $("." + $(item2).attr("id")).css(
+                                                "animation",
+                                                ""
+                                            );
+                                            $("." + $(item2).attr("id")).show();
+                                            utils.runAni(
+                                                $(item2).attr("id"),
+                                                JSON.parse(
+                                                    $(
+                                                        "." +
+                                                            $(item2).attr("id")
+                                                    ).attr("data-ani")
+                                                )
+                                            );
+                                        });
+                                });
+                        }
                     });
                 });
             });
