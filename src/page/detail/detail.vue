@@ -1,34 +1,41 @@
 <style lang="scss" scoped>
 .nav {
-    display: flex;
-    li {
-        margin-right: 60px;
-        position: relative;
-        a {
-            font-size: 14px;
-            line-height: 40px;
-            height: 40px;
-            &::before {
-                content: "";
-                height: 2px;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background: #59c7f9;
-                transform: scaleX(0);
-                transition: transform 0.25s ease;
+    background: #fff;
+    border-bottom: 1px solid #e6ebed;
+    .same-content {
+        width: 1120px;
+        margin: 0 auto;
+        display: flex;
+        li {
+            margin-right: 60px;
+            position: relative;
+            cursor: pointer;
+            a {
+                font-size: 14px;
+                line-height: 40px;
+                height: 40px;
+                &::before {
+                    content: "";
+                    height: 2px;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    background: #59c7f9;
+                    transform: scaleX(0);
+                    transition: transform 0.25s ease;
+                }
             }
-        }
-        &:hover {
-            a::before {
-                transform: scaleX(1);
+            &:hover {
+                a::before {
+                    transform: scaleX(1);
+                }
             }
-        }
-        &.active {
-            color: #59c7f9;
-            a::before {
-                transform: scaleX(1);
+            &.active {
+                color: #59c7f9;
+                a::before {
+                    transform: scaleX(1);
+                }
             }
         }
     }
@@ -137,17 +144,19 @@
 <template>
     <div class="wrapper">
         <v-header></v-header>
-        <ul class="nav">
-            <li class="active">
-                <a>社交分享</a>
-            </li>
-            <li>
-                <a>效果统计</a>
-            </li>
-            <li>
-                <a>数据汇总</a>
-            </li>
-        </ul>
+        <div class="nav">
+            <ul class="same-content">
+                <li class="active">
+                    <a>社交分享</a>
+                </li>
+                <li @click="todo">
+                    <a>效果统计</a>
+                </li>
+                <li @click="todo">
+                    <a>数据汇总</a>
+                </li>
+            </ul>
+        </div>
         <div class="container">
             <div class="area-left">
 
@@ -156,9 +165,9 @@
                 <div class="base-info">
                     <img class="left" src="@/img/logo2.png" />
                     <div class="right">
-                        <p class="title">副本-未命名场景4</p>
-                        <p class="description">我用易企秀做了一个超酷炫的H5，快来看看吧。</p>
-                        <p class="create-time">创建时间： 2018年05月18日 </p>
+                        <p class="title">{{data.title}}</p>
+                        <p class="description">{{data.desc || '我用易企秀做了一个超酷炫的H5，快来看看吧。'}}</p>
+                        <p class="create-time">创建时间： {{data.createTime | timechange}}</p>
                     </div>
                 </div>
                 <div class="share-area">
@@ -202,12 +211,55 @@
 
 <script>
 import Header from "../list/header.vue";
+import * as api from "@/api";
 import ClipboardJS from "clipboard";
 export default {
     components: {
         vHeader: Header
     },
-    mounted() {
+    data() {
+        return {
+            data: {}
+        };
+    },
+    filters: {
+        timechange(timestamp) {
+            var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            var Y = date.getFullYear() + "-";
+            var M =
+                (date.getMonth() + 1 < 10
+                    ? "0" + (date.getMonth() + 1)
+                    : date.getMonth() + 1) + "-";
+            var D = date.getDate() + " ";
+            var h = date.getHours() + ":";
+            var m = date.getMinutes() + ":";
+            var s = date.getSeconds();
+            return Y + M + D + h + m + s;
+        }
+    },
+    methods: {
+        todo() {
+            this.$alert("开发中", {
+                closeOnClickModal: true,
+                callback: () => {}
+            });
+        }
+    },
+    async mounted() {
+        let { result, status } = await api.getScene({
+            id: this.$route.params.id
+        });
+        if (status == 1) {
+            this.$alert("不存在", {
+                closeOnClickModal: true,
+                callback: () => {
+                    this.$router.push({
+                        name: "list"
+                    });
+                }
+            });
+        }
+        this.data = result.data;
         var clipboard = new ClipboardJS(".copy-btn");
         clipboard.on("success", e => {
             console.info("Action:", e.action);

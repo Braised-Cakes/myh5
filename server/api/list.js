@@ -26,7 +26,7 @@ app.get('/aj/scene/list', async (req, res) => {
     const data = await collection.find({
             uid: req.session.uid,
             status: status
-        }, ['id', 'title', 'desc', 'status', 'publishStatus'])
+        }, ['id', 'title', 'desc', 'status', 'publishStatus', 'createTime'])
         .skip((page - 1) * limit)
         .sort({
             updateTime: -1
