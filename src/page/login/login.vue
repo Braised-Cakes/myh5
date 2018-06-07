@@ -22,7 +22,7 @@
 </style>
 
 <template>
-    <div class="login-page">
+    <!-- <div class="login-page">
         <div class="particles-js" id="particles-js"></div>
         <div class="container">
             <h3>登录</h3>
@@ -50,10 +50,19 @@
                 <el-button @click="register" type="primary">注册</el-button>
             </div>
         </div>
+    </div> -->
+    <div>
+    <div class="wrap">
+         <img id="image" src="@/img/logo2.png">
+    </div>
+    <div id="confirm">确定</div>
     </div>
 </template>
 <script>
 import * as api from "@/api";
+import $ from "jquery";
+// http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg?imageMogr2/crop/!400x300a0a100
+import Cropper from "cropper";
 export default {
     data() {
         return {
@@ -97,6 +106,30 @@ export default {
         //         }
         //     }
         // });
+        var $image = $("#image");
+        $image.cropper({
+            viewMode:1,
+            dragMode:'none',
+            zoomable:false,
+            aspectRatio: 1 / 1,
+            // aspectRatio: 16 / 9,
+            // crop: function(event) {
+            //     console.log(event.detail.x);
+            //     console.log(event.detail.y);
+            //     console.log(event.detail.width);
+            //     console.log(event.detail.height);
+            //     console.log(event.detail.rotate);
+            //     console.log(event.detail.scaleX);
+            //     console.log(event.detail.scaleY);
+            // }
+        });
+
+        // Get the Cropper.js instance after initialized
+        var cropper = $image.data("cropper");
+        $('#confirm').on('click', function(){
+            let result = $image.cropper('getCroppedCanvas', {}, {});
+            console.log(result.toDataURL('image/jpeg'));
+        })
     },
     methods: {
         //用户注册

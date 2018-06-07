@@ -5,7 +5,7 @@ import fetch from './fetch'
  * 获取场景列表
  */
 
-export const getSceneList = data => fetch('/aj/scene/list', data);
+export const getSceneList = data => fetch('http://localhost:8081/aj/scene/list', data);
 
 /**
  * 创建场景

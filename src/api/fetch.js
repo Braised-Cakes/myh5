@@ -8,6 +8,10 @@ export default async function (url, data, type = 'GET') {
             data: type == 'GET' ? data : JSON.stringify(data),
             type: type,
             contentType: 'application/json; charset=UTF-8',
+            xhrFields: {
+                withCredentials: true
+            },
+            // crossDomain: true,
             success(rs) {
                 //为登录
                 if (rs.status == 2) {
