@@ -1,101 +1,107 @@
 <template>
-	<div style="height:100%;width:100%;position:absolute;">
-		<v-header></v-header>
-		<div id="svg_cache" style="width:0px;height:0px;overflow:hidden;"></div>
-		<el-scrollbar class="page-component__nav" style="height:100%;">
-			<div class="main">
-				<v-page :data="panel"></v-page>
-				<v-panel v-if="modulePanel[types.SHAPE]"></v-panel>
-				<v-music v-if="modulePanel[types.MUSIC]"></v-music>
-				<v-image v-if="modulePanel[types.IMAGE]"></v-image>
-				<v-qrcode v-if="modulePanel[types.QRCODE]"></v-qrcode>
-                <v-crop></v-crop>
-				<div class="workspace" v-my-select @mousedown.stop="cancelSelect">
-					<div class="container">
-						<div class="phone-bg"></div>
-						<div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
-							<div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
-								<!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
-								<div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
-								<!-- <div v-if="item.type == 'shape'" class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="highlight(item)"></div> -->
-								<div v-if="curItemId == index || curItemIds.indexOf(index) != -1" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
-									<div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
-									<div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
-									<div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
-									<div v-my-changesize="{type : 's'}" class="circle circle-s"></div>
-									<div v-my-changesize="{type : 'sw'}" class="circle circle-sw"></div>
-									<div v-my-changesize="{type : 'w'}" class="circle circle-w"></div>
-									<div v-my-changesize="{type : 'se'}" class="circle circle-se"></div>
-									<div v-my-changesize="{type : 'e'}" class="circle circle-e"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="help">
-					<ul>
-						<li @click="copyPage">
-							<el-tooltip class="item" content="复制当前页" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-fuzhi"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li @click="runCurPhoneAni(true)">
-							<el-tooltip class="item" content="播放" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-bofang"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li v-if="config.revoke" @click="revoke">
-							<el-tooltip class="item" content="撤销" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-chexiao"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li v-if="config.revoke" @click="redo">
-							<el-tooltip class="item" content="重做" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-zhongzuo"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('++')">
-							<el-tooltip class="item" content="置顶" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-zhiding"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('+')">
-							<el-tooltip class="item" content="上移" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-shangyi"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('-')">
-							<el-tooltip class="item" content="下移" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-xiayi"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-						<li @click="setZIndex('--')">
-							<el-tooltip class="item" content="置底" placement="right">
-								<el-button type="text">
-									<i class="icon iconfont icon-12_zhidi"></i>
-								</el-button>
-							</el-tooltip>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<v-set v-if="modulePanel['SET']" class="set-area"></v-set>
-		</el-scrollbar>
-	</div>
+    <div style="height:100%;width:100%;position:absolute;">
+        <v-header></v-header>
+        <div id="svg_cache" style="width:0px;height:0px;overflow:hidden;"></div>
+        <el-scrollbar class="page-component__nav" style="height:100%;">
+            <div class="main">
+                <v-page :data="panel"></v-page>
+                <v-panel v-if="modulePanel[types.SHAPE]"></v-panel>
+                <v-music v-if="modulePanel[types.MUSIC]"></v-music>
+                <v-image v-if="modulePanel[types.IMAGE]"></v-image>
+                <v-qrcode v-if="modulePanel[types.QRCODE]"></v-qrcode>
+                <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
+                    <div class="container">
+                        <div class="phone-bg"></div>
+                        <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
+                            <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
+                                <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
+                                <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
+                                <!-- <div v-if="item.type == 'shape'" class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="highlight(item)"></div> -->
+                                <div v-if="curItemId == index || curItemIds.indexOf(index) != -1" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+                                    <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
+                                    <div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
+                                    <div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
+                                    <div v-my-changesize="{type : 's'}" class="circle circle-s"></div>
+                                    <div v-my-changesize="{type : 'sw'}" class="circle circle-sw"></div>
+                                    <div v-my-changesize="{type : 'w'}" class="circle circle-w"></div>
+                                    <div v-my-changesize="{type : 'se'}" class="circle circle-se"></div>
+                                    <div v-my-changesize="{type : 'e'}" class="circle circle-e"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="help">
+                    <ul>
+                        <li @click="bbb">
+                            <el-tooltip class="item" content="复制当前页" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-fuzhi"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li @click="copyPage">
+                            <el-tooltip class="item" content="复制当前页" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-fuzhi"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li @click="runCurPhoneAni(true)">
+                            <el-tooltip class="item" content="播放" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-bofang"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li v-if="config.revoke" @click="revoke">
+                            <el-tooltip class="item" content="撤销" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-chexiao"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li v-if="config.revoke" @click="redo">
+                            <el-tooltip class="item" content="重做" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-zhongzuo"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('++')">
+                            <el-tooltip class="item" content="置顶" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-zhiding"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('+')">
+                            <el-tooltip class="item" content="上移" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-shangyi"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('-')">
+                            <el-tooltip class="item" content="下移" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-xiayi"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                        <li @click="setZIndex('--')">
+                            <el-tooltip class="item" content="置底" placement="right">
+                                <el-button type="text">
+                                    <i class="icon iconfont icon-12_zhidi"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <v-set v-if="modulePanel['SET']" class="set-area"></v-set>
+        </el-scrollbar>
+    </div>
 </template>
 
 <script>
@@ -104,7 +110,6 @@ import vPanel from "./panel";
 import vMusic from "./music";
 import vImage from "./image";
 import vQrcode from "./qrcode";
-import vCrop from "./crop";
 import vSet from "./set";
 import $ from "jquery";
 import vHeader from "./header";
@@ -120,8 +125,7 @@ export default {
         "v-music": vMusic,
         "v-image": vImage,
         "v-qrcode": vQrcode,
-        "v-set": vSet,
-        "v-crop": vCrop
+        "v-set": vSet
     },
     filters: {
         filterItemWrap(res) {
@@ -187,6 +191,14 @@ export default {
             "revoke",
             "redo"
         ]),
+        bbb() {
+            this.$crop({
+                src: "http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg",
+                callback: ({ src }) => {
+                    console.log(src);
+                }
+            });
+        },
         select(index) {
             this.selectItem(index);
             if (this.curItem.type == "shape") {

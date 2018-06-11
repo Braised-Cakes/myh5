@@ -1,35 +1,49 @@
 <template>
-    <div class="wrapper">
-        <div class="header">
-            <h4>图片库</h4>
-            <span class="close">x</span>
-        </div>
-        <div class="main">
-            <div class="left">
-                <img id="image" src="http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg">
+    <transition>
+        <div v-if="isActive" class="wrapper">
+            <div class="header">
+                <h4>图片库</h4>
+                <span class="close">x</span>
             </div>
-            <div class="right">
-                <el-radio-group  :value="id" size="small">
-                    <el-radio @change="change(item)" v-for="item in list" :label="item.id">{{item.name}}</el-radio>
-                </el-radio-group>
-                <div>
-                    <el-button size="mini">取消</el-button>
-                    <el-button size="mini" type="success">确定</el-button>
+            <div class="main">
+                <div class="left">
+                    <img id="image" :src="src">
+                </div>
+                <div class="right">
+                    <el-radio-group :value="id" size="small">
+                        <el-radio @change="change(item)" :key="item.id" v-for="item in list" :label="item.id">{{item.name}}</el-radio>
+                    </el-radio-group>
+                    <div>
+                        <el-button @click="close" size="mini">取消</el-button>
+                        <el-button @click="confirm" size="mini" type="success">确定</el-button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script>
 import $ from "jquery";
 // http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg?imageMogr2/crop/!400x300a0a100
+
+/**
+
+调用方式
+this.$crop({
+    img : 'http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg',
+    callback:()=>{
+
+    }
+})
+ */
 import Cropper from "cropper";
 export default {
     data() {
         return {
+            isActive: false,
+            callback: () => {},
             id: "原图比例",
-            load: false,
             list: [
                 {
                     name: "原图比例",
@@ -73,37 +87,67 @@ export default {
                 }
             ],
             image: null,
+            src: "",
             radio: ""
         };
     },
     methods: {
-        change(item) {
-            this.id = item.id;
-            this.radio = item.radio;
-            this.image && this.image.cropper("setAspectRatio", this.radio);
+        init(params) {
+            let { src, callback } = params;
+            this.isActive = true;
+            var img = new Image();
+            img.src = src;
+            img.onload = () => {
+                this.src = src;
+                this.$nextTick().then(() => {
+                    this.image = $("#image");
+                    this.list[0].radio = this.radio = img.width / img.height;
+                    this.image.cropper({
+                        viewMode: 1,
+                        dragMode: "none",
+                        zoomable: false,
+                        aspectRatio: this.radio
+                    });
+                });
+            };
+            this.callback = callback;
+        },
+        change({ id, radio }) {
+            this.id = id;
+            this.radio = radio;
+            this.image && this.image.cropper("setAspectRatio", radio);
+        },
+        confirm() {
+            let { x, y, width, height } = this.image.cropper("getData");
+            this.callback({
+                action: "confirm",
+                data: { x, y, width, height },
+                src: `${this.src}?imageMogr2/crop/!${parseInt(
+                    width
+                )}x${parseInt(height)}a${parseInt(x)}a${parseInt(y)}`
+            });
+            this.isActive = false;
+        },
+        close() {
+            this.callback({
+                action: "confirm"
+            });
+            this.isActive = false;
         }
     },
     mounted() {
-        var img = new Image();
-        img.src = "http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg";
-        img.onload = () => {
-            this.image = $("#image");
-            this.list[0].radio = this.radio = img.width / img.height;
-            this.image.cropper({
-                viewMode: 1,
-                dragMode: "none",
-                zoomable: false,
-                aspectRatio: this.radio
-            });
-            // this.$nextTick().then(() => {
-            //     this.load = true;
-            // });
-        };
-        // Get the Cropper.js instance after initialized
-        $("#confirm").on("click", function() {
-            let result = this.image.cropper("getData");
-            document.title = result;
-        });
+        // var img = new Image();
+        // img.src = this.src;
+        // img.onload = () => {
+        //     this.image = $("#image");
+        //     this.list[0].radio = this.radio = img.width / img.height;
+        //     this.image.cropper({
+        //         viewMode: 1,
+        //         dragMode: "none",
+        //         zoomable: false,
+        //         aspectRatio: this.radio
+        //     });
+        // };
     }
 };
 </script>
@@ -127,6 +171,7 @@ img {
     border-radius: 6px;
     z-index: $panelZIndex;
     position: absolute;
+    overflow: hidden;
     left: 100px;
     top: 30px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
