@@ -387,7 +387,7 @@ export default {
                 id: item.id
             });
             let img = new Image();
-            let path = `//p7h1y3vg2.bkt.clouddn.com/${
+            let path = `//p7d4z759a.bkt.clouddn.com/${
                 item.path
             }?imageView2/2/w/230/h/230/q/75|imageslim`;
             img.src = path;
@@ -420,14 +420,14 @@ export default {
                     this.list = res.result.data;
                     for (let i = 0; i < this.list.length; i++) {
                         let img = new Image();
-                        img.src = `//p7h1y3vg2.bkt.clouddn.com/${
+                        img.src = `//p7d4z759a.bkt.clouddn.com/${
                             this.list[i].path
                         }?imageView2/2/w/230/h/230/q/75|imageslim`;
                         let id = this.list[i].id;
                         img.onload = () => {
                             if (this.list[i] && this.list[i].id == id) {
                                 this.$set(this.list[i], "style", {
-                                    "background-image": `url(//p7h1y3vg2.bkt.clouddn.com/${
+                                    "background-image": `url(//p7d4z759a.bkt.clouddn.com/${
                                         this.list[i].path
                                     }?imageView2/2/w/230/h/230/q/75|imageslim)`,
                                     "background-size": "contain"

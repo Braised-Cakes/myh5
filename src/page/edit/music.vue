@@ -469,7 +469,7 @@ export default {
                 this.playMusicId = null;
                 return;
             }
-            this.audio.src = `http://p7dremn1s.bkt.clouddn.com/${item.path}`;
+            this.audio.src = `http://p7d4z759a.bkt.clouddn.com/${item.path}`;
             this.audio.play();
             this.playMusicId = item.id;
             this.audio.onended = function() {

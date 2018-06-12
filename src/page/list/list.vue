@@ -325,7 +325,7 @@ export default {
                 border-top-right-radius: 3px;
             }
             .front2 {
-                background: url(http://p7m90pgef.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg)
+                background: url(http://p7d4z759a.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg)
                     center 0px no-repeat;
                 background-size: 240px;
                 animation: zoomIn 0.5s ease-in-out 0s 1 both;

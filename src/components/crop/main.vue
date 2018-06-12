@@ -25,7 +25,7 @@
 
 <script>
 import $ from "jquery";
-// http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg?imageMogr2/crop/!400x300a0a100
+// http://p7d4z759a.bkt.clouddn.com/03tf72538229.jpg?imageMogr2/crop/!400x300a0a100
 
 /**
 
@@ -34,7 +34,7 @@ import $ from "jquery";
 
 
 this.$crop({
-    src : 'http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg',
+    src : 'http://p7d4z759a.bkt.clouddn.com/03tf72538229.jpg',
     data : {
         tpye : 'original',
         x : 0,

@@ -172,7 +172,7 @@
                 </div>
                 <div class="share-area">
                     <div class="qrcode-wrap">
-                        <div><img style="width:160px;height:160px;" src="http://p7m90pgef.bkt.clouddn.com/259e21f16fe01e103fad34e7db286c2b.svg" /></div>
+                        <div><img style="width:160px;height:160px;" src="http://p7d4z759a.bkt.clouddn.com/259e21f16fe01e103fad34e7db286c2b.svg" /></div>
                         <p class="share-wx">扫一扫分享到微信</p>
                     </div>
                     <div>

@@ -555,7 +555,7 @@ app.get('/aj/qrcode/create', async (req, res) => {
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
-        result: `http://p7m90pgef.bkt.clouddn.com/${fileName}`
+        result: `http://p7d4z759a.bkt.clouddn.com/${fileName}`
     })
 });
 
@@ -746,7 +746,7 @@ app.get('/aj/image/token', async (req, res) => {
     let id = uuid();
     // req.session.uid
     const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-    let bucketName = 'image'
+    let bucketName = 'user'
     var options = {
         scope: bucketName,
         // expires: 60 * 60 * 10,
@@ -782,7 +782,7 @@ app.post('/aj/image/user_upload', async (req, res) => {
             status: AJ_STATUS.success,
             message: AJ_MESSAGE.success,
             data: {
-                path: `http://p7m90pgef.bkt.clouddn.com/${req.body.key}`
+                path: `http://p7d4z759a.bkt.clouddn.com/${req.body.key}`
             }
         })
     } else {
@@ -803,7 +803,7 @@ app.get('/aj/music/token', async (req, res) => {
     let id = uuid();
     // req.session.uid
     const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-    let bucketName = 'music'
+    let bucketName = 'user'
     var options = {
         scope: bucketName,
         // expires: 60 * 60 * 10,
@@ -837,7 +837,7 @@ app.post('/aj/music/user_upload', async (req, res) => {
             status: AJ_STATUS.success,
             message: AJ_MESSAGE.success,
             data: {
-                path: `http://p7dremn1s.bkt.clouddn.com/${req.body.key}`
+                path: `http://p7d4z759a.bkt.clouddn.com/${req.body.key}`
             }
         })
     } else {
