@@ -178,19 +178,19 @@
                     <div>
                         <p class="hot-share">热门分享</p>
                         <ul class="share-group">
-                            <li>
+                            <li @click="todo">
                                 <a class="share-btn">
                                     <i class="icon iconfont icon-qq"></i>
                                     <span>QQ</span>
                                 </a>
                             </li>
-                            <li>
+                            <li @click="todo">
                                 <a class="share-btn">
                                     <i class="icon iconfont icon-qqkongjian"></i>
                                     <span>QQ空间</span>
                                 </a>
                             </li>
-                            <li>
+                            <li @click="todo">
                                 <a class="share-btn">
                                     <i class="icon iconfont icon-weibo"></i>
                                     <span>微博</span>
@@ -199,8 +199,8 @@
                         </ul>
                         <p class="hot-share">链接分享</p>
                         <div class="share-url">
-                            <p>https://c.eqxiu.com/s/2maJI1PF</p>
-                            <el-button data-clipboard-text="https://c.eqxiu.com/s/2maJI1PF" class="copy-btn" size="mini">复制链接</el-button>
+                            <p>https://myh5.com/xxxxxx</p>
+                            <el-button data-clipboard-text="https://myh5.com/xxxxxx" class="copy-btn" size="mini">复制链接</el-button>
                         </div>
                     </div>
                 </div>
