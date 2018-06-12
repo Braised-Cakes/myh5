@@ -33,13 +33,6 @@
                 </div>
                 <div class="help">
                     <ul>
-                        <li @click="bbb">
-                            <el-tooltip class="item" content="复制当前页" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-fuzhi"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
                         <li @click="copyPage">
                             <el-tooltip class="item" content="复制当前页" placement="right">
                                 <el-button type="text">
@@ -191,14 +184,6 @@ export default {
             "revoke",
             "redo"
         ]),
-        bbb() {
-            this.$crop({
-                src: "http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg",
-                callback: ({ src }) => {
-                    console.log(src);
-                }
-            });
-        },
         select(index) {
             this.selectItem(index);
             if (this.curItem.type == "shape") {
@@ -352,7 +337,8 @@ export default {
                 fillColorList: []
             },
             types: types,
-            config: config
+            config: config,
+            cropData: {}
         };
     }
 };

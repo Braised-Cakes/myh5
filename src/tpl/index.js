@@ -77,9 +77,11 @@ export default {
         width,
         height
     }) {
-        console.log(path)
         return {
             type: types.IMAGE,
+            path: path,
+            originPath: path,
+            crop : {},
             content: `<img style="width:100%;height:100%" src="${path}"/>`,
             class: types.IMAGE.toLowerCase(),
             animation: [],

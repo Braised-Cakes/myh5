@@ -10,8 +10,8 @@
                     <img id="image" :src="src">
                 </div>
                 <div class="right">
-                    <el-radio-group :value="id" size="small">
-                        <el-radio @change="change(item)" :key="item.id" v-for="item in list" :label="item.id">{{item.name}}</el-radio>
+                    <el-radio-group :value="type" size="small">
+                        <el-radio @change="change(item)" :key="item.type" v-for="item in list" :label="item.type">{{item.name}}</el-radio>
                     </el-radio-group>
                     <div>
                         <el-button @click="close" size="mini">取消</el-button>
@@ -29,125 +29,134 @@ import $ from "jquery";
 
 /**
 
-调用方式
+
+对外api
+
+
 this.$crop({
-    img : 'http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg',
+    src : 'http://p7h1y3vg2.bkt.clouddn.com/03tf72538229.jpg',
+    data : {
+        tpye : 'original',
+        x : 0,
+        y : 0,
+        width : 100,
+        height : 100
+    },
     callback:()=>{
 
     }
 })
+
  */
-import Cropper from "cropper";
+import "cropper";
 export default {
     data() {
         return {
             isActive: false,
             callback: () => {},
-            id: "原图比例",
+            type: "original",
             list: [
                 {
                     name: "原图比例",
                     radio: -1,
-                    id: "原图比例"
+                    type: "original"
                 },
                 {
                     name: "1:1",
                     radio: 1,
-                    id: "1:1"
+                    type: "1:1"
                 },
                 {
                     name: "4:3",
                     radio: 4 / 3,
-                    id: "4:3"
+                    type: "4:3"
                 },
                 {
                     name: "3:4",
                     radio: 3 / 4,
-                    id: "3:4"
+                    type: "3:4"
                 },
                 {
                     name: "标准屏比例",
                     radio: 320 / 486,
-                    id: "标准屏比例"
+                    type: "screen"
                 },
                 {
                     name: "1/2屏比例",
                     radio: 320 / 486 * 2,
-                    id: "1/2屏比例"
+                    type: "screen/2"
                 },
                 {
                     name: "1/3屏比例",
                     radio: 320 / 486 * 3,
-                    id: "1/3屏比例"
+                    type: "screen/3"
                 },
                 {
                     name: "自定义",
                     radio: "",
-                    id: "自定义"
+                    type: "diy"
                 }
             ],
             image: null,
             src: "",
-            radio: ""
+            radio: "",
+            data: {}
         };
     },
     methods: {
         init(params) {
-            let { src, callback } = params;
+            let { src, callback, data = {} } = params;
             this.isActive = true;
             var img = new Image();
             img.src = src;
+            this.type = (data && data.type) || "original";
             img.onload = () => {
                 this.src = src;
                 this.$nextTick().then(() => {
                     this.image = $("#image");
-                    this.list[0].radio = this.radio = img.width / img.height;
+                    let radio = img.width / img.height;
+                    this.list[0].radio = radio;
+                    this.radio = data.width / data.height || radio;
                     this.image.cropper({
                         viewMode: 1,
                         dragMode: "none",
                         zoomable: false,
+                        data: data,
                         aspectRatio: this.radio
                     });
                 });
             };
             this.callback = callback;
         },
-        change({ id, radio }) {
-            this.id = id;
+        change({ type, radio }) {
+            this.type = type;
             this.radio = radio;
             this.image && this.image.cropper("setAspectRatio", radio);
         },
         confirm() {
-            let { x, y, width, height } = this.image.cropper("getData");
+            let data = this.image.cropper("getData");
+            data.x = parseInt(data.x);
+            data.y = parseInt(data.y);
+            data.width = parseInt(data.width);
+            data.height = parseInt(data.height);
+            data.type = this.type;
             this.callback({
                 action: "confirm",
-                data: { x, y, width, height },
-                src: `${this.src}?imageMogr2/crop/!${parseInt(
-                    width
-                )}x${parseInt(height)}a${parseInt(x)}a${parseInt(y)}`
+                data: data,
+                src: `${this.src}${
+                    this.src.indexOf("?") == -1 ? "?" : "|"
+                }imageMogr2/crop/!${data.width}x${data.height}a${parseInt(
+                    data.x
+                )}a${parseInt(data.y)}`
             });
             this.isActive = false;
         },
         close() {
             this.callback({
-                action: "confirm"
+                action: "cancel"
             });
             this.isActive = false;
         }
-    },
-    mounted() {
-        // var img = new Image();
-        // img.src = this.src;
-        // img.onload = () => {
-        //     this.image = $("#image");
-        //     this.list[0].radio = this.radio = img.width / img.height;
-        //     this.image.cropper({
-        //         viewMode: 1,
-        //         dragMode: "none",
-        //         zoomable: false,
-        //         aspectRatio: this.radio
-        //     });
-        // };
     }
 };
 </script>

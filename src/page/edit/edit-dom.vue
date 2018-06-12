@@ -1,113 +1,117 @@
 <template>
-	<div v-if="hasSelectedOneItem && curItem.style">
-		<ul @click="updateItem" class="nav">
-			<li @click="navIndex = index" :class="{'active':index == navIndex}" :key="item" v-for="(item, index) in nav">
-				{{item}}
-			</li>
-		</ul>
-		<el-scrollbar v-if="navIndex == 0" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
-			<div style="padding:12px 20px;">
-				<!-- <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
+    <div v-if="hasSelectedOneItem && curItem.style">
+        <ul @click="updateItem" class="nav">
+            <li @click="navIndex = index" :class="{'active':index == navIndex}" :key="item" v-for="(item, index) in nav">
+                {{item}}
+            </li>
+        </ul>
+        <el-scrollbar v-if="navIndex == 0" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
+            <div style="padding:12px 20px;">
+                <!-- <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
                 </el-input> -->
-				<div class="style-item" v-if="rules('line-height')">
-					<label>行高</label>
-					<el-input-number lazy size="mini" :step="0.1" @change="updateItem({key:'style', val:{'line-height':$event}})" :value="curItem.style['line-height'] || 1.5" :min="0" :max="3"></el-input-number>
-				</div>
-				<div class="style-item" v-if="rules('letter-spacing')">
-					<label>字距</label>
-					<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'letter-spacing':($event / 100).toFixed(2) + 'em'}})" :value="Math.round(100 * parseFloat(curItem.style['letter-spacing'] || 0))" :min="0" :max="100"></el-input-number>
-				</div>
-				<div class="style-item" v-if="rules('font-size')">
-					<label>字号</label>
-					<el-input-number size="mini" :step="2" @change="updateItem({key:'style', val:{'font-size':$event + 'px'}})" :value="parseInt(curItem.style['font-size']) || 12" :min="12" :max="96"></el-input-number>
-				</div>
-				<div class="style-item" v-if="rules('color')">
-					<label>文字颜色</label>
-					<el-color-picker @active-change="updateItem({key:'style', val:{'color':$event}})" :value="curItem.style['color'] || '#666'" show-alpha></el-color-picker>
-					<ul class="color-list">
-						<li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
-					</ul>
-				</div>
-				<div class="style-item" v-if="rules('fill')" :key="index1" v-for="(item1, index1) in data.fillColorList">
-					<label>形状颜色{{index1 + 1}}</label>
-					<el-color-picker @active-change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill" show-alpha></el-color-picker>
-					<ul class="color-list">
-						<li @click="updateItem({key:'content', val:item1.css, fill : item1.fill}); item1.css = item2" :style="{'background':item2 == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item2}" :key="item2" v-for="item2 in colorList"></li>
-					</ul>
-				</div>
-			</div>
-			<el-collapse v-model="activeName" accordion>
-				<el-collapse-item title="外观" name="1">
-					<div style="padding:12px 20px;">
-						<div class="style-item">
-							<label>背景颜色</label>
-							<el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'rgba(0,0,0,0)'" show-alpha></el-color-picker>
-							<ul class="color-list">
-								<li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
-							</ul>
-						</div>
-						<div class="style-item">
-							<label>透明度</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'opacity':($event / 100).toFixed(2)}})" :value="Math.round((curItem.style['opacity'] || 1) * 100)" :min="0" :max="100"></el-input-number>
-						</div>
-						<div class="style-item">
-							<label>宽度</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'width': $event + 'px'}})" :value="parseInt(curItem.style['width'])" :min="0"></el-input-number>
-						</div>
-						<div class="style-item">
-							<label>高度</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'height': $event + 'px'}})" :value="parseInt(curItem.style['height'])" :min="0"></el-input-number>
-						</div>
-						<div class="style-item">
-							<label>x</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'left': $event + 'px'}})" :value="parseInt(curItem.style['left'])" :min="0"></el-input-number>
-						</div>
-						<div class="style-item">
-							<label>y</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'top': $event + 'px'}})" :value="parseInt(curItem.style['top'])" :min="0"></el-input-number>
-						</div>
-						<div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
-							<div class="tab-setting-line-title">边框</div>
-						</div>
-						<div class="style-item">
-							<label>边框样式</label>
-							<el-select @change="updateItem({key:'style', val:{'border-style': $event}})" size="mini" :value="curItem.style['border-style'] || 'solid'" placeholder="请选择">
-								<el-option v-for="item in options222" :key="item.value" :label="item.label" :value="item.value">
-								</el-option>
-							</el-select>
-						</div>
-						<div class="style-item">
-							<label>边框颜色</label>
-							<el-color-picker @active-change="updateItem({key:'style', val:{'border-color':$event}})" :value="curItem.style['border-color'] || '#000'" show-alpha></el-color-picker>
-							<ul class="color-list">
-								<li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
-							</ul>
-						</div>
-						<div class="style-item">
-							<label>边框尺寸</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'border-width': $event + 'px'}})" :value="parseInt(curItem.style['border-width'] || 0)" :min="0" :max="20"></el-input-number>
-						</div>
-						<div class="style-item">
-							<label>边框弧度</label>
-							<el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'border-radius': $event + '%'}})" :value="parseInt(curItem.style['border-radius'] || 0)" :min="0" :max="50"></el-input-number>
-						</div>
-						<div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
-							<div class="tab-setting-line-title">阴影</div>
-						</div>
-					</div>
-				</el-collapse-item>
-			</el-collapse>
-		</el-scrollbar>
-		<el-scrollbar v-if="navIndex == 1" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
-			<v-ani></v-ani>
-		</el-scrollbar>
-		<el-scrollbar v-if="navIndex == 2" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
-			<v-event></v-event>
-		</el-scrollbar>
-	</div>
+                <div class="style-item" v-if="rules('line-height')">
+                    <label>行高</label>
+                    <el-input-number lazy size="mini" :step="0.1" @change="updateItem({key:'style', val:{'line-height':$event}})" :value="curItem.style['line-height'] || 1.5" :min="0" :max="3"></el-input-number>
+                </div>
+                <div class="style-item" v-if="rules('letter-spacing')">
+                    <label>字距</label>
+                    <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'letter-spacing':($event / 100).toFixed(2) + 'em'}})" :value="Math.round(100 * parseFloat(curItem.style['letter-spacing'] || 0))" :min="0" :max="100"></el-input-number>
+                </div>
+                <div class="style-item" v-if="rules('font-size')">
+                    <label>字号</label>
+                    <el-input-number size="mini" :step="2" @change="updateItem({key:'style', val:{'font-size':$event + 'px'}})" :value="parseInt(curItem.style['font-size']) || 12" :min="12" :max="96"></el-input-number>
+                </div>
+                <div class="style-item" v-if="rules('color')">
+                    <label>文字颜色</label>
+                    <el-color-picker @active-change="updateItem({key:'style', val:{'color':$event}})" :value="curItem.style['color'] || '#666'" show-alpha></el-color-picker>
+                    <ul class="color-list">
+                        <li @click="updateItem({key:'style', val:{'color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
+                    </ul>
+                </div>
+                <div class="style-item" v-if="rules('fill')" :key="index1" v-for="(item1, index1) in data.fillColorList">
+                    <label>形状颜色{{index1 + 1}}</label>
+                    <el-color-picker @active-change="updateItem({key:'content', val:$event, fill : item1.fill});item1.css = $event" :value="item1.css || item1.fill" show-alpha></el-color-picker>
+                    <ul class="color-list">
+                        <li @click="updateItem({key:'content', val:item1.css, fill : item1.fill}); item1.css = item2" :style="{'background':item2 == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item2}" :key="item2" v-for="item2 in colorList"></li>
+                    </ul>
+                </div>
+                <div class="style-item">
+                    <el-button @click="crop">裁切图片</el-button>
+                </div>
+            </div>
+            <el-collapse v-model="activeName" accordion>
+                <el-collapse-item title="外观" name="1">
+                    <div style="padding:12px 20px;">
+                        <div class="style-item">
+                            <label>背景颜色</label>
+                            <el-color-picker @active-change="updateItem({key:'style', val:{'background-color':$event}})" :value="curItem.style['background-color'] || 'rgba(0,0,0,0)'" show-alpha></el-color-picker>
+                            <ul class="color-list">
+                                <li @click="updateItem({key:'style', val:{'background-color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
+                            </ul>
+                        </div>
+                        <div class="style-item">
+                            <label>透明度</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'opacity':($event / 100).toFixed(2)}})" :value="Math.round((curItem.style['opacity'] || 1) * 100)" :min="0" :max="100"></el-input-number>
+                        </div>
+                        <div class="style-item">
+                            <label>宽度</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'width': $event + 'px'}})" :value="parseInt(curItem.style['width'])" :min="0"></el-input-number>
+                        </div>
+                        <div class="style-item">
+                            <label>高度</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'height': $event + 'px'}})" :value="parseInt(curItem.style['height'])" :min="0"></el-input-number>
+                        </div>
+                        <div class="style-item">
+                            <label>x</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'left': $event + 'px'}})" :value="parseInt(curItem.style['left'])" :min="0"></el-input-number>
+                        </div>
+                        <div class="style-item">
+                            <label>y</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'top': $event + 'px'}})" :value="parseInt(curItem.style['top'])" :min="0"></el-input-number>
+                        </div>
+                        <div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
+                            <div class="tab-setting-line-title">边框</div>
+                        </div>
+                        <div class="style-item">
+                            <label>边框样式</label>
+                            <el-select @change="updateItem({key:'style', val:{'border-style': $event}})" size="mini" :value="curItem.style['border-style'] || 'solid'" placeholder="请选择">
+                                <el-option v-for="item in options222" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div class="style-item">
+                            <label>边框颜色</label>
+                            <el-color-picker @active-change="updateItem({key:'style', val:{'border-color':$event}})" :value="curItem.style['border-color'] || '#000'" show-alpha></el-color-picker>
+                            <ul class="color-list">
+                                <li @click="updateItem({key:'style', val:{'border-color':item}})" :style="{'background':item == 'rgba(0,0,0,0)' ? 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)' : item}" :key="item" v-for="item in colorList"></li>
+                            </ul>
+                        </div>
+                        <div class="style-item">
+                            <label>边框尺寸</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'border-width': $event + 'px'}})" :value="parseInt(curItem.style['border-width'] || 0)" :min="0" :max="20"></el-input-number>
+                        </div>
+                        <div class="style-item">
+                            <label>边框弧度</label>
+                            <el-input-number size="mini" :step="1" @change="updateItem({key:'style', val:{'border-radius': $event + '%'}})" :value="parseInt(curItem.style['border-radius'] || 0)" :min="0" :max="50"></el-input-number>
+                        </div>
+                        <div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
+                            <div class="tab-setting-line-title">阴影</div>
+                        </div>
+                    </div>
+                </el-collapse-item>
+            </el-collapse>
+        </el-scrollbar>
+        <el-scrollbar v-if="navIndex == 1" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
+            <v-ani></v-ani>
+        </el-scrollbar>
+        <el-scrollbar v-if="navIndex == 2" style="height:calc(100vh - 60px - 60px - 50px);" class="page-component__nav">
+            <v-event></v-event>
+        </el-scrollbar>
+    </div>
 </template>
 
 <script>
+import $ from 'jquery'
 import { mapActions, mapGetters } from "vuex";
 import ani from "./ani";
 import vEvent from "./event";
@@ -150,11 +154,36 @@ export default {
                 return rules[type].default;
             }
         },
-        fffff() {
-            console.log("获得焦点");
-        },
-        bbbbb() {
-            console.log("失去焦点");
+        crop() {
+            console.log(this.curItem);
+            this.$crop({
+                src: this.curItem.originPath,
+                data:  this.curItem.crop,
+                callback: ({ src, data, action }) => {
+                    if (action == "confirm") {
+                        // this.curItem.path = src;
+                        this.updateItem({
+                            key: "path",
+                            val: src
+                        });
+                        this.updateItem({
+                            key: "content",
+                            val: `<img style="width:100%;height:100%" src="${src}"/>`
+                        });
+                        this.updateItem({
+                            key: "crop",
+                            val: data
+                        });
+                        // this.updateItem({
+                        //     key: "style",
+                        //     val: {
+                        //         width: data.width + "px",
+                        //         height: data.height + "px"
+                        //     }
+                        // });
+                    }
+                }
+            });
         }
     },
     props: {
