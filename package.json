@@ -15,7 +15,7 @@
     "clipboard": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "cropper": "^4.0.0",
-    "element-ui": "^2.3.6",
+    "element-ui": "^2.4.1",
     "express-art-template": "^1.0.1",
     "express-session": "^1.15.6",
     "jquery": "^3.3.1",

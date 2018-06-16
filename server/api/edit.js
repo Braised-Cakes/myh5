@@ -550,7 +550,7 @@ app.get('/aj/qrcode/create', async (req, res) => {
         type: 'svg',
         margin: Number(margin)
     });
-    await upload('user', toFilePath, fileName);
+    await upload('store', toFilePath, fileName);
     rimraf.sync(toFilePath)
     res.send({
         status: AJ_STATUS.success,
@@ -746,7 +746,7 @@ app.get('/aj/image/token', async (req, res) => {
     let id = uuid();
     // req.session.uid
     const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-    let bucketName = 'user'
+    let bucketName = 'store'
     var options = {
         scope: bucketName,
         // expires: 60 * 60 * 10,
@@ -803,7 +803,7 @@ app.get('/aj/music/token', async (req, res) => {
     let id = uuid();
     // req.session.uid
     const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-    let bucketName = 'user'
+    let bucketName = 'store'
     var options = {
         scope: bucketName,
         // expires: 60 * 60 * 10,

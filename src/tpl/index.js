@@ -96,7 +96,7 @@ export default {
         }
     },
     /*
-    	图片
+    	二维码
     */
     [types.QRCODE]: function ({
         url

@@ -45,7 +45,7 @@ export default {
             margin: 2,
             loading: false,
             src:
-                "http://p7d4z759a.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg"
+                ""
         };
     },
     methods: {

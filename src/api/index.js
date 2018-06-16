@@ -1,6 +1,5 @@
 import fetch from './fetch'
 
-
 /**
  * 获取场景列表
  */
