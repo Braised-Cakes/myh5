@@ -54,7 +54,6 @@
 </template>
 <script>
 import * as api from "@/api";
-import $ from "jquery";
 export default {
     data() {
         return {

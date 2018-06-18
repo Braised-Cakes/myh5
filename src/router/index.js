@@ -2,9 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Cookies from 'js-cookie'
 import store from '@/store/index.js'
+
 Vue.use(Router);
+
 let routes = new Router({
     linkActiveClass: 'active',
+    mode: 'history',
     routes: [{
         path: '/list',
         name: 'list',

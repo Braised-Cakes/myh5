@@ -122,7 +122,7 @@ export default {
                     data: this.phoneData.data
                 });
                 this.$nextTick(() => {
-                    this.swiper = new Swiper(".swiper-container", {
+                    this.swiper = new window.Swiper(".swiper-container", {
                         direction: "vertical",
                         effect: this.value,
                         loop: this.checked,

@@ -111,7 +111,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import { mapActions, mapGetters } from "vuex";
 import ani from "./ani";
 import vEvent from "./event";

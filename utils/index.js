@@ -7,7 +7,7 @@ import $ from 'jquery'
 export const round = function (num, n = 2) {
   return Number(parseFloat(num).toFixed(n));
 }
-export const runAni = function (id, ani, aniIndex, time) {
+export const runAni = function (id, ani, aniIndex) {
   let str = '';
   let delay = 0;
   ani.forEach(($item, $index) => {

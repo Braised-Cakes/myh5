@@ -1,11 +1,5 @@
 import Vue from 'vue'
 import 'animate.css'
-import App from '@/App'
-import router from '@/router'
-import '@/css/reset.css'
-import '@/css/index.css'
-import '@/css/index.scss'
-import Crop from '@/components/crop'
 import {
     Pagination,
     Scrollbar,
@@ -31,14 +25,21 @@ import {
     Dialog,
     Checkbox
 } from 'element-ui';
+import App from '@/App'
+import router from '@/router'
+import Crop from '@/components/crop'
+import store from '@/store'
+import '@/css/reset.css'
+import '@/css/index.css'
+import '@/css/index.scss'
 import '@/css/element-variables.scss'
+import '@/iconfont/iconfont.css'
 import '@/directive/select'
 import '@/directive/drag'
 import "@/directive/changesize";
-import '@/iconfont/iconfont.css'
 import '@/keycode/index'
-import store from '@/store'
-// Vue.config.productionTip = false
+
+Vue.config.productionTip = process.env.NODE_ENV !== 'production';
 Vue.use(Pagination);
 Vue.use(Scrollbar);
 Vue.use(Form);
@@ -67,7 +68,7 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.use(Crop);
-// Vue.prototype.$crop = Crop;
+
 export default new Vue({
     router: router,
     store: store,

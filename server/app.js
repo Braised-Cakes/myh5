@@ -6,7 +6,7 @@ let session = require('express-session')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 let url = require('url')
-
+var history = require('connect-history-api-fallback');
 const {
     AJ_STATUS,
     AJ_MESSAGE
@@ -18,7 +18,9 @@ let dbHandel = require('./db/handel.js')
 
 
 var app = express();
-
+app.use(history({
+    index: '/Users/BraisedCakes/Desktop/2018/myh5-project/public/index.html'
+}));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
