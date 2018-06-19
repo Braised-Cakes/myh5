@@ -25,7 +25,6 @@
                 </el-select>
                 <el-checkbox @change="fff" v-model="checked">是否循环播放</el-checkbox>
             </div>
-            
             <div class="setting-operations">
                 <el-button @click="save">确定</el-button>
                 <el-button @click="CLOSE_PANEL('SET')">取消</el-button>
@@ -45,7 +44,7 @@ import * as utils from "../../../utils/index";
  * 翻页方式 effect
  * 是否循环播放 loop
  * 自动播放->时间   autoplay
- * 
+ *
  */
 runtime.parseStyle = function(date) {
     let str = "";
@@ -57,24 +56,13 @@ runtime.parseStyle = function(date) {
 
 export default {
     computed: {
-        ...mapGetters(["otherInfo", "phoneData"])
-    },
-    watch: {
-        otherInfo: {
-            handler: function(val) {
-                this.formData = $.extend(true, {}, val);
-                this.formData.id = this.$route.params.id;
-            },
-            deep: true
+        ...mapGetters(["otherInfo", "phoneData"]),
+        formData() {
+            return $.extend(true, {}, this.otherInfo);
         }
     },
     data() {
         return {
-            formData: {
-                id: this.$route.params.id,
-                title: "",
-                desc: ""
-            },
             options: [
                 {
                     key: "slide",
@@ -98,7 +86,7 @@ export default {
                 }
             ],
             value: "cube",
-            checked : false,
+            checked: false,
             html: "",
             swiper: null
         };

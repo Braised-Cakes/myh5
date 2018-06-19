@@ -3,7 +3,7 @@ const dbHandel = require('../db/handel.js')
 const fs = require('fs')
 let path = require('path')
 let glob = require('glob')
-var QRCode = require('qrcode')
+let QRCode = require('qrcode')
 let md5 = require('md5')
 const rimraf = require('rimraf')
 const sha1 = require('sha1')
@@ -33,23 +33,34 @@ const {
  */
 app.get('/aj/scene/get', async (req, res) => {
     const collection = dbHandel.getModel('myh5')
-    const data = await collection.findOne({
-        id: req.query.id
-    })
-    if (data) {
-        res.send({
-            status: AJ_STATUS.success,
-            message: AJ_MESSAGE.success,
-            result: {
-                data: data
-            }
-        })
-    } else {
+    const id = Number(req.query.id)
+    const errorMessage = '场景不存在'
+    if (isNaN(id)) {
         res.send({
             status: AJ_STATUS.error,
-            message: AJ_MESSAGE.error
+            message: errorMessage
         })
+    } else {
+        const data = await collection.findOne({
+            id: id
+        })
+        if (data) {
+            res.send({
+                status: AJ_STATUS.success,
+                message: AJ_MESSAGE.success,
+                result: {
+                    data: data
+                }
+            })
+        } else {
+            res.send({
+                status: AJ_STATUS.error,
+                message: errorMessage
+            })
+        }
     }
+
+
 
 })
 

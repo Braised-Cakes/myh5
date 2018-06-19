@@ -1,41 +1,39 @@
 
 
 <template>
-	<div class="qrcode-section">
-		<div class="header">
-			<h4>二维码</h4>
-			<span @click="CLOSE_PANEL(types.QRCODE)" class="close">x</span>
-		</div>
-		<section class="main">
-			<div class="left">
-				<div class="item">
-					<label>链接</label>
-					<el-input v-model="url" size="mini" placeholder="http://www.baidu.com"></el-input>
-				</div>
-				<div class="item">
-					<label>边距</label>
-					<el-input-number v-model="margin" size="mini" :max="4" :step="1" :min="0"></el-input-number>
-				</div>
-				<div class="item">
-					<label></label>
-					<el-button @click="create" size="mini" type="success">生成</el-button>
-				</div>
-			</div>
-			<div class="right">
-				<div v-loading="loading">
-					<img class="qr-image" :src="src" />
-				</div>
-				<footer>
-					<el-button @click="CLOSE_PANEL(types.QRCODE)" size="mini">取消</el-button>
-					<el-button @click="confirm" size="mini" type="success" :disabled="loading">确定</el-button>
-				</footer>
-			</div>
-		</section>
-	</div>
+    <v-dialog class="qrcode-section" title="二维码">
+        <section class="main">
+            <div class="left">
+                <div class="item">
+                    <label>链接</label>
+                    <el-input v-model="url" size="mini" placeholder="http://www.baidu.com"></el-input>
+                </div>
+                <div class="item">
+                    <label>边距</label>
+                    <el-input-number v-model="margin" size="mini" :max="4" :step="1" :min="0"></el-input-number>
+                </div>
+                <div class="item">
+                    <label></label>
+                    <el-button @click="create" size="mini" type="success">生成</el-button>
+                </div>
+            </div>
+            <div class="right">
+                <div v-loading="loading">
+                    <img class="qr-image" :src="src" />
+                </div>
+                <footer>
+                    <el-button @click="CLOSE_PANEL(types.QRCODE)" size="mini">取消</el-button>
+                    <el-button @click="confirm" size="mini" type="success" :disabled="loading">确定</el-button>
+                </footer>
+            </div>
+        </section>
+    </v-dialog>
 </template>
 <script>
 import * as api from "@/api";
 import * as types from "@/tpl/types";
+import vDialog from "@/components/dialog/dialog";
+console.log(vDialog);
 import { mapActions, mapMutations } from "vuex";
 export default {
     data() {
@@ -44,9 +42,11 @@ export default {
             url: "",
             margin: 2,
             loading: false,
-            src:
-                ""
+            src: ""
         };
+    },
+    components: {
+        "v-dialog": vDialog
     },
     methods: {
         ...mapActions(["addItem"]),
@@ -80,25 +80,25 @@ export default {
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
 .qrcode-section {
-    width: 470px;
-    background: #fff;
-    border-radius: 6px;
-    z-index: $panelZIndex;
-    position: absolute;
-    margin-left: 50%;
-    left: -235px;
-    top: 80px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    // width: 470px;
+    // background: #fff;
+    // border-radius: 6px;
+    // z-index: $panelZIndex;
+    // position: absolute;
+    // margin-left: 50%;
+    // left: -235px;
+    // top: 80px;
+    // box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     .header {
-        padding: 15px 20px;
-        border-bottom: 1px solid #ccd5db;
-        min-height: 21px;
-        background-color: #f7f7f7;
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        // padding: 15px 20px;
+        // border-bottom: 1px solid #ccd5db;
+        // min-height: 21px;
+        // background-color: #f7f7f7;
+        // border-top-left-radius: 6px;
+        // border-top-right-radius: 6px;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
         h4 {
             font-size: 18px;
             font-weight: bold;
@@ -122,8 +122,7 @@ export default {
     }
     .main {
         display: flex;
-        height: 280px;
-        padding: 20px;
+        height: 230px;
         .left {
             width: 300px;
             display: flex;

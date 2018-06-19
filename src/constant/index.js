@@ -21,7 +21,8 @@ export const initState = {
     curItemIds: [],
     otherInfo: {
         title: '',
-        desc: ''
+        desc: '',
+        id:''
     },
     panel: {
         [types.SHAPE]: false,

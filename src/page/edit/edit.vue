@@ -8,7 +8,7 @@
                 <v-panel v-if="modulePanel[types.SHAPE]"></v-panel>
                 <v-music v-if="modulePanel[types.MUSIC]"></v-music>
                 <v-image v-if="modulePanel[types.IMAGE]"></v-image>
-                <v-qrcode v-if="modulePanel[types.QRCODE]"></v-qrcode>
+                <v-qrcode></v-qrcode>
                 <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>

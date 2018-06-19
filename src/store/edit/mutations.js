@@ -270,9 +270,11 @@ export default {
   },
   [types.OTHERINFO](state, {
     title,
-    desc
+    desc,
+    id
   }) {
     state.otherInfo.title = title;
     state.otherInfo.desc = desc;
+    state.otherInfo.id = id;
   }
 }
