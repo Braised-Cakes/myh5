@@ -248,7 +248,7 @@
 						</li>
 					</ul>
 					<div class="no-list" v-if="list.length == 0">
-						<img src="@/img/image_default.svg" />
+						<img src="@/img/default.svg" />
 						<p class="empty-guide">赶紧去制作场景吧～</p>
 					</div>
 					<div v-if="curMusic.id">

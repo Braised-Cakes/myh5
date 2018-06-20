@@ -1,3 +1,264 @@
+<template>
+    <div class="wrapper">
+        <div class="header">
+            <h4>图片库</h4>
+            <span @click="close" class="close">x</span>
+        </div>
+        <v-dialog></v-dialog>
+        <div class="main">
+            <div class="left">
+                <ul>
+                    <li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">图片库</li>
+                    <li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
+                    <li @click="changeLeftIndex(2);" :class="{active : leftIndex == 2}">我的上传</li>
+                </ul>
+                <div class="operation">
+                    <div class="item">
+                        <div class="progress-area"></div>
+                        <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="image/jpeg,image/jpg,image/png,image/gif" :multiple="true" :limit="uploadLimit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
+                            <el-tooltip effect="dark" :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadLimit}张`" placement="right">
+                                <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
+                            </el-tooltip>
+                        </el-upload>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
+                    <ul class="nav-list">
+                        <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
+                    </ul>
+                </div>
+                <div class="right-content">
+                    <ul class="img-list" v-if="list.length > 0" >
+                        <li @click="choiceImage(item)" class="img-loading" :style="item.style || {}" :key="item.id" v-for="item in list"></li>
+                    </ul>
+                    <div class="no-list" v-if="list.length == 0">
+                        <img src="@/img/default.svg" />
+                        <p class="empty-guide">赶紧去制作场景吧～</p>
+                    </div>
+                    <div class="footer">
+                        <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                        <div style="float:right;">
+                            <el-button @click="close" size="mini">取消</el-button>
+                            <el-button @click="confirm" size="mini" type="success">确定</el-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import $ from "jquery";
+import * as api from "@/api";
+import * as types from "@/tpl/types";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import vDialog from '@/components/dialog/dialog2.vue'
+/**
+ * main里的内容，都是自己来的
+ * 
+ * 
+ * 可复用的部分
+ * header, leftNav, typeNav, pageination
+ */
+export default {
+    components : {
+        vDialog
+    },
+    data() {
+        return {
+            types: types,
+            list: [],
+            curMusic: {},
+            playMusicId: null,
+            pageInfo: {
+                pageSize: 18,
+                total: 0,
+                currentPage: 1
+            },
+            navOption: [],
+            navIndex: 0,
+            audio: null,
+            leftIndex: 0,
+            loading1: true,
+            loading2: false,
+            form: {
+                key: "",
+                token: ""
+            },
+            txt: "上传",
+            uploadLimit: 5,
+            progressList: {},
+            uploadSucLen: 0
+        };
+    },
+    computed: {
+        ...mapState({
+            panel: state => state.edit.panel
+        }),
+        ...mapGetters(["phoneData"])
+    },
+    methods: {
+        ...mapActions(["addItem", "updateMain"]),
+        ...mapMutations(["CLOSE_PANEL"]),
+        uploadProgress(event, file, fileList) {
+            if (!file) {
+                return;
+            }
+            this.progressList[file.uid] = parseInt(event.percent);
+            let per = 0;
+            for (let attr in this.progressList) {
+                per += this.progressList[attr];
+            }
+            $(".progress-area").css(
+                "width",
+                parseInt(per / fileList.length) + "%"
+            );
+        },
+        transition(type) {
+            switch (type) {
+                case "done":
+                    this.txt = "上传";
+                    $(".progress-area").css("width", 0);
+                    this.$refs.upload.clearFiles();
+                    break;
+                case "process":
+                    this.txt = "上传中";
+                    break;
+            }
+        },
+        uploadSuccess(response, file) {
+            api.userUpload(response).then(({ status }) => {
+                //异常情况， 后缀为png,jpg等等，但是实际并不是图片
+                if (status != 0) {
+                    this.showNotify(file);
+                }
+                this.uploadSucLen++;
+                this.leftIndex = 2;
+                this.pageInfo.currentPage = 1;
+                this.get();
+                if (
+                    this.uploadSucLen == Object.keys(this.progressList).length
+                ) {
+                    this.transition("done");
+                }
+            });
+        },
+        uploadError(err, file) {
+            this.progressList[file.uid] = 100;
+            this.uploadSucLen++;
+            this.leftIndex = 2;
+            this.pageInfo.currentPage = 1;
+            if (this.uploadSucLen == Object.keys(this.progressList).length) {
+                this.transition("done");
+            }
+            this.showNotify(file);
+            throw err;
+        },
+        showNotify(file) {
+            this.$notify.error({
+                title: "上传失败",
+                message: `图片${file.name}上传失败`
+            });
+        },
+        uploadExceed() {
+            this.$alert(`一次最多上传${this.uploadLimit}张图片`, {
+                closeOnClickModal: true,
+                callback: () => {}
+            });
+        },
+        beforeUpload(file) {
+            this.transition("process");
+            return api
+                .getToken({
+                    fileName: file.name
+                })
+                .then(({ token, key }) => {
+                    this.form.key = key;
+                    this.form.token = token;
+                });
+        },
+        /**
+         * 关闭音乐面板
+         */
+        close() {
+            this.CLOSE_PANEL(types.IMAGE);
+        },
+        changeLeftIndex(index) {
+            this.leftIndex = index;
+            this.pageInfo.currentPage = 1;
+            this.get();
+        },
+        changeNav(index) {
+            this.navIndex = index;
+            this.pageInfo.currentPage = 1;
+            this.get();
+        },
+        async choiceImage(item) {
+            await api.choiceImage({
+                id: item.id
+            });
+            let img = new Image();
+            let path = `//p7d4z759a.bkt.clouddn.com/${
+                item.path
+            }?imageView2/2/w/230/h/230/q/75|imageslim`;
+            img.src = path;
+            img.onload = () => {
+                this.addItem({
+                    type: types.IMAGE,
+                    path: path,
+                    width: img.width,
+                    height: img.height
+                });
+            };
+            this.CLOSE_PANEL(types.IMAGE);
+        },
+        /**
+         * 确认
+         */
+        async confirm() {
+            this.close();
+        },
+        get() {
+            api
+                .getImage({
+                    limit: this.pageInfo.pageSize,
+                    page: this.pageInfo.currentPage,
+                    typeId: this.navOption[this.navIndex].typeId,
+                    used: this.leftIndex == 1 ? 1 : "",
+                    isMy: this.leftIndex == 2 ? 1 : ""
+                })
+                .then(res => {
+                    this.list = res.result.data;
+                    for (let i = 0; i < this.list.length; i++) {
+                        let img = new Image();
+                        img.src = `//p7d4z759a.bkt.clouddn.com/${
+                            this.list[i].path
+                        }?imageView2/2/w/230/h/230/q/75|imageslim`;
+                        let id = this.list[i].id;
+                        img.onload = () => {
+                            if (this.list[i] && this.list[i].id == id) {
+                                this.$set(this.list[i], "style", {
+                                    "background-image": `url(//p7d4z759a.bkt.clouddn.com/${
+                                        this.list[i].path
+                                    }?imageView2/2/w/230/h/230/q/75|imageslim)`,
+                                    "background-size": "contain"
+                                });
+                            }
+                        };
+                    }
+                    this.pageInfo.total = res.result.info.total;
+                });
+        }
+    },
+    async mounted() {
+        let { result = [] } = await api.getImageNav();
+        this.navOption = result;
+        this.get();
+    }
+};
+</script>
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
 .wrapper {
@@ -200,249 +461,3 @@
     }
 }
 </style>
-
-<template>
-	<div class="wrapper">
-		<div class="header">
-			<h4>图片库</h4>
-			<span @click="close" class="close">x</span>
-		</div>
-		<div class="main">
-			<div class="left">
-				<ul>
-					<li @click="changeLeftIndex(0);" :class="{active : leftIndex == 0}">图片库</li>
-					<li @click="changeLeftIndex(1);" :class="{active : leftIndex == 1}">最近使用</li>
-					<li @click="changeLeftIndex(2);" :class="{active : leftIndex == 2}">我的上传</li>
-				</ul>
-				<div class="operation">
-					<div class="item">
-						<div class="progress-area"></div>
-						<el-upload :on-error="uploadError" ref="upload" :drag="true" accept="image/jpeg,image/jpg,image/png,image/gif" :multiple="true" :limit="uploadLimit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
-							<el-tooltip effect="dark" :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadLimit}张`" placement="right">
-								<span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
-							</el-tooltip>
-						</el-upload>
-					</div>
-				</div>
-			</div>
-			<div class="right">
-				<div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
-					<ul class="nav-list">
-						<li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
-					</ul>
-				</div>
-				<div class="right-content">
-					<ul class="img-list">
-						<li @click="choiceImage(item)" class="img-loading" :style="item.style || {}" :key="item.id" v-for="item in list"></li>
-					</ul>
-					<div class="footer">
-						<el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
-						<div style="float:right;">
-							<el-button @click="close" size="mini">取消</el-button>
-							<el-button @click="confirm" size="mini" type="success">确定</el-button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-<script>
-import $ from "jquery";
-import * as api from "@/api";
-import * as types from "@/tpl/types";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
-export default {
-    data() {
-        return {
-            types: types,
-            list: [],
-            curMusic: {},
-            playMusicId: null,
-            pageInfo: {
-                pageSize: 18,
-                total: 0,
-                currentPage: 1
-            },
-            navOption: [],
-            navIndex: 0,
-            audio: null,
-            leftIndex: 0,
-            loading1: true,
-            loading2: false,
-            form: {
-                key: "",
-                token: ""
-            },
-            txt: "上传",
-            uploadLimit: 5,
-            progressList: {},
-            uploadSucLen: 0
-        };
-    },
-    computed: {
-        ...mapState({
-            panel: state => state.edit.panel
-        }),
-        ...mapGetters(["phoneData"])
-    },
-    methods: {
-        ...mapActions(["addItem", "updateMain"]),
-        ...mapMutations(["CLOSE_PANEL"]),
-        uploadProgress(event, file, fileList) {
-            if (!file) {
-                return;
-            }
-            this.progressList[file.uid] = parseInt(event.percent);
-            let per = 0;
-            for (let attr in this.progressList) {
-                per += this.progressList[attr];
-            }
-            $(".progress-area").css(
-                "width",
-                parseInt(per / fileList.length) + "%"
-            );
-        },
-        transition(type) {
-            switch (type) {
-                case "done":
-                    this.txt = "上传";
-                    $(".progress-area").css("width", 0);
-                    this.$refs.upload.clearFiles();
-                    break;
-                case "process":
-                    this.txt = "上传中";
-                    break;
-            }
-        },
-        uploadSuccess(response, file) {
-            api.userUpload(response).then(({ status }) => {
-                //异常情况， 后缀为png,jpg等等，但是实际并不是图片
-                if (status != 0) {
-                    this.showNotify(file);
-                }
-                this.uploadSucLen++;
-                this.leftIndex = 2;
-                this.pageInfo.currentPage = 1;
-                this.get();
-                if (
-                    this.uploadSucLen == Object.keys(this.progressList).length
-                ) {
-                    this.transition("done");
-                }
-            });
-        },
-        uploadError(err, file) {
-            this.progressList[file.uid] = 100;
-            this.uploadSucLen++;
-            this.leftIndex = 2;
-            this.pageInfo.currentPage = 1;
-            if (this.uploadSucLen == Object.keys(this.progressList).length) {
-                this.transition("done");
-            }
-            this.showNotify(file);
-            throw err;
-        },
-        showNotify(file) {
-            this.$notify.error({
-                title: "上传失败",
-                message: `图片${file.name}上传失败`
-            });
-        },
-        uploadExceed() {
-            this.$alert(`一次最多上传${this.uploadLimit}张图片`, {
-                closeOnClickModal: true,
-                callback: () => {}
-            });
-        },
-        beforeUpload(file) {
-            this.transition("process");
-            return api
-                .getToken({
-                    fileName: file.name
-                })
-                .then(({ token, key }) => {
-                    this.form.key = key;
-                    this.form.token = token;
-                });
-        },
-        /**
-         * 关闭音乐面板
-         */
-        close() {
-            this.CLOSE_PANEL(types.IMAGE);
-        },
-        changeLeftIndex(index) {
-            this.leftIndex = index;
-            this.pageInfo.currentPage = 1;
-            this.get();
-        },
-        changeNav(index) {
-            this.navIndex = index;
-            this.pageInfo.currentPage = 1;
-            this.get();
-        },
-        async choiceImage(item) {
-            await api.choiceImage({
-                id: item.id
-            });
-            let img = new Image();
-            let path = `//p7d4z759a.bkt.clouddn.com/${
-                item.path
-            }?imageView2/2/w/230/h/230/q/75|imageslim`;
-            img.src = path;
-            img.onload = () => {
-                this.addItem({
-                    type: types.IMAGE,
-                    path: path,
-                    width: img.width,
-                    height: img.height
-                });
-            };
-            this.CLOSE_PANEL(types.IMAGE);
-        },
-        /**
-         * 确认
-         */
-        async confirm() {
-            this.close();
-        },
-        get() {
-            api
-                .getImage({
-                    limit: this.pageInfo.pageSize,
-                    page: this.pageInfo.currentPage,
-                    typeId: this.navOption[this.navIndex].typeId,
-                    used: this.leftIndex == 1 ? 1 : "",
-                    isMy: this.leftIndex == 2 ? 1 : ""
-                })
-                .then(res => {
-                    this.list = res.result.data;
-                    for (let i = 0; i < this.list.length; i++) {
-                        let img = new Image();
-                        img.src = `//p7d4z759a.bkt.clouddn.com/${
-                            this.list[i].path
-                        }?imageView2/2/w/230/h/230/q/75|imageslim`;
-                        let id = this.list[i].id;
-                        img.onload = () => {
-                            if (this.list[i] && this.list[i].id == id) {
-                                this.$set(this.list[i], "style", {
-                                    "background-image": `url(//p7d4z759a.bkt.clouddn.com/${
-                                        this.list[i].path
-                                    }?imageView2/2/w/230/h/230/q/75|imageslim)`,
-                                    "background-size": "contain"
-                                });
-                            }
-                        };
-                    }
-                    this.pageInfo.total = res.result.info.total;
-                });
-        }
-    },
-    async mounted() {
-        let { result = [] } = await api.getImageNav();
-        this.navOption = result;
-        this.get();
-    }
-};
-</script>

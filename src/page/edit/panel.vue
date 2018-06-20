@@ -135,42 +135,41 @@
 </style>
 
 <template>
-	<div class="wrapper" ref="bbb">
-		<div class="header">
-			<h4>形状库
-				<span>矢量素材，可更换颜色，放大不失真</span>
-			</h4>
-			<span @click="CLOSE_PANEL(types.SHAPE)" class="close">x</span>
-		</div>
-		<div class="main">
-			<div class="left">
-				<ul>
-					<li @click="changeNav(0)" :class="{'active':navIndex == 0}">形状库</li>
-					<li @click="changeNav(1)" :class="{'active':navIndex == 1}">最近使用</li>
-				</ul>
-			</div>
-			<div class="right">
-				<div class="nav" v-if="typeList.length > 0 && navIndex == 0">
-					<ul class="nav-list">
-						<li @click="changeType(index)" :class="{'active' : typeIndex == index}" :key="item.typeId" v-for="(item, index) in typeList">{{item.name}}</li>
-					</ul>
-					<ul class="tag-list">
-						<li @click="changeTag(index)" :class="{'active' : tagIndex == index}" :key="item.tagId" v-for="(item, index) in typeList[typeIndex].children">{{item.name}}</li>
-					</ul>
-				</div>
-				<div class="right-content">
-					<ul class="img-list">
-						<li @click="choiceShape(item, $event)" :style="{'background-image':`url(store/${item.path})`}" :key="item.id" v-for="item in list">
-						</li>
-					</ul>
-					<div class="footer">
-						<el-pagination :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="wrapper" ref="bbb">
+        <div class="header">
+            <h4>形状库
+                <span>矢量素材，可更换颜色，放大不失真</span>
+            </h4>
+            <span @click="CLOSE_PANEL(types.SHAPE)" class="close">x</span>
+        </div>
+        <div class="main">
+            <div class="left">
+                <ul>
+                    <li @click="changeNav(0)" :class="{'active':navIndex == 0}">形状库</li>
+                    <li @click="changeNav(1)" :class="{'active':navIndex == 1}">最近使用</li>
+                </ul>
+            </div>
+            <div class="right">
+                <div class="nav" v-if="typeList.length > 0 && navIndex == 0">
+                    <ul class="nav-list">
+                        <li @click="changeType(index)" :class="{'active' : typeIndex == index}" :key="item.typeId" v-for="(item, index) in typeList">{{item.name}}</li>
+                    </ul>
+                    <ul class="tag-list">
+                        <li @click="changeTag(index)" :class="{'active' : tagIndex == index}" :key="item.tagId" v-for="(item, index) in typeList[typeIndex].children">{{item.name}}</li>
+                    </ul>
+                </div>
+                <div class="right-content">
+                    <ul class="img-list">
+                        <li @click="choiceShape(item, $event)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
+                    </ul>
+                    <div class="footer">
+                        <el-pagination :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-	</div>
+    </div>
 </template>
 <script>
 import $ from "jquery";
