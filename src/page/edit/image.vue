@@ -4,7 +4,7 @@
             <h4>图片库</h4>
             <span @click="close" class="close">x</span>
         </div>
-        <v-dialog></v-dialog>
+        <!-- <v-dialog></v-dialog> -->
         <div class="main">
             <div class="left">
                 <ul>
@@ -54,7 +54,7 @@ import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
-import vDialog from '@/components/dialog/dialog2.vue'
+// import vDialog from '@/components/dialog/dialog2.vue'
 /**
  * main里的内容，都是自己来的
  * 
@@ -63,9 +63,9 @@ import vDialog from '@/components/dialog/dialog2.vue'
  * header, leftNav, typeNav, pageination
  */
 export default {
-    components : {
-        vDialog
-    },
+    // components : {
+    //     vDialog
+    // },
     data() {
         return {
             types: types,
