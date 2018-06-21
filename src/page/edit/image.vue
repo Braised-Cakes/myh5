@@ -382,7 +382,7 @@ export default {
                     padding: 15px 0;
                     display: flex;
                     flex-wrap: wrap;
-                    height: 340px;
+                    // height: 340px;
                     li {
                         width: 115px;
                         height: 115px;
