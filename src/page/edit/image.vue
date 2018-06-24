@@ -1,5 +1,5 @@
 <template>
-    <v-dialog @changeData="toshow" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
+    <v-dialog @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" :panelType="types.IMAGE" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
         <div slot="content">
             <ul class="img-list" v-if="list.length > 0">
                 <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
@@ -18,6 +18,7 @@ export default {
     },
     data() {
         return {
+            types: types,
             leftNav: [
                 {
                     name: "图片库"

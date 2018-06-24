@@ -2,7 +2,7 @@
     <el-dialog :before-close="handleClose" width="970px" class="panel-dialog" :visible="true" :show-close="false">
         <div class="header" slot="title">
             <h4>{{title}}</h4>
-            <span @click="CLOSE_PANEL(types.QRCODE)" class="close">x</span>
+            <span @click="CLOSE_PANEL(panelType)" class="close">x</span>
         </div>
         <div class="main">
             <div class="left">
@@ -12,7 +12,7 @@
                 <div class="operation">
                     <div class="item">
                         <div class="progress-area"></div>
-                        <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="image/jpeg,image/jpg,image/png,image/gif" :multiple="true" :limit="uploadInfo.limit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
+                        <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="accept" :multiple="true" :limit="uploadInfo.limit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
                             <el-tooltip effect="dark" :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadInfo.limit}张`" placement="right">
                                 <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
                             </el-tooltip>
@@ -33,7 +33,7 @@
                         <img style="width:300px;" src="@/img/default.svg" />
                     </div>
                     <div class="footer">
-                        <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageInfo.pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                        <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
                         <div style="float:right;">
                             <el-button @click="close" size="mini">取消</el-button>
                             <el-button @click="confirm" size="mini" type="success">确定</el-button>
@@ -58,10 +58,25 @@ export default {
         leftNav: {
             required: true
         },
+        pageSize: {
+            required: true
+        },
         navOption: {
             required: true
         },
         list: {
+            required: true
+        },
+        panelType: {
+            required: true
+        },
+        func: {
+            required: true
+        },
+        accept: {
+            required: true
+        },
+        judgeUpload: {
             required: true
         }
     },
@@ -79,7 +94,7 @@ export default {
             navIndex: 0,
             pageInfo: {
                 pageSize: 18,
-                total: 123,
+                total: 0,
                 currentPage: 1
             },
             uploadInfo: {
@@ -98,7 +113,8 @@ export default {
     methods: {
         ...mapMutations(["CLOSE_PANEL"]),
         handleClose(done) {
-            this.CLOSE_PANEL(types.IMAGE);
+            this.$emit('close');
+            this.CLOSE_PANEL(this.panelType);
             done();
         },
         changeLeftIndex(index) {
@@ -112,27 +128,27 @@ export default {
             this.get();
         },
         close() {
-            this.CLOSE_PANEL(types.IMAGE);
+            this.$emit('close');
+            this.CLOSE_PANEL(this.panelType);
         },
         /**
          * 确认
          */
         async confirm() {
+            this.$emit('confirm');
             this.close();
         },
         get() {
-            api
-                .getImage({
-                    limit: this.pageInfo.pageSize,
-                    page: this.pageInfo.currentPage,
-                    typeId: this.navOption[this.navIndex].typeId,
-                    used: this.leftIndex == 1 ? 1 : "",
-                    isMy: this.leftIndex == 2 ? 1 : ""
-                })
-                .then(res => {
-                    this.$emit("changeData", res.result.data);
-                    this.pageInfo.total = res.result.info.total;
-                });
+            api[this.func]({
+                limit: this.pageSize,
+                page: this.pageInfo.currentPage,
+                typeId: this.navOption[this.navIndex].typeId,
+                used: this.leftIndex == 1 ? 1 : "",
+                isMy: this.leftIndex == 2 ? 1 : ""
+            }).then(res => {
+                this.$emit("changeData", res.result.data);
+                this.pageInfo.total = res.result.info.total;
+            });
         },
         //上传
         transition(type) {
@@ -148,7 +164,7 @@ export default {
             }
         },
         uploadSuccess(response, file) {
-            api.userUpload(response).then(({ status }) => {
+            api[this.judgeUpload](response).then(({ status }) => {
                 //异常情况， 后缀为png,jpg等等，但是实际并不是图片
                 if (status != 0) {
                     this.showNotify(file);
@@ -352,8 +368,9 @@ export default {
 
         .right-content {
             position: relative;
-            height: 460px;
+            min-height: 400px;
             margin: 0 20px;
+            padding-bottom: 62px;
             .no-list {
                 width: 100%;
                 height: 100%;
