@@ -28,7 +28,6 @@ import * as types from "@/tpl/types";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import vDialog from "@/components/dialog/dialog2.vue";
 export default {
-    name: "musicPanel",
     components: {
         vDialog
     },
@@ -134,9 +133,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
 .img-list {
-    padding: 15px 0;
-    flex-wrap: wrap;
-    height: 340px;
+    height: 300px;
     li {
         height: 30px;
         line-height: 30px;

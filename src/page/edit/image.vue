@@ -1,10 +1,8 @@
 <template>
     <v-dialog @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" :panelType="types.IMAGE" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
-        <div slot="content">
-            <ul class="img-list" v-if="list.length > 0">
-                <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
-            </ul>
-        </div>
+        <ul slot="content" class="img-list" v-if="list.length > 0">
+            <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
+        </ul>
     </v-dialog>
 </template>
 <script>
@@ -89,7 +87,6 @@ export default {
 <style lang="scss" scoped>
 @import "~@/css/mixin";
 .img-list {
-    padding: 15px 0;
     display: flex;
     flex-wrap: wrap;
     .img-item {
@@ -102,12 +99,11 @@ export default {
         background-repeat: no-repeat;
         background-position: center center;
         cursor: pointer;
-        .icon {
-            font-size: 12px;
-            color: #ccc;
-        }
         &:nth-child(6n) {
             margin-right: 0;
+        }
+        &:nth-child(n + 12) {
+            margin-bottom: 0;
         }
     }
 }

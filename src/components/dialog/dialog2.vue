@@ -1,7 +1,9 @@
 <template>
     <el-dialog :before-close="handleClose" width="970px" class="panel-dialog" :visible="true" :show-close="false">
         <div class="header" slot="title">
-            <h4>{{title}}</h4>
+            <h4>{{title}}
+                <span v-if="desc">{{desc}}</span>
+            </h4>
             <span @click="CLOSE_PANEL(panelType)" class="close">x</span>
         </div>
         <div class="main">
@@ -24,6 +26,9 @@
                 <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
                     <ul class="nav-list">
                         <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
+                    </ul>
+                    <ul class="tag-list">
+                        <li @click="changeTag(index)" :class="{'active' : tagIndex == index}" :key="item.tagId" v-for="(item, index) in navOption[navIndex].children">{{item.name}}</li>
                     </ul>
                 </div>
                 <div class="right-content">
@@ -53,6 +58,9 @@ import * as types from "@/tpl/types";
 export default {
     props: {
         title: {
+            required: true
+        },
+        desc: {
             // required: true
         },
         leftNav: {
@@ -73,12 +81,8 @@ export default {
         func: {
             required: true
         },
-        accept: {
-            required: true
-        },
-        judgeUpload: {
-            required: true
-        }
+        accept: String,
+        judgeUpload: String
     },
     watch: {
         navOption: function(val) {
@@ -107,13 +111,14 @@ export default {
             },
             txt: "上传",
             progressList: {},
-            uploadSucLen: 0
+            uploadSucLen: 0,
+            tagIndex: 0
         };
     },
     methods: {
         ...mapMutations(["CLOSE_PANEL"]),
         handleClose(done) {
-            this.$emit('close');
+            this.$emit("close");
             this.CLOSE_PANEL(this.panelType);
             done();
         },
@@ -127,15 +132,20 @@ export default {
             this.pageInfo.currentPage = 1;
             this.get();
         },
+        changeTag(index) {
+            this.tagIndex = index;
+            this.pageInfo.currentPage = 1;
+            this.get();
+        },
         close() {
-            this.$emit('close');
+            this.$emit("close");
             this.CLOSE_PANEL(this.panelType);
         },
         /**
          * 确认
          */
         async confirm() {
-            this.$emit('confirm');
+            this.$emit("confirm");
             this.close();
         },
         get() {
@@ -144,8 +154,13 @@ export default {
                 page: this.pageInfo.currentPage,
                 typeId: this.navOption[this.navIndex].typeId,
                 used: this.leftIndex == 1 ? 1 : "",
-                isMy: this.leftIndex == 2 ? 1 : ""
+                isMy: this.leftIndex == 2 ? 1 : "",
+                tagId:
+                    this.navOption[this.navIndex] &&
+                    this.navOption[this.navIndex].children &&
+                    this.navOption[this.navIndex].children[this.tagIndex].tagId
             }).then(res => {
+                console.log(res);
                 this.$emit("changeData", res.result.data);
                 this.pageInfo.total = res.result.info.total;
             });
@@ -364,13 +379,26 @@ export default {
                     }
                 }
             }
+            .tag-list {
+                display: flex;
+                flex-wrap: wrap;
+                li {
+                    line-height: 30px;
+                    margin-right: 15px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    &.active {
+                        color: #1593ff;
+                    }
+                }
+            }
         }
 
         .right-content {
             position: relative;
             min-height: 400px;
-            margin: 0 20px;
-            padding-bottom: 62px;
+            margin: 15px 20px;
+            padding-bottom: 52px;
             .no-list {
                 width: 100%;
                 height: 100%;
@@ -387,7 +415,7 @@ export default {
             .footer {
                 position: absolute;
                 width: 100%;
-                bottom: 10px;
+                bottom: 0;
             }
         }
     }
