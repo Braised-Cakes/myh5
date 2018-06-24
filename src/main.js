@@ -28,6 +28,8 @@ import {
 import App from '@/App'
 import router from '@/router'
 import Crop from '@/components/crop'
+import Image from '@/components/image'
+import Shape from '@/components/shape'
 import store from '@/store'
 import '@/css/reset.css'
 import '@/css/index.css'
@@ -68,7 +70,8 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.use(Crop);
-
+Vue.use(Image);
+Vue.use(Shape);
 export default new Vue({
     router: router,
     store: store,

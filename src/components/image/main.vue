@@ -1,14 +1,15 @@
 <template>
-    <v-dialog @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" :panelType="types.IMAGE" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
-        <ul slot="content" class="img-list" v-if="list.length > 0">
-            <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
-        </ul>
-    </v-dialog>
+    <transition>
+        <v-dialog :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" :panelType="types.IMAGE" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
+            <ul slot="content" class="img-list" v-if="list.length > 0">
+                <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
+            </ul>
+        </v-dialog>
+    </transition>
 </template>
 <script>
 import * as api from "@/api";
 import * as types from "@/tpl/types";
-import { mapActions, mapMutations } from "vuex";
 import vDialog from "@/components/dialog/dialog2.vue";
 export default {
     components: {
@@ -16,6 +17,8 @@ export default {
     },
     data() {
         return {
+            visible: false,
+            callback: () => {},
             types: types,
             leftNav: [
                 {
@@ -33,28 +36,27 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["addItem"]),
-        ...mapMutations(["CLOSE_PANEL"]),
-        async choiceImage(item) {
-            await api.choiceImage({
-                id: item.id
-            });
-            let img = new Image();
-            let path = `//p7d4z759a.bkt.clouddn.com/${
-                item.path
-            }?imageView2/2/w/230/h/230/q/75|imageslim`;
-            img.src = path;
-            img.onload = () => {
-                this.addItem({
-                    type: types.IMAGE,
-                    path: path,
-                    width: img.width,
-                    height: img.height
-                });
-            };
-            this.CLOSE_PANEL(types.IMAGE);
+        init(params) {
+            this.visible = true;
+            let { callback } = params;
+            this.callback = callback;
         },
-
+        choiceImage(item) {
+            //记录最近使用
+            api
+                .choiceImage({
+                    id: item.id
+                })
+                .then(() => {
+                    this.callback({
+                        action: "confirm",
+                        path: `//p7d4z759a.bkt.clouddn.com/${
+                            item.path
+                        }?imageView2/2/w/230/h/230/q/75|imageslim`
+                    });
+                    this.visible = false;
+                });
+        },
         toshow(list) {
             this.list = list;
             for (let i = 0; i < this.list.length; i++) {
@@ -62,16 +64,11 @@ export default {
                 img.src = `//p7d4z759a.bkt.clouddn.com/${
                     this.list[i].path
                 }?imageView2/2/w/230/h/230/q/75|imageslim`;
-                let id = this.list[i].id;
                 img.onload = () => {
-                    if (this.list[i] && this.list[i].id == id) {
-                        this.$set(this.list[i], "style", {
-                            "background-image": `url(//p7d4z759a.bkt.clouddn.com/${
-                                this.list[i].path
-                            }?imageView2/2/w/230/h/230/q/75|imageslim)`,
-                            "background-size": "contain"
-                        });
-                    }
+                    this.$set(this.list[i], "style", {
+                        "background-image": `url(${img.src})`,
+                        "background-size": "contain"
+                    });
                 };
             }
         }
@@ -91,8 +88,7 @@ export default {
     flex-wrap: wrap;
     .img-item {
         @include wh(115px, 115px);
-        margin-right: 15px;
-        margin-bottom: 15px;
+        margin: 0 15px 15px 0;
         background-image: url(data:image/svg+xml,<svg%20width%3D%2744%27%20height%3D%2744%27%20viewBox%3D%270%200%2044%2044%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20stroke%3D%27%23fff%27><g%20fill%3D%27none%27%20fill-rule%3D%27evenodd%27%20stroke-width%3D%272%27><circle%20stroke%3D%27%2376838f%27%20cx%3D%2722%27%20cy%3D%2722%27%20r%3D%271%27><animate%20attributeName%3D%27r%27%20begin%3D%270s%27%20dur%3D%271.8s%27%20values%3D%271%3B%2020%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.165%2C%200.84%2C%200.44%2C%201%27%20repeatCount%3D%27indefinite%27%20/><animate%20attributeName%3D%27stroke-opacity%27%20begin%3D%270s%27%20dur%3D%271.8s%27%20values%3D%271%3B%200%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.3%2C%200.61%2C%200.355%2C%201%27%20repeatCount%3D%27indefinite%27%20/></circle><circle%20stroke%3D%27%2376838f%27%20cx%3D%2722%27%20cy%3D%2722%27%20r%3D%271%27><animate%20attributeName%3D%27r%27%20begin%3D%27-0.9s%27%20dur%3D%271.8s%27%20values%3D%271%3B%2020%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.165%2C%200.84%2C%200.44%2C%201%27%20repeatCount%3D%27indefinite%27%20/><animate%20attributeName%3D%27stroke-opacity%27%20begin%3D%27-0.9s%27%20dur%3D%271.8s%27%20values%3D%271%3B%200%27%20calcMode%3D%27spline%27%20keyTimes%3D%270%3B%201%27%20keySplines%3D%270.3%2C%200.61%2C%200.355%2C%201%27%20repeatCount%3D%27indefinite%27%20/></circle></g></svg>);
         background-size: 40px 40px;
         background-color: #e6ebed;

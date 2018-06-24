@@ -72,9 +72,41 @@ export default {
         },
         //创建元素前
         beforeCreate(type) {
-            if (type != types.TXT) {
-                this.OPEN_PANEL(type);
-            } else {
+            if (type == types.IMAGE) {
+                this.$image({
+                    callback: ({ path }) => {
+                        let img = new Image();
+                        img.src = path;
+                        img.onload = () => {
+                            this.addItem({
+                                type: types.IMAGE,
+                                path: path,
+                                width: img.width,
+                                height: img.height
+                            });
+                        };
+                    }
+                });
+            } else if (type == types.SHAPE) {
+                this.$shape({
+                    callback: ({ path }) => {
+                        let dom = $(`<embed src="/store/${path}"></embed>`);
+                        $(dom).on("load", () => {
+                            let docs = dom[0].getSVGDocument();
+                            $(dom).remove();
+                            this.addItem({
+                                type: types.SHAPE,
+                                path: path,
+                                content: $(docs)
+                                    .find("svg")
+                                    .prop("outerHTML")
+                                    .match(/<svg[\s\S]+/)[0]
+                            });
+                        });
+                        $("#svg_cache").append(dom);
+                    }
+                });
+            } else if (type == types.TXT) {
                 this.addItem(type);
             }
         }

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :before-close="handleClose" width="970px" class="panel-dialog" :visible="true" :show-close="false">
+    <el-dialog :before-close="handleClose" width="970px" class="panel-dialog" :visible="visible" :show-close="false">
         <div class="header" slot="title">
             <h4>{{title}}
                 <span v-if="desc">{{desc}}</span>
@@ -82,7 +82,8 @@ export default {
             required: true
         },
         accept: String,
-        judgeUpload: String
+        judgeUpload: String,
+        visible: Boolean
     },
     watch: {
         navOption: function(val) {
@@ -93,6 +94,7 @@ export default {
     },
     data() {
         return {
+            // visible: true,
             types: types,
             leftIndex: 0,
             navIndex: 0,
@@ -119,7 +121,6 @@ export default {
         ...mapMutations(["CLOSE_PANEL"]),
         handleClose(done) {
             this.$emit("close");
-            this.CLOSE_PANEL(this.panelType);
             done();
         },
         changeLeftIndex(index) {

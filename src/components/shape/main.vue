@@ -1,16 +1,14 @@
 
 <template>
-    <v-dialog @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getShape" :pageSize="18" :panelType="types.SHAPE" title="形状库" desc="矢量素材，可更换颜色，放大不失真" :list="list" :leftNav="leftNav" :navOption="typeList">
+    <v-dialog :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getShape" :pageSize="18" :panelType="types.SHAPE" title="形状库" desc="矢量素材，可更换颜色，放大不失真" :list="list" :leftNav="leftNav" :navOption="typeList">
         <ul slot="content" class="img-list">
             <li @click="choiceShape(item, $event)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
         </ul>
     </v-dialog>
 </template>
 <script>
-import $ from "jquery";
 import * as api from "@/api";
 import * as types from "@/tpl/types";
-import { mapActions, mapMutations } from "vuex";
 import vDialog from "@/components/dialog/dialog2.vue";
 export default {
     components: {
@@ -18,6 +16,8 @@ export default {
     },
     data() {
         return {
+            visible: false,
+            callback: () => {},
             leftNav: [
                 {
                     name: "形状库"
@@ -32,30 +32,23 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["addItem"]),
-        ...mapMutations(["CLOSE_PANEL"]),
+        init(params) {
+            this.visible = true;
+            let { callback } = params;
+            this.callback = callback;
+        },
         choiceShape(item) {
-            let dom = $(`<embed src="/store/${item.path}"></embed>`);
-            $(dom).on("load", () => {
-                let docs = dom[0].getSVGDocument();
-                $(dom).remove();
-                this.CLOSE_PANEL(types.SHAPE);
-                this.addItem({
-                    type: types.SHAPE,
-                    path: item.path,
-                    content: $(docs)
-                        .find("svg")
-                        .prop("outerHTML")
-                        .match(/<svg[\s\S]+/)[0]
-                });
-            });
-            $("#svg_cache").append(dom);
-            // embed
             api
                 .getShapeContent({
                     id: item.id
                 })
-                .then(() => {});
+                .then(() => {
+                    this.callback({
+                        action: "confirm",
+                        path: item.path
+                    });
+                    this.visible = false;
+                });
         },
         toshow(list) {
             this.list = list;
