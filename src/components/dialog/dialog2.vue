@@ -151,7 +151,6 @@ export default {
                     this.navOption[this.navIndex].children &&
                     this.navOption[this.navIndex].children[this.tagIndex].tagId
             }).then(res => {
-                console.log(res);
                 this.$emit("changeData", res.result.data);
                 this.pageInfo.total = res.result.info.total;
             });

@@ -1,19 +1,17 @@
 <template>
-    <el-dialog :before-close="handleClose" width="470px" class="panel-dialog" :visible="true" :show-close="false">
-        <div class="header" slot="title">
-            <h4>{{title}}</h4>
-            <span @click="CLOSE_PANEL(types.QRCODE)" class="close">x</span>
-        </div>
-        <slot></slot>
+    <el-dialog :before-close="handleClose" width="470px" class="panel-dialog" :visible="visible" :show-close="false">
+        <slot name="aaa"></slot>
     </el-dialog>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 import * as types from "@/tpl/types";
 export default {
     props: {
         title: {
+            // required: true
+        },
+        visible: {
             required: true
         }
     },
@@ -23,9 +21,11 @@ export default {
         };
     },
     methods: {
-        ...mapMutations(["CLOSE_PANEL"]),
+        // ...mapMutations(["CLOSE_PANEL"]),
         handleClose(done) {
-            this.CLOSE_PANEL(types.QRCODE)
+            console.log(9999);
+            this.$emit("close");
+            // this.CLOSE_PANEL(types.QRCODE)
             done();
         }
     }

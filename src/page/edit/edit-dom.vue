@@ -36,7 +36,8 @@
                     </ul>
                 </div>
                 <div class="style-item">
-                    <el-button @click="crop">裁切图片</el-button>
+                    <el-button @click="crop(false)">裁切图片1</el-button>
+                    <el-button @click="crop(true)">裁切图片2</el-button>
                 </div>
             </div>
             <el-collapse v-model="activeName" accordion>
@@ -153,14 +154,19 @@ export default {
                 return rules[type].default;
             }
         },
-        crop() {
-            console.log(this.curItem);
+        crop(type) {
             this.$crop({
                 src: this.curItem.originPath,
-                data:  this.curItem.crop,
+                data: !type
+                    ? {
+                          type: "1:1",
+                          width: 200,
+                          height: 200
+                      }
+                    : this.curItem.crop,
+                hasRight: type,
                 callback: ({ src, data, action }) => {
                     if (action == "confirm") {
-                        // this.curItem.path = src;
                         this.updateItem({
                             key: "path",
                             val: src
@@ -173,13 +179,6 @@ export default {
                             key: "crop",
                             val: data
                         });
-                        // this.updateItem({
-                        //     key: "style",
-                        //     val: {
-                        //         width: data.width + "px",
-                        //         height: data.height + "px"
-                        //     }
-                        // });
                     }
                 }
             });

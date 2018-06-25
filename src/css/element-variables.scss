@@ -6,43 +6,50 @@
 $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 @import "../../node_modules/element-ui/packages/theme-chalk/src/index";
 .el-collapse-item__header {
-  padding-left: 20px;
-  background: #f6f9fa;
-  line-height: 32px;
-  height: 32px;
+    padding-left: 20px;
+    background: #f6f9fa;
+    line-height: 32px;
+    height: 32px;
 }
 
 .el-collapse-item__arrow {
-  line-height: 32px !important;
+    line-height: 32px !important;
 }
 
 .el-select--mini {
-  width: 130px;
+    width: 130px;
 }
 
 .el-input--mini {
-  width: 130px;
+    width: 130px;
 }
 
 .el-radio-group {
-  width: 130px;
-  .el-radio+.el-radio {
-    margin-left: 0;
-  }
-  .el-radio__label {
-    font-size: 12px;
-  }
+    width: 130px;
+    .el-radio+.el-radio {
+        margin-left: 0;
+    }
+    .el-radio__label {
+        font-size: 12px;
+    }
 }
 
 .el-upload-dragger {
-  width: 160px;
-  height: 50px;
-  border-style: none;
-  background-color: inherit;
+    width: 160px;
+    height: 50px;
+    border-style: none;
+    background-color: inherit;
 }
 
 .el-notification {
-  p {
-    word-break: break-all;
-  }
+    p {
+        word-break: break-all;
+    }
+}
+
+.my-el-dialog {
+    .el-dialog__header,
+    .el-dialog__body {
+        padding: 0 !important;
+    }
 }

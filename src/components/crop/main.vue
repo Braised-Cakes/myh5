@@ -1,25 +1,52 @@
 <template>
     <transition>
-        <div v-if="isActive" class="wrapper">
-            <div class="header">
-                <h4>图片库</h4>
-                <span class="close">x</span>
-            </div>
-            <div class="main">
-                <div class="left">
-                    <img id="image" :src="src">
+        <el-dialog @close="close" :width="width" class="my-el-dialog" :visible.sync="visible" :show-close="false">
+            <div class="wrapper">
+                <div class="header">
+                    <h4>图片裁切</h4>
+                    <span class="close" @click="close">x</span>
                 </div>
-                <div class="right">
-                    <el-radio-group :value="type" size="small">
-                        <el-radio @change="change(item)" :key="item.type" v-for="item in list" :label="item.type">{{item.name}}</el-radio>
-                    </el-radio-group>
-                    <div>
-                        <el-button @click="close" size="mini">取消</el-button>
-                        <el-button @click="confirm" size="mini" type="success">确定</el-button>
+                <div class="main" :class="{'main1' : !hasRight, 'main2' : hasRight}">
+                    <div class="left" v-loading="loading" style="overflow:hidden;" element-loading-background="rgba(0, 0, 0, 0.8)">
+                        <img id="image" :src="src" />
+                    </div>
+                    <div v-if="!hasRight" class="operation" style="margin-top:28px;align-self:flex-end;">
+                        <el-button @click="close" style="width:96px;" size="medium">取消</el-button>
+                        <el-button @click="confirm" style="width:96px;" size="medium" type="primary">确定</el-button>
+                    </div>
+                    <div class="right" v-if="hasRight">
+                        <h3>裁切比例</h3>
+                        <ul class="ul">
+                            <li :key="item.type" v-for="item in list">
+                                <el-radio @change="change(item)" :value="type" :label="item.type">{{item.name}}</el-radio>
+                            </li>
+                        </ul>
+                        <div class="operation">
+                            <el-button @click="close" size="medium">取消</el-button>
+                            <el-button @click="confirm" size="medium" type="primary">确定</el-button>
+                        </div>
                     </div>
                 </div>
+                <!-- <div class="main main2" v-if="hasRight">
+                    <div v-loading="true" style="overflow:hidden;" element-loading-background="rgba(0, 0, 0, 0.8)" class="left">
+                        <img id="image2" :src="src" />
+                    </div>
+                    <div class="right">
+                        <h3>裁切比例</h3>
+                        <ul class="ul">
+                            <li :key="item.type" v-for="item in list">
+                                <el-radio @change="change(item)" :value="type" :label="item.type">{{item.name}}</el-radio>
+                            </li>
+                        </ul>
+                        <div class="operation">
+                            <el-button @click="close" size="medium">取消</el-button>
+                            <el-button @click="confirm" size="medium" type="primary">确定</el-button>
+                        </div>
+                    </div>
+                </div> -->
             </div>
-        </div>
+        </el-dialog>
+
     </transition>
 </template>
 
@@ -47,14 +74,25 @@ this.$crop({
     }
 })
 
+传参，  固定1比1
+
+
+传参 1:1
+
  */
 import "cropper";
+import vDialog from "@/components/dialog/dialog.vue";
 export default {
+    components: {
+        vDialog
+    },
     data() {
         return {
-            isActive: false,
+            visible: false,
             callback: () => {},
             type: "original",
+            width: "auto",
+            loading: true,
             list: [
                 {
                     name: "原图比例",
@@ -100,16 +138,26 @@ export default {
             image: null,
             src: "",
             radio: "",
-            data: {}
+            data: {},
+            hasRight: false
         };
     },
     methods: {
+        close() {
+            this.image.cropper("destroy");
+            this.visible = false;
+        },
         init(params) {
-            let { src, callback, data = {} } = params;
-            this.isActive = true;
+            let { src, callback, data = {}, hasRight } = params;
+            this.visible = true;
             var img = new Image();
+            src = src.replace(/\?.+/g, "");
             img.src = src;
             this.type = (data && data.type) || "original";
+            this.hasRight = hasRight;
+            this.loading = true;
+            this.width = this.hasRight ? "914px" : "996px";
+
             img.onload = () => {
                 this.src = src;
                 this.$nextTick().then(() => {
@@ -118,6 +166,10 @@ export default {
                     this.list[0].radio = radio;
                     this.radio = data.width / data.height || radio;
                     this.image.cropper({
+                        ready: () => {
+                            this.loading = false;
+                            console.log("succes成功啦");
+                        },
                         viewMode: 1,
                         dragMode: "none",
                         zoomable: false,
@@ -149,13 +201,7 @@ export default {
                     data.x
                 )}a${parseInt(data.y)}`
             });
-            this.isActive = false;
-        },
-        close() {
-            this.callback({
-                action: "cancel"
-            });
-            this.isActive = false;
+            this.close();
         }
     }
 };
@@ -163,32 +209,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
-.wrap {
-    position: relative;
-    z-index: 1231231;
-    width: 620px;
-    height: 520px;
-    background: #fff;
-}
 img {
     max-width: 100%; /* This rule is very important, please do not ignore this! */
 }
-
 .wrapper {
-    width: 970px;
     background: #fff;
-    border-radius: 6px;
-    z-index: $panelZIndex;
-    position: absolute;
     overflow: hidden;
-    left: 100px;
-    top: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     .header {
         padding: 15px 20px;
-        border-bottom: 1px solid #ccd5db;
         min-height: 21px;
-        background-color: #f7f7f7;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
         display: flex;
@@ -217,9 +246,51 @@ img {
     }
     .main {
         display: flex;
+        padding: 0 28px 28px 28px;
         .left {
-            width: 620px;
-            height: 520px;
+            position: relative;
+        }
+        .right {
+            width: 284px;
+            padding: 28px 0 0 28px;
+            position: relative;
+            h3 {
+                font-weight: bold;
+                font-size: 14px;
+                color: #111;
+                line-height: 48px;
+            }
+            .ul {
+                display: flex;
+                flex-wrap: wrap;
+                li {
+                    width: 50%;
+                    line-height: 36px;
+                }
+            }
+            .operation {
+                position: absolute;
+                bottom: 0px;
+                display: flex;
+                width: 256px;
+                .el-button {
+                    width: 50%;
+                }
+            }
+        }
+    }
+    .main1 {
+        flex-direction: column;
+        .left {
+            width: 940px;
+            height: 448px;
+        }
+    }
+    .main2 {
+        flex-direction: row;
+        .left {
+            width: 574px;
+            height: 492px;
         }
     }
 }
