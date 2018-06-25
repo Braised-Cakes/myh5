@@ -8,7 +8,7 @@
             <div class="basic-info">
                 <div class="cover-img">
                     <img src="@/img/logo2.png" />
-                    <span>更换封面</span>
+                    <span @click="changeImg">更换封面</span>
                 </div>
                 <div>
                     <span>标题</span>
@@ -100,6 +100,13 @@ export default {
         },
         fff() {
             this.resetSwiper();
+        },
+        changeImg() {
+            this.$image({
+                callback: ({ path }) => {
+                    console.log(path);
+                }
+            });
         },
         resetSwiper() {
             let realIndex = this.swiper && this.swiper.realIndex;

@@ -1,6 +1,6 @@
 
 <template>
-    <v-dialog :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getShape" :pageSize="18" :panelType="types.SHAPE" title="形状库" desc="矢量素材，可更换颜色，放大不失真" :list="list" :leftNav="leftNav" :navOption="typeList">
+    <v-dialog :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getShape" :pageSize="18" title="形状库" desc="矢量素材，可更换颜色，放大不失真" :list="list" :leftNav="leftNav" :navOption="typeList">
         <ul slot="content" class="img-list">
             <li @click="choiceShape(item, $event)" :style="{'background-image':`url(/store/${item.path})`}" :key="item.id" v-for="item in list"></li>
         </ul>
@@ -8,7 +8,6 @@
 </template>
 <script>
 import * as api from "@/api";
-import * as types from "@/tpl/types";
 import vDialog from "@/components/dialog/dialog2.vue";
 export default {
     components: {
@@ -26,7 +25,6 @@ export default {
                     name: "最近使用"
                 }
             ],
-            types: types,
             list: [],
             typeList: []
         };

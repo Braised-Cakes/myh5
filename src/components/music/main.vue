@@ -1,7 +1,5 @@
-
-
 <template>
-    <v-dialog judgeUpload="userUploadMusic" @close="close" @confirm="confirm" @changeData="toshow" func="getMusic" :pageSize="10" accept="audio/*" :panelType="types.MUSIC" title="音乐库" :list="list" :leftNav="leftNav" :navOption="navOption">
+    <v-dialog :visible="visible" type="music" @close="close" judgeUpload="userUploadMusic" @confirm="confirm" @changeData="list = $event" func="getMusic" :pageSize="10" accept="audio/*" title="音乐库" :list="list" :leftNav="leftNav" :navOption="navOption">
         <div slot="content">
             <ul v-if="list.length > 0" class="img-list">
                 <li @click="choiceMusic(item)" :class="{'active':item.id == curMusic.id}" :key="item.id" v-for="item in list">
@@ -24,8 +22,7 @@
 <script>
 import $ from "jquery";
 import * as api from "@/api";
-import * as types from "@/tpl/types";
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import store from "@/store/index";
 import vDialog from "@/components/dialog/dialog2.vue";
 export default {
     components: {
@@ -33,6 +30,8 @@ export default {
     },
     data() {
         return {
+            visible: false,
+            callback: () => {},
             leftNav: [
                 {
                     name: "音乐库"
@@ -44,7 +43,6 @@ export default {
                     name: "我的上传"
                 }
             ],
-            types: types,
             list: [],
             curMusic: {},
             playMusicId: null,
@@ -53,21 +51,17 @@ export default {
             audio: null
         };
     },
-    computed: {
-        ...mapGetters(["phoneData"])
-    },
     methods: {
-        ...mapActions(["updateMain"]),
-        ...mapMutations(["CLOSE_PANEL"]),
-        toshow(list) {
-            this.list = list;
+        init(params) {
+            this.visible = true;
+            let { callback } = params;
+            this.callback = callback;
         },
         /**
          * 关闭音乐面板
          */
         close() {
-            this.pause();
-            this.CLOSE_PANEL(types.MUSIC);
+            this.visible = false;
         },
         /**
          * 选择音乐
@@ -89,9 +83,9 @@ export default {
                 (await api.choiceMusic({
                     id: this.curMusic.id
                 }));
-            this.updateMain({
-                key: "music",
-                val: this.curMusic
+            this.callback({
+                action: "confirm",
+                music: this.curMusic
             });
             this.close();
         },
@@ -126,7 +120,11 @@ export default {
     async mounted() {
         let { result = [] } = await api.getMusicNav();
         this.navOption = result;
-        this.curMusic = $.extend(true, {}, this.phoneData.main.music || {});
+        this.curMusic = $.extend(
+            true,
+            {},
+            store.getters.phoneData.main.music || {}
+        );
     }
 };
 </script>
@@ -134,6 +132,7 @@ export default {
 @import "~@/css/variables.scss";
 .img-list {
     height: 300px;
+    margin-bottom: 20px;
     li {
         height: 30px;
         line-height: 30px;

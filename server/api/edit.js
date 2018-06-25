@@ -746,22 +746,26 @@ app.get('/aj/qrcode/create', async (req, res) => {
 //     })
 // })
 
-
-/**
- * 用户上传图片
- */
-app.get('/aj/image/token', async (req, res) => {
+app.get('/aj/upload/token', async (req, res) => {
     var accessKey = AccessKey
     var secretKey = SecretKey
     var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     let id = uuid();
-    // req.session.uid
     const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
     let bucketName = 'store'
+    let returnBody
+    switch (req.query.type) {
+        case 'image':
+            returnBody = '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(fname)", "imageInfo":$(imageInfo)}'
+            break;
+        case 'music':
+            returnBody = '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(fname)", "avinfo":$(avinfo)}'
+            break;
+    }
     var options = {
         scope: bucketName,
         // expires: 60 * 60 * 10,
-        returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)", "imageInfo":$(imageInfo)}'
+        returnBody: returnBody
     };
     var putPolicy = new qiniu.rs.PutPolicy(options);
     var uploadToken = putPolicy.uploadToken(mac);
@@ -773,7 +777,6 @@ app.get('/aj/image/token', async (req, res) => {
 });
 app.post('/aj/image/user_upload', async (req, res) => {
     let id = uuid();
-    console.log(id);
     const collection = dbHandel.getModel('images')
     let lastData = await collection.find().sort({
         id: -1
@@ -805,29 +808,6 @@ app.post('/aj/image/user_upload', async (req, res) => {
         })
     }
 })
-
-
-app.get('/aj/music/token', async (req, res) => {
-    var accessKey = AccessKey
-    var secretKey = SecretKey
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-    let id = uuid();
-    // req.session.uid
-    const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
-    let bucketName = 'store'
-    var options = {
-        scope: bucketName,
-        // expires: 60 * 60 * 10,
-        returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)", "avinfo":$(avinfo)}'
-    };
-    var putPolicy = new qiniu.rs.PutPolicy(options);
-    var uploadToken = putPolicy.uploadToken(mac);
-    // http://up-z2.qiniup.com
-    res.send({
-        token: uploadToken,
-        key: fileName
-    })
-});
 
 app.post('/aj/music/user_upload', async (req, res) => {
     let id = uuid();

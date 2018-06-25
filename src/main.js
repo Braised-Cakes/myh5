@@ -30,6 +30,7 @@ import router from '@/router'
 import Crop from '@/components/crop'
 import Image from '@/components/image'
 import Shape from '@/components/shape'
+import Music from '@/components/music'
 import store from '@/store'
 import '@/css/reset.css'
 import '@/css/index.css'
@@ -72,6 +73,7 @@ Vue.prototype.$message = Message;
 Vue.use(Crop);
 Vue.use(Image);
 Vue.use(Shape);
+Vue.use(Music);
 export default new Vue({
     router: router,
     store: store,

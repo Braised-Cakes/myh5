@@ -1,6 +1,6 @@
 <template>
     <transition>
-        <v-dialog :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" :panelType="types.IMAGE" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
+        <v-dialog type="image" :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
             <ul slot="content" class="img-list" v-if="list.length > 0">
                 <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
             </ul>
@@ -9,7 +9,6 @@
 </template>
 <script>
 import * as api from "@/api";
-import * as types from "@/tpl/types";
 import vDialog from "@/components/dialog/dialog2.vue";
 export default {
     components: {
@@ -19,7 +18,6 @@ export default {
         return {
             visible: false,
             callback: () => {},
-            types: types,
             leftNav: [
                 {
                     name: "图片库"

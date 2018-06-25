@@ -5,7 +5,6 @@
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
                 <v-page :data="panel"></v-page>
-                <v-music v-if="modulePanel[types.MUSIC]"></v-music>
                 <v-qrcode v-if="modulePanel[types.QRCODE]"></v-qrcode>
                 <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
                     <div class="container">
@@ -97,7 +96,6 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import vMusic from "./music";
 import vQrcode from "./qrcode";
 import vSet from "./set";
 import $ from "jquery";
@@ -110,7 +108,6 @@ export default {
     components: {
         "v-header": vHeader,
         "v-page": vPage,
-        "v-music": vMusic,
         "v-qrcode": vQrcode,
         "v-set": vSet
     },

@@ -38,7 +38,7 @@ export default {
         ...mapGetters(["phoneData"])
     },
     methods: {
-        ...mapActions(["addItem"]),
+        ...mapActions(["addItem", "updateMain"]),
         ...mapMutations(["OPEN_PANEL"]),
         //保存场景
         async save() {
@@ -104,6 +104,15 @@ export default {
                             });
                         });
                         $("#svg_cache").append(dom);
+                    }
+                });
+            } else if (type == types.MUSIC) {
+                this.$music({
+                    callback: ({ music }) => {
+                        this.updateMain({
+                            key: "music",
+                            val: music
+                        });
                     }
                 });
             } else if (type == types.TXT) {

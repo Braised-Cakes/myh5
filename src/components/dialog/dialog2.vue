@@ -4,7 +4,7 @@
             <h4>{{title}}
                 <span v-if="desc">{{desc}}</span>
             </h4>
-            <span @click="CLOSE_PANEL(panelType)" class="close">x</span>
+            <span @click="$emit('close')" class="close">x</span>
         </div>
         <div class="main">
             <div class="left">
@@ -14,9 +14,9 @@
                 <div class="operation">
                     <div class="item">
                         <div class="progress-area"></div>
-                        <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="accept" :multiple="true" :limit="uploadInfo.limit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
+                        <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="accept" :multiple="true" :limit="uploadInfo.limit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="uploadInfo.form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
                             <el-tooltip effect="dark" :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadInfo.limit}张`" placement="right">
-                                <span class="txt" style="width:100%;position:absolute;left:0;top:0;">{{txt}}</span>
+                                <span class="uploadInfo.txt" style="width:100%;position:absolute;left:0;top:0;">{{uploadInfo.txt}}</span>
                             </el-tooltip>
                         </el-upload>
                     </div>
@@ -52,17 +52,14 @@
 
 <script>
 import $ from "jquery";
-import { mapMutations } from "vuex";
 import * as api from "@/api";
-import * as types from "@/tpl/types";
 export default {
     props: {
         title: {
             required: true
         },
-        desc: {
-            // required: true
-        },
+        desc: String,
+        type: String,
         leftNav: {
             required: true
         },
@@ -73,9 +70,6 @@ export default {
             required: true
         },
         list: {
-            required: true
-        },
-        panelType: {
             required: true
         },
         func: {
@@ -94,8 +88,6 @@ export default {
     },
     data() {
         return {
-            // visible: true,
-            types: types,
             leftIndex: 0,
             navIndex: 0,
             pageInfo: {
@@ -104,21 +96,20 @@ export default {
                 currentPage: 1
             },
             uploadInfo: {
-                limit: 5 //最大允许上传个数
+                limit: 5, //最大允许上传个数,
+                txt: "上传",
+                form: {
+                    key: "",
+                    token: ""
+                },
+                sucLen: 0
             },
-            //上传
-            form: {
-                key: "",
-                token: ""
-            },
-            txt: "上传",
             progressList: {},
-            uploadSucLen: 0,
+            // uploadInfo.sucLen: 0,
             tagIndex: 0
         };
     },
     methods: {
-        ...mapMutations(["CLOSE_PANEL"]),
         handleClose(done) {
             this.$emit("close");
             done();
@@ -140,7 +131,6 @@ export default {
         },
         close() {
             this.$emit("close");
-            this.CLOSE_PANEL(this.panelType);
         },
         /**
          * 确认
@@ -170,12 +160,12 @@ export default {
         transition(type) {
             switch (type) {
                 case "done":
-                    this.txt = "上传";
+                    this.uploadInfo.txt = "上传";
                     $(".progress-area").css("width", 0);
                     this.$refs.upload.clearFiles();
                     break;
                 case "process":
-                    this.txt = "上传中";
+                    this.uploadInfo.txt = "上传中";
                     break;
             }
         },
@@ -185,12 +175,13 @@ export default {
                 if (status != 0) {
                     this.showNotify(file);
                 }
-                this.uploadSucLen++;
+                this.uploadInfo.sucLen++;
                 this.leftIndex = 2;
                 this.pageInfo.currentPage = 1;
                 this.get();
                 if (
-                    this.uploadSucLen == Object.keys(this.progressList).length
+                    this.uploadInfo.sucLen ==
+                    Object.keys(this.progressList).length
                 ) {
                     this.transition("done");
                 }
@@ -198,10 +189,12 @@ export default {
         },
         uploadError(err, file) {
             this.progressList[file.uid] = 100;
-            this.uploadSucLen++;
+            this.uploadInfo.sucLen++;
             this.leftIndex = 2;
             this.pageInfo.currentPage = 1;
-            if (this.uploadSucLen == Object.keys(this.progressList).length) {
+            if (
+                this.uploadInfo.sucLen == Object.keys(this.progressList).length
+            ) {
                 this.transition("done");
             }
             this.showNotify(file);
@@ -223,11 +216,12 @@ export default {
             this.transition("process");
             return api
                 .getToken({
-                    fileName: file.name
+                    fileName: file.name,
+                    type: this.type
                 })
                 .then(({ token, key }) => {
-                    this.form.key = key;
-                    this.form.token = token;
+                    this.uploadInfo.form.key = key;
+                    this.uploadInfo.form.token = token;
                 });
         },
         uploadProgress(event, file, fileList) {
