@@ -160,8 +160,8 @@ export default {
                 data: !type
                     ? {
                           type: "1:1",
-                          width: 200,
-                          height: 200
+                          width: 400,
+                          height: 400
                       }
                     : this.curItem.crop,
                 hasRight: type,

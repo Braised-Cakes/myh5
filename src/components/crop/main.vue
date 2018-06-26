@@ -27,23 +27,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="main main2" v-if="hasRight">
-                    <div v-loading="true" style="overflow:hidden;" element-loading-background="rgba(0, 0, 0, 0.8)" class="left">
-                        <img id="image2" :src="src" />
-                    </div>
-                    <div class="right">
-                        <h3>裁切比例</h3>
-                        <ul class="ul">
-                            <li :key="item.type" v-for="item in list">
-                                <el-radio @change="change(item)" :value="type" :label="item.type">{{item.name}}</el-radio>
-                            </li>
-                        </ul>
-                        <div class="operation">
-                            <el-button @click="close" size="medium">取消</el-button>
-                            <el-button @click="confirm" size="medium" type="primary">确定</el-button>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </el-dialog>
 
@@ -168,7 +151,6 @@ export default {
                     this.image.cropper({
                         ready: () => {
                             this.loading = false;
-                            console.log("succes成功啦");
                         },
                         viewMode: 1,
                         dragMode: "none",

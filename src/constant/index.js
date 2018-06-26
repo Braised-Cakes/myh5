@@ -22,7 +22,8 @@ export const initState = {
     otherInfo: {
         title: '',
         desc: '',
-        id:''
+        id: '',
+        portrait: ''
     },
     panel: {
         [types.SHAPE]: false,

@@ -45,6 +45,7 @@ app.get('/aj/scene/get', async (req, res) => {
             id: id
         })
         if (data) {
+            data.portrait = data.domain + data.portrait
             res.send({
                 status: AJ_STATUS.success,
                 message: AJ_MESSAGE.success,
@@ -848,11 +849,14 @@ app.post('/aj/scene/update', async (req, res) => {
     })
     let title = req.body.title || item.title
     let desc = req.body.desc || item.desc
+    let portrait = req.body.portrait || item.portrait
+    portrait = portrait.match(/.com\/(.+)/)[1];
     await collection.update({
         id: req.body.id
     }, {
         title: title,
-        desc: desc
+        desc: desc,
+        portrait: portrait
     })
     res.send({
         status: AJ_STATUS.success,

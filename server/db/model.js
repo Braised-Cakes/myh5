@@ -10,6 +10,16 @@ module.exports = {
             required: true,
             description: '作品title'
         },
+        'domain': {
+            type: String,
+            required: false,
+            default: 'http://p7d4z759a.bkt.clouddn.com/'
+        },
+        "portrait": {
+            type: String,
+            required: false,
+            description: '背景图'
+        },
         "desc": {
             type: String,
             required: false,
@@ -57,6 +67,11 @@ module.exports = {
         "path": {
             type: String,
             required: true
+        },
+        'domain': {
+            type: String,
+            required: false,
+            default: 'http://p7d4z759a.bkt.clouddn.com/'
         },
         "space": {
             type: String,
@@ -169,6 +184,11 @@ module.exports = {
             type: Number,
             required: false
         },
+        'domain': {
+            type: String,
+            required: false,
+            default: 'http://p7d4z759a.bkt.clouddn.com/'
+        },
         'path': {
             type: String,
             required: true
@@ -208,6 +228,11 @@ module.exports = {
         }
     },
     'musics': {
+        'domain': {
+            type: String,
+            required: false,
+            default: 'http://p7d4z759a.bkt.clouddn.com/'
+        },
         'path': {
             type: String,
             required: true

@@ -30,7 +30,7 @@
                         <span :class="publishStatus[item.publishStatus].ename">{{publishStatus[item.publishStatus].name}}</span>
                     </div>
                     <div class="image">
-                        <div class="front"></div>
+                        <div class="front" :style="{'background-image': `url(${item.portrait})`}"></div>
                         <div class="overlay">
                             <router-link class="edit" :to="{ name: 'detail', params: { id: item.id }}">
                                 <div>
@@ -319,7 +319,7 @@ export default {
             transition: 0.2s;
             .front {
                 height: 280px;
-                background: url(~@/img/logo2.png) no-repeat;
+                background-repeat: no-repeat;
                 background-size: 100%;
                 border-top-left-radius: 3px;
                 border-top-right-radius: 3px;

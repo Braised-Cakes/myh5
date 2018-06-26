@@ -7,7 +7,7 @@
         <div class="right">
             <div class="basic-info">
                 <div class="cover-img">
-                    <img src="@/img/logo2.png" />
+                    <img :src="formData.portrait" />
                     <span @click="changeImg">更换封面</span>
                 </div>
                 <div>
@@ -56,10 +56,7 @@ runtime.parseStyle = function(date) {
 
 export default {
     computed: {
-        ...mapGetters(["otherInfo", "phoneData"]),
-        formData() {
-            return $.extend(true, {}, this.otherInfo);
-        }
+        ...mapGetters(["otherInfo", "phoneData"])
     },
     data() {
         return {
@@ -88,7 +85,8 @@ export default {
             value: "cube",
             checked: false,
             html: "",
-            swiper: null
+            swiper: null,
+            formData: {}
         };
     },
     methods: {
@@ -104,7 +102,18 @@ export default {
         changeImg() {
             this.$image({
                 callback: ({ path }) => {
-                    console.log(path);
+                    this.$crop({
+                        src: path,
+                        data: {
+                            type: "1:1",
+                            width: 400,
+                            height: 400
+                        },
+                        hasRight: false,
+                        callback: ({ src }) => {
+                            this.formData.portrait = src;
+                        }
+                    });
                 }
             });
         },
@@ -152,6 +161,7 @@ export default {
         }
     },
     mounted() {
+        this.formData = $.extend(true, {}, this.otherInfo);
         this.html = dataTpl({
             data: this.phoneData.data
         });

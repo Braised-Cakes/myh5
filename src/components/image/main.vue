@@ -40,20 +40,28 @@ export default {
             this.callback = callback;
         },
         choiceImage(item) {
-            //记录最近使用
-            api
-                .choiceImage({
-                    id: item.id
-                })
-                .then(() => {
-                    this.callback({
-                        action: "confirm",
-                        path: `//p7d4z759a.bkt.clouddn.com/${
-                            item.path
-                        }?imageView2/2/w/230/h/230/q/75|imageslim`
+            /**
+             * TODO
+             * 所有的图片应该有宽高信息, 旧的官方图片是没有宽高信息的，需要更新数据库
+             */
+            let img = new Image();
+            img.src = `//p7d4z759a.bkt.clouddn.com/${item.path}`;
+            img.onload = () => {
+                api
+                    .choiceImage({
+                        id: item.id
+                    })
+                    .then(() => {
+                        this.callback({
+                            action: "confirm",
+                            path: img.src,
+                            width: img.width,
+                            height: img.height
+                        });
+                        this.visible = false;
                     });
-                    this.visible = false;
-                });
+            };
+            //记录最近使用
         },
         toshow(list) {
             this.list = list;

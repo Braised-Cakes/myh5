@@ -26,12 +26,15 @@ app.get('/aj/scene/list', async (req, res) => {
     const data = await collection.find({
             uid: req.session.uid,
             status: status
-        }, ['id', 'title', 'desc', 'status', 'publishStatus', 'createTime'])
+        }, ['id', 'title', 'desc', 'status', 'publishStatus', 'createTime', 'domain', 'portrait'])
         .skip((page - 1) * limit)
         .sort({
             updateTime: -1
         })
         .limit(limit)
+    data.forEach((item) => {
+        item.portrait = item.domain + item.portrait
+    })
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
