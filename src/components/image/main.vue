@@ -2,7 +2,7 @@
     <transition>
         <v-dialog type="image" :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
             <ul slot="content" class="img-list" v-if="list.length > 0">
-                <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="index" v-for="(item, index) in list"></li>
+                <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="item.id" v-for="(item) in list"></li>
             </ul>
         </v-dialog>
     </transition>
@@ -70,11 +70,14 @@ export default {
                 img.src = `//p7d4z759a.bkt.clouddn.com/${
                     this.list[i].path
                 }?imageView2/2/w/230/h/230/q/75|imageslim`;
+                let id = this.list[i].id;
                 img.onload = () => {
-                    this.$set(this.list[i], "style", {
-                        "background-image": `url(${img.src})`,
-                        "background-size": "contain"
-                    });
+                    if (this.list[i] && this.list[i].id == id) {
+                        this.$set(this.list[i], "style", {
+                            "background-image": `url(${img.src})`,
+                            "background-size": "contain"
+                        });
+                    }
                 };
             }
         }

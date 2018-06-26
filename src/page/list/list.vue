@@ -325,9 +325,8 @@ export default {
                 border-top-right-radius: 3px;
             }
             .front2 {
-                background: url(http://p7d4z759a.bkt.clouddn.com/e81c1f5749545c5f7d247b3a100ffe62.svg)
-                    center 0px no-repeat;
-                background-size: 240px;
+                background: url(~@/img/show.svg) center 0px no-repeat !important;
+                background-size: 240px !important;
                 animation: zoomIn 0.5s ease-in-out 0s 1 both;
             }
             .overlay {

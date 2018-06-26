@@ -163,7 +163,7 @@
             </div>
             <div class="area-right">
                 <div class="base-info">
-                    <img class="left" src="@/img/logo2.png" />
+                    <img class="left" :src="data.portrait" />
                     <div class="right">
                         <p class="title">{{data.title}}</p>
                         <p class="description">{{data.desc || '我用易企秀做了一个超酷炫的H5，快来看看吧。'}}</p>
@@ -172,7 +172,7 @@
                 </div>
                 <div class="share-area">
                     <div class="qrcode-wrap">
-                        <div><img style="width:160px;height:160px;" src="http://p7d4z759a.bkt.clouddn.com/259e21f16fe01e103fad34e7db286c2b.svg" /></div>
+                        <div><img style="width:160px;height:160px;" src="http://p7d4z759a.bkt.clouddn.com/24a1edff606cf7866ad9d2bf0886288a.svg" /></div>
                         <p class="share-wx">扫一扫分享到微信</p>
                     </div>
                     <div>

@@ -1,7 +1,7 @@
 
 
 <template>
-    <v-dialog class="qrcode-section" title="二维码">
+    <div class="qrcode-section" title="二维码">
         <section class="main">
             <div class="left">
                 <div class="item">
@@ -9,7 +9,7 @@
                     <el-input v-model="url" size="mini" placeholder="http://www.baidu.com"></el-input>
                 </div>
                 <div class="item">
-                    <label>边距</label>
+                     <label>边距</label>
                     <el-input-number v-model="margin" size="mini" :max="4" :step="1" :min="0"></el-input-number>
                 </div>
                 <div class="item">
@@ -27,7 +27,7 @@
                 </footer>
             </div>
         </section>
-    </v-dialog>
+    </div>
 </template>
 <script>
 import * as api from "@/api";
@@ -80,25 +80,25 @@ export default {
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
 .qrcode-section {
-    // width: 470px;
-    // background: #fff;
-    // border-radius: 6px;
-    // z-index: $panelZIndex;
-    // position: absolute;
-    // margin-left: 50%;
-    // left: -235px;
-    // top: 80px;
-    // box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    width: 470px;
+    background: #fff;
+    border-radius: 6px;
+    z-index: $panelZIndex;
+    position: absolute;
+    margin-left: 50%;
+    left: -235px;
+    top: 80px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     .header {
-        // padding: 15px 20px;
-        // border-bottom: 1px solid #ccd5db;
-        // min-height: 21px;
-        // background-color: #f7f7f7;
-        // border-top-left-radius: 6px;
-        // border-top-right-radius: 6px;
-        // display: flex;
-        // justify-content: space-between;
-        // align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #ccd5db;
+        min-height: 21px;
+        background-color: #f7f7f7;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         h4 {
             font-size: 18px;
             font-weight: bold;
