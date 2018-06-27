@@ -5,8 +5,6 @@
         <section class="entrance">
             <div class="same-content">
                 <el-button size="small" type="primary" @click="createSceneVisible = true" icon="el-icon-plus">创建场景</el-button>
-                <el-button size="small" type="primary" @click="goTrash" v-if="trash">我的场景</el-button>
-                <el-button size="small" type="primary" @click="goTrash" v-else icon="el-icon-delete">回收站</el-button>
             </div>
         </section>
         <my-feed @copy="createSceneVisible=true"></my-feed>
@@ -14,7 +12,6 @@
 </template>
 
 <script>
-import Bus from "./bus.js";
 import MyHeader from "./header.vue";
 import MyCreate from "./create.vue";
 import MyFeed from "./feed.vue";
@@ -24,21 +21,8 @@ export default {
         MyCreate,
         MyFeed
     },
-    methods: {
-        bus() {
-            Bus.$emit("updateData", {
-                status: this.trash ? 1 : 0,
-                page: 1
-            });
-        },
-        goTrash() {
-            this.trash = this.trash ? false : true;
-            this.bus();
-        }
-    },
     data() {
         return {
-            trash: false,
             createSceneVisible: false
         };
     }

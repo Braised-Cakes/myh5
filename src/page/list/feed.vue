@@ -1,56 +1,63 @@
 <template>
     <section class="container">
-        <ul class="scene-list">
-            <li :style="{'animation-delay': 50 * index + 'ms'}" :key="item.id" v-for="(item, index) in list">
-                <div class="publish-status">
-                    <span :class="publishStatus[item.publishStatus].ename">{{publishStatus[item.publishStatus].name}}</span>
-                </div>
-                <div class="image">
-                    <div class="front" :style="{'background-image': `url(${item.portrait})`}"></div>
-                    <div class="overlay">
-                        <router-link class="edit" :to="{ name: 'detail', params: { id: item.id }}">
-                            <div>
-                                <i class="icon iconfont icon-yulan"></i>
-                            </div>
-                            <span>详情</span>
-                        </router-link>
-                        <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
-                            <div>
-                                <i class="icon iconfont icon-bianji"></i>
-                            </div>
-                            <span>编辑</span>
-                        </router-link>
+        <div v-if="list.length != 0">
+            <ul class="scene-list">
+                <li :style="{'animation-delay': 50 * index + 'ms'}" :key="item.id" v-for="(item, index) in list">
+                    <div class="publish-status">
+                        <span :class="sceneStatus[item.status].ename">{{sceneStatus[item.status].name}}</span>
                     </div>
-                </div>
-                <div class="project-info">
-                    <p class="project-title">{{item.title}}</p>
-                    <a class="show-count">
-                        <i class="icon iconfont icon-yulan"></i>
-                        <span>0</span>
-                    </a>
-                    <div class="button-list">
-                        <a @mouseenter="qrCodeEnter(index)" @mouseleave="qrCodeLeave(index)" class="erweima">
-                            <i class="icon iconfont icon-erweima"></i>
-                        </a>
-                        <div>
-                            <a class="button button-delete" @click="del(item)">
-                                <i class="icon iconfont icon-shanchu"></i>
-                                <span>删除</span>
-                            </a>
-                            <a class="button button-publish" @click="publish(item)" v-if="item.publishStatus != 1">
-                                <i class="icon iconfont icon-fabu"></i>
-                                <span>发布</span>
-                            </a>
-                            <a class="button button-copy" @click="copy(item)">
-                                <i class="icon iconfont icon-fuzhi"></i>
-                                <span>复制</span>
-                            </a>
+                    <div class="image">
+                        <div class="front" :style="{'background-image': `url(${item.portrait})`}"></div>
+                        <div class="overlay">
+                            <router-link class="edit" :to="{ name: 'detail', params: { id: item.id }}">
+                                <div>
+                                    <i class="icon iconfont icon-yulan"></i>
+                                </div>
+                                <span>详情</span>
+                            </router-link>
+                            <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
+                                <div>
+                                    <i class="icon iconfont icon-bianji"></i>
+                                </div>
+                                <span>编辑</span>
+                            </router-link>
                         </div>
                     </div>
-                </div>
-            </li>
-        </ul>
-        <el-pagination style="text-align:center;" :current-page.sync="currentPage" @current-change="get({page:$event})" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
+                    <div class="project-info">
+                        <p class="project-title">{{item.title}}</p>
+                        <a class="show-count">
+                            <i class="icon iconfont icon-yulan"></i>
+                            <span>0</span>
+                        </a>
+                        <div class="button-list">
+                            <a @mouseenter="qrCodeEnter(index)" @mouseleave="qrCodeLeave(index)" class="erweima">
+                                <i class="icon iconfont icon-erweima"></i>
+                            </a>
+                            <div>
+                                <a class="button button-delete" @click="del(item)">
+                                    <i class="icon iconfont icon-shanchu"></i>
+                                    <span>删除</span>
+                                </a>
+                                <a class="button button-publish" @click="publish(item)" v-if="item.status != 1">
+                                    <i class="icon iconfont icon-fabu"></i>
+                                    <span>发布</span>
+                                </a>
+                                <a class="button button-copy" @click="copy(item)">
+                                    <i class="icon iconfont icon-fuzhi"></i>
+                                    <span>复制</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <el-pagination style="text-align:center;" :current-page.sync="currentPage" @current-change="get({page:$event})" :page-size="12" background layout="prev, pager, next" :total="total"></el-pagination>
+        </div>
+        <div v-else class="no-list">
+            <h2>暂无场景</h2>
+            <a>制作场景</a>
+            <img src="@/img/notfound.svg" />
+        </div>
     </section>
 </template>
 <script>
@@ -87,7 +94,7 @@ export default {
                 .eq(index)
                 .show();
         },
-        get({ page = 1, limit = 12, status = 0 } = {}) {
+        get({ page = 1, limit = 12, status } = {}) {
             this.currentPage = page;
             api
                 .getSceneList({
@@ -97,7 +104,6 @@ export default {
                 })
                 .then(res => {
                     this.list = res.result.data;
-                    // console.log(this.list);
                     this.total = res.result.info.total;
                 })
                 .catch(() => {});
@@ -152,7 +158,7 @@ export default {
             list: [],
             currentPage: 1,
             total: 0,
-            publishStatus: {
+            sceneStatus: {
                 0: {
                     name: "未发布",
                     ename: "unpublish"
@@ -375,6 +381,23 @@ export default {
                 height: 220px;
             }
         }
+    }
+}
+
+.no-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    h2 {
+        margin-bottom: 20px;
+        color: #526069;
+    }
+    a {
+        color: #59c7f9;
+        font-size: 14px;
+        display: block;
+        margin-bottom: 20px;
     }
 }
 </style>

@@ -96,7 +96,7 @@ app.post('/aj/scene/save', async (req, res) => {
     }, {
         data: req.body.data,
         updateTime: utils.getTime(),
-        publishStatus: data.publishStatus != 0 ? 2 : 0
+        status: data.status != 0 ? 2 : 0
     })
 
     res.send({

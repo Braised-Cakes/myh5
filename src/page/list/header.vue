@@ -19,7 +19,6 @@ export default {
     methods: {
         logout() {
             api.userLogout().then(res => {
-                console.log(res);
                 this.$router.push({
                     name: "login"
                 });

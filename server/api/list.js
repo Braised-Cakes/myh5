@@ -14,11 +14,19 @@ const utils = require('../utils')
 app.get('/aj/scene/list', async (req, res) => {
     /**
      * page,limit,uid,status
+     * 默认情况获取所有非回收站作品
      */
     const collection = dbHandel.getModel('myh5')
     const page = Number(req.query.page) || DEFAULT_PAGE.page
     const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
-    const status = Number(req.query.status) || 0
+    let status = req.query.status
+    if (!status) {
+        status = {
+            $in: [0, 1, 2]
+        }
+    } else {
+        status = Number(status)
+    }
     const total = await collection.count({
         uid: req.session.uid,
         status: status
@@ -26,7 +34,7 @@ app.get('/aj/scene/list', async (req, res) => {
     const data = await collection.find({
             uid: req.session.uid,
             status: status
-        }, ['id', 'title', 'desc', 'status', 'publishStatus', 'createTime', 'domain', 'portrait'])
+        }, ['id', 'title', 'desc', 'status', 'createTime', 'domain', 'portrait'])
         .skip((page - 1) * limit)
         .sort({
             updateTime: -1
@@ -106,7 +114,7 @@ app.get('/aj/scene/del', async (req, res) => {
         await collection.update({
             id: req.query.id
         }, {
-            status: 1
+            status: 3
         })
         res.send({
             status: AJ_STATUS.success,
@@ -135,7 +143,7 @@ app.post('/aj/scene/publish', async (req, res) => {
             id: req.body.id
         }, {
             updateTime: utils.getTime(),
-            publishStatus: 1,
+            status: 1,
             publishData: scene.data
         })
         res.send({
