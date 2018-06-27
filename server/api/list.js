@@ -63,8 +63,8 @@ app.post('/aj/scene/add', async (req, res) => {
     }
     const collection = dbHandel.getModel('myh5')
     const count = await collection.count()
-    let copyItem
-    if (req.body.type == 'copy') {
+    let copyItem = {}
+    if (req.body.id) {
         copyItem = await collection.findOne({
             id: req.body.id
         })
@@ -74,6 +74,7 @@ app.post('/aj/scene/add', async (req, res) => {
         title: req.body.title,
         desc: req.body.desc,
         uid: req.session.uid,
+        portrait: copyItem.portrait,
         data: (copyItem && copyItem.data) || {},
         createTime: utils.getTime(),
         updateTime: utils.getTime()

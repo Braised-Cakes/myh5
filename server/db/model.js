@@ -18,7 +18,8 @@ module.exports = {
         "portrait": {
             type: String,
             required: false,
-            description: '背景图'
+            description: '背景图',
+            default: 'myh5_logo.png'
         },
         "desc": {
             type: String,
