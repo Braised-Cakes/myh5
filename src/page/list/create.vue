@@ -1,7 +1,7 @@
 <template>
-    <el-dialog width="500px" @close="close" :visible="true" :title="copy ? '复制场景' : '创建场景'">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-            <el-form-item prop="title" label="标题">
+    <el-dialog width="500px" :visible.sync="visible" :title="copyId ? '复制场景' : '创建场景'">
+        <el-form :model="ruleForm" ref="ruleForm" label-width="60px">
+            <el-form-item :rules="{required: true, message: '场景标题不能为空'}" prop="title" label="标题">
                 <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
             <el-form-item prop="desc" label="描述">
@@ -14,23 +14,26 @@
         </div>
     </el-dialog>
 </template>
+
 <script>
 import * as api from "@/api/index";
 import Bus from "./bus.js";
+
 export default {
-    props: {
-        copy: Boolean
+    created() {
+        Bus.$on(
+            "createScene",
+            ({ title = "", desc = "", copyId = "" } = {}) => {
+                this.visible = true;
+                this.ruleForm.title = title;
+                this.ruleForm.desc = desc;
+                this.copyId = copyId;
+            }
+        );
     },
     data() {
         return {
-            rules: {
-                title: [
-                    {
-                        required: true,
-                        message: "场景标题不能为空"
-                    }
-                ]
-            },
+            visible: false,
             ruleForm: {
                 title: "",
                 desc: ""
@@ -38,16 +41,9 @@ export default {
             copyId: ""
         };
     },
-    created() {
-        Bus.$on("copy", ({ title, desc, copyId }) => {
-            this.ruleForm.title = title;
-            this.ruleForm.desc = desc;
-            this.copyId = copyId;
-        });
-    },
     methods: {
         close() {
-            this.$emit("close");
+            this.visible = false;
         },
         create() {
             this.$refs.ruleForm.validate(async valid => {
@@ -58,10 +54,12 @@ export default {
                         id: this.copyId
                     });
                     this.$notify({
-                        title: this.copy ? "复制成功" : "创建成功",
+                        title: this.copyId ? "复制成功" : "创建成功",
                         type: "success"
                     });
-                    Bus.$emit("updateData");
+                    Bus.$emit("updateData", {
+                        page: 1
+                    });
                     this.close();
                 } else {
                     console.log("error submit!!");
