@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import $ from "jquery";
 import Bus from "./bus.js";
 import * as api from "@/api/index";
 
