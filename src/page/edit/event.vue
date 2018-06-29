@@ -21,6 +21,7 @@
 <script>
 import $ from "jquery";
 import { mapActions, mapGetters } from "vuex";
+
 export default {
     computed: {
         ...mapGetters(["curItem"]),

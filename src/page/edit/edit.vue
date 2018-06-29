@@ -1,11 +1,11 @@
 <template>
     <div style="height:100%;width:100%;position:absolute;">
-        <v-header></v-header>
+        <my-header></my-header>
         <div id="svg_cache" style="width:0px;height:0px;overflow:hidden;"></div>
         <el-scrollbar class="page-component__nav" style="height:100%;">
             <div class="main">
-                <v-page :data="panel"></v-page>
-                <v-qrcode v-if="modulePanel[types.QRCODE]"></v-qrcode>
+                <my-page :data="panel"></my-page>
+                <my-qrcode v-if="modulePanel[types.QRCODE]"></my-qrcode>
                 <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
                     <div class="container">
                         <div class="phone-bg"></div>
@@ -28,88 +28,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="help">
-                    <ul>
-                        <li @click="copyPage">
-                            <el-tooltip class="item" content="复制当前页" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-fuzhi"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li @click="runCurPhoneAni(true)">
-                            <el-tooltip class="item" content="播放" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-bofang"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li v-if="config.revoke" @click="revoke">
-                            <el-tooltip class="item" content="撤销" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-chexiao"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li v-if="config.revoke" @click="redo">
-                            <el-tooltip class="item" content="重做" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-zhongzuo"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li @click="setZIndex('++')">
-                            <el-tooltip class="item" content="置顶" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-zhiding"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li @click="setZIndex('+')">
-                            <el-tooltip class="item" content="上移" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-shangyi"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li @click="setZIndex('-')">
-                            <el-tooltip class="item" content="下移" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-xiayi"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                        <li @click="setZIndex('--')">
-                            <el-tooltip class="item" content="置底" placement="right">
-                                <el-button type="text">
-                                    <i class="icon iconfont icon-12_zhidi"></i>
-                                </el-button>
-                            </el-tooltip>
-                        </li>
-                    </ul>
-                </div>
+                <my-tool class="my-tool"></my-tool>
             </div>
-            <v-set v-if="modulePanel['SET']" class="set-area"></v-set>
+            <my-set v-if="modulePanel['SET']" class="set-area"></my-set>
         </el-scrollbar>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import vQrcode from "./qrcode";
-import vSet from "./set";
+import myQrcode from "./qrcode";
+import mySet from "./set";
 import $ from "jquery";
-import vHeader from "./header";
-import vPage from "./page";
-import * as utils from "@/utils";
+import myHeader from "./header";
+import myTool from "./tool";
+import myPage from "./page";
 import * as types from "@/tpl/types";
 import config from "@/config";
 export default {
     components: {
-        "v-header": vHeader,
-        "v-page": vPage,
-        "v-qrcode": vQrcode,
-        "v-set": vSet
+        "my-header": myHeader,
+        "my-page": myPage,
+        "my-qrcode": myQrcode,
+        "my-set": mySet,
+        "my-tool": myTool
     },
     filters: {
         filterItemWrap(res) {
@@ -148,33 +90,13 @@ export default {
         }
     },
     computed: {
-        ...mapGetters([
-            "phoneData",
-            "currentPage",
-            "currentPhone",
-            "curItem",
-            "hasSelectedItems",
-            "curItemId",
-            "curItemIds",
-            "curCache"
-        ]),
+        ...mapGetters(["currentPhone", "curItem", "curItemId", "curItemIds"]),
         ...mapState({
             modulePanel: state => state.edit.panel
         })
     },
     methods: {
-        ...mapActions([
-            "selectItem",
-            "updateItem",
-            "reset",
-            "addPage",
-            "delPage",
-            "setPhone",
-            "copyPage",
-            "cancelSelect",
-            "revoke",
-            "redo"
-        ]),
+        ...mapActions(["selectItem", "setPhone", "cancelSelect"]),
         select(index) {
             this.selectItem(index);
             if (this.curItem.type == "shape") {
@@ -197,123 +119,6 @@ export default {
                 console.log(arr);
                 this.panel.fillColorList = arr;
             }
-        },
-        runCurPhoneAni: utils.runCurPhoneAni,
-        setZIndex(type) {
-            if (!this.curItem) return;
-            let minZIndex = 1;
-            let maxZIndex = this.currentPhone.data.length;
-
-            /**
-             * 找到选中元素的z-index,
-             *
-             * 当删除元素的时候， 一次可以删一个， 也可以删多个  调整z-index
-             *
-             * 如果是上移一层，就找z-index = now + 1的元素
-             *
-             * 如果是置顶，就找z-index比他大的所有元素
-             *
-             * 遍历所有元素 ， 如果z-index > now,  z-index - 1,  最后now =
-             */
-            // const index = this.currentPhone.data.findIndex((item) => {
-            //     return item === this.curItem;
-            // })
-            const zIndex = this.curItem.style["z-index"];
-            if (
-                (zIndex == minZIndex && (type == "-" || type == "--")) ||
-                (zIndex == maxZIndex && (type == "+" || type == "++"))
-            ) {
-                return;
-            }
-
-            for (let i = 0; i < this.currentPhone.data.length; i++) {
-                if (
-                    type == "+" &&
-                    this.currentPhone.data[i].style["z-index"] == zIndex + 1
-                ) {
-                    this.updateItem({
-                        item: this.currentPhone.data[i],
-                        key: "style",
-                        val: {
-                            "z-index": zIndex
-                        }
-                    });
-                } else if (
-                    type == "-" &&
-                    this.currentPhone.data[i].style["z-index"] == zIndex - 1
-                ) {
-                    this.updateItem({
-                        item: this.currentPhone.data[i],
-                        key: "style",
-                        val: {
-                            "z-index": zIndex
-                        }
-                    });
-                } else if (
-                    type == "++" &&
-                    this.currentPhone.data[i].style["z-index"] >= zIndex + 1
-                ) {
-                    this.updateItem({
-                        item: this.currentPhone.data[i],
-                        key: "style",
-                        val: {
-                            "z-index":
-                                this.currentPhone.data[i].style["z-index"] - 1
-                        }
-                    });
-                } else if (
-                    type == "--" &&
-                    this.currentPhone.data[i].style["z-index"] <= zIndex + 1
-                ) {
-                    this.updateItem({
-                        item: this.currentPhone.data[i],
-                        key: "style",
-                        val: {
-                            "z-index":
-                                this.currentPhone.data[i].style["z-index"] + 1
-                        }
-                    });
-                }
-            }
-
-            switch (type) {
-                case "+":
-                    this.updateItem({
-                        item: this.curItem,
-                        key: "style",
-                        val: {
-                            "z-index": zIndex + 1
-                        }
-                    });
-                    break;
-                case "-":
-                    this.updateItem({
-                        item: this.curItem,
-                        key: "style",
-                        val: {
-                            "z-index": zIndex - 1
-                        }
-                    });
-                    break;
-                case "++":
-                    this.updateItem({
-                        item: this.curItem,
-                        key: "style",
-                        val: {
-                            "z-index": maxZIndex
-                        }
-                    });
-                    break;
-                case "--":
-                    this.updateItem({
-                        item: this.curItem,
-                        key: "style",
-                        val: {
-                            "z-index": minZIndex
-                        }
-                    });
-                    break;
-            }
         }
     },
     beforeCreate() {},
@@ -335,8 +140,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/css/mixin";
 @import "~@/css/variables.scss";
-.help {
+
+.my-tool {
     width: 40px;
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
     background: #fff;
@@ -344,24 +151,7 @@ export default {
     z-index: $helpZIndex;
     left: 770px;
     top: 200px;
-    ul {
-        li {
-            color: #999;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            cursor: pointer;
-            .item {
-                width: 40px;
-                height: 40px;
-            }
-            &:hover {
-                background: #2495fc;
-            }
-        }
-    }
 }
-
 .workspace {
     position: absolute;
     height: 100%;
@@ -371,8 +161,7 @@ export default {
     right: 260px;
     z-index: $workspaceZIndex;
     .container {
-        width: 328px;
-        height: 560px;
+        @include wh(328px, 560px);
         position: absolute;
         top: 5%;
         left: 20%;
@@ -385,8 +174,7 @@ export default {
         }
         .phone-area {
             position: absolute;
-            height: 486px;
-            width: 320px;
+            @include wh(320px, 486px);
             top: 37px;
             left: 4px;
             background: #fff;
@@ -461,12 +249,5 @@ export default {
     top: 0;
     margin-top: 56px;
     min-width: 1180px;
-}
-
-.icon.disabled {
-    color: #ccc;
-}
-.el-button {
-    color: #999;
 }
 </style>
