@@ -151,6 +151,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/css/mixin";
 @import "~@/css/variables.scss";
+
 header {
     display: flex;
     justify-content: space-between;
@@ -169,8 +170,7 @@ header {
     a {
         font-size: 45px;
         display: block;
-        width: 100%;
-        height: 100%;
+        @include wh(100%, 100%);
         text-align: center;
         color: #1593ff;
     }

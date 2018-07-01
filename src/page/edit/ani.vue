@@ -1,48 +1,48 @@
 <template>
-	<div>
-		<ul class="ani-topbar">
-			<li @click="addAni">
-				<i class="icon iconfont icon-tianjia"></i>
-				<span>添加动画</span>
-			</li>
-			<li @click="goAni">
-				<i class="icon iconfont icon-tianjia"></i>
-				<span>预览动画</span>
-			</li>
-		</ul>
-		<ul class="ani-list">
-			<li class="ani-item" :key="index" v-for="(item, index) in curItem.animation">
-				<div class="title">
-					<div class="left">
-						<span>动画{{index + 1}}</span>
-						<span class="ani-name">{{item | getLabel}}</span>
-					</div>
-					<div class="right">
-						<span @click="delAni(index)" class="close">x</span>
-					</div>
-				</div>
-				<div class="item-contain" style="padding:12px 20px;">
-					<div class="style-item">
-						<label>方式</label>
-						<el-select size="mini" @change="change('animation-name', index, $event)" :value="item['animation-name']" placeholder="请选择">
-							<el-option-group v-for="group in aniList" :key="group.label" :label="group.label">
-								<el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
-								</el-option>
-							</el-option-group>
-						</el-select>
-					</div>
-					<div class="style-item">
-						<label>动画时间</label>
-						<el-input-number @change="change('animation-duration', index, $event)" size="mini" :value="item['animation-duration']" :step="0.1" :min="1" :max="20"></el-input-number>
-					</div>
-					<div class="style-item">
-						<label>延迟时间</label>
-						<el-input-number @change="change('animation-delay', index, $event)" size="mini" :value="item['animation-delay']" :step="0.1" :min="0" :max="20"></el-input-number>
-					</div>
-				</div>
-			</li>
-		</ul>
-	</div>
+    <div>
+        <ul class="ani-topbar">
+            <li @click="addAni">
+                <i class="icon iconfont icon-tianjia"></i>
+                <span>添加动画</span>
+            </li>
+            <li @click="goAni">
+                <i class="icon iconfont icon-tianjia"></i>
+                <span>预览动画</span>
+            </li>
+        </ul>
+        <ul class="ani-list">
+            <li class="ani-item" :key="index" v-for="(item, index) in curItem.animation">
+                <div class="title">
+                    <div class="left">
+                        <span>动画{{index + 1}}</span>
+                        <span class="ani-name">{{item | getLabel}}</span>
+                    </div>
+                    <div class="right">
+                        <span @click="delAni(index)" class="close">x</span>
+                    </div>
+                </div>
+                <div class="item-contain" style="padding:12px 20px;">
+                    <div class="style-item">
+                        <label>方式</label>
+                        <el-select size="mini" @change="change('animation-name', index, $event)" :value="item['animation-name']" placeholder="请选择">
+                            <el-option-group v-for="group in aniList" :key="group.label" :label="group.label">
+                                <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-option-group>
+                        </el-select>
+                    </div>
+                    <div class="style-item">
+                        <label>动画时间</label>
+                        <el-input-number @change="change('animation-duration', index, $event)" size="mini" :value="item['animation-duration']" :step="0.1" :min="1" :max="20"></el-input-number>
+                    </div>
+                    <div class="style-item">
+                        <label>延迟时间</label>
+                        <el-input-number @change="change('animation-delay', index, $event)" size="mini" :value="item['animation-delay']" :step="0.1" :min="0" :max="20"></el-input-number>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </template>
 <script>
 import $ from "jquery";
@@ -142,6 +142,9 @@ export default {
             padding: 0 20px;
             .right {
                 display: flex;
+                .close {
+                    cursor: pointer;
+                }
                 span {
                     font-size: 20px;
                 }

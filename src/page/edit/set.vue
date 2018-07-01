@@ -2,7 +2,14 @@
     <div>
         <div class="setting-bg"></div>
         <div class="left">
-            <div class="phone" v-html="html"></div>
+            <div class="phone">
+                <div id="wrapAll">
+                    <div style="100%;height:100%;" v-html="html"></div>
+                    <div id="musicBtn" class="rotate" style="z-index:999;position:absolute;right:50px;width:30px;height:30px;top:50px;">
+                        <img src="@/img/music_btn.svg" />
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="right">
             <div class="basic-info">
@@ -17,14 +24,14 @@
                     <el-input v-model="formData.desc"></el-input>
                 </div>
             </div>
-            <div>
+            <!-- <div>
                 <h4>翻页方式</h4>
                 <el-select @change="fff" size="mini" v-model="value" placeholder="请选择">
                     <el-option v-for="item in options" :key="item.key" :label="item.label" :value="item.key">
                     </el-option>
                 </el-select>
                 <el-checkbox @change="fff" v-model="checked">是否循环播放</el-checkbox>
-            </div>
+            </div> -->
             <div class="setting-operations">
                 <el-button @click="save">确定</el-button>
                 <el-button @click="CLOSE_PANEL('SET')">取消</el-button>
@@ -82,8 +89,8 @@ export default {
                     label: "3d翻转"
                 }
             ],
-            value: "cube",
-            checked: false,
+            value: "slide",
+            checked: true,
             html: "",
             swiper: null,
             formData: {}
@@ -94,6 +101,7 @@ export default {
         save() {
             api.updateScene(this.formData).then(res => {
                 console.log(res);
+                this.CLOSE_PANEL("SET");
             });
         },
         fff() {
@@ -121,6 +129,7 @@ export default {
             let realIndex = this.swiper && this.swiper.realIndex;
             this.swiper && this.swiper.destroy();
             this.html = "";
+            console.log(this.phoneData)
             this.$nextTick(() => {
                 this.html = dataTpl({
                     data: this.phoneData.data
@@ -168,10 +177,21 @@ export default {
         this.$nextTick(() => {
             this.resetSwiper();
         });
+        let music = true;
+        $("#musicBtn").on("click", function() {
+            if (music) {
+                $(this).css("animation-play-state", "paused");
+            } else {
+                $(this).css("animation-play-state", "running");
+            }
+            music = !music;
+        });
     }
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/css/mixin";
+
 .setting-bg {
     position: fixed;
     left: 0;
@@ -190,8 +210,7 @@ export default {
     z-index: 1050;
     overflow: hidden;
     .phone {
-        width: 326px;
-        height: 596px;
+        @include wh(326px, 596px);
         position: absolute;
         top: 50%;
         left: 50%;
@@ -210,21 +229,18 @@ export default {
     z-index: 1050;
     background-color: #fff;
     overflow-y: auto;
-    font-size: 12px;
-    color: #76838f;
+    @include sc(12px, #76838f);
     .basic-info {
         display: flex;
         .cover-img {
-            width: 180px;
-            height: 180px;
+            @include wh(180px, 180px);
             margin-right: 20px;
             position: relative;
             span {
                 position: absolute;
                 left: 45px;
                 bottom: 20px;
-                height: 30px;
-                width: 90px;
+                @include wh(90px, 30px);
                 text-align: center;
                 line-height: 30px;
                 border: 1px solid #ccd5db;

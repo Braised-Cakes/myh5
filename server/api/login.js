@@ -6,8 +6,9 @@ const {
     AJ_MESSAGE
 } = require('../const/index')
 const types = require('./types')
+
 /**
- * 用户：注册
+ * 注册
  */
 app.post(types.userRegister, async (req, res) => {
     const collection = dbHandel.getModel('user')
@@ -25,24 +26,20 @@ app.post(types.userRegister, async (req, res) => {
         res.send({
             status: AJ_STATUS.success,
             message: '注册成功',
-            result: {
-                data: data
-            }
+            result: {}
         })
     } else {
         res.send({
             status: AJ_STATUS.error,
             message: '用户已经存在',
-            result: {
-                data: data
-            }
+            result: {}
         })
     }
 })
 
 
 /**
- * 用户：登录
+ * 登录
  */
 app.post(types.userLogin, async (req, res) => {
     const collection = dbHandel.getModel('user')
@@ -56,7 +53,6 @@ app.post(types.userLogin, async (req, res) => {
             message: '用户名或密码不正确'
         })
     } else {
-        res.clearCookie('username')
         req.session.isLogin = true
         req.session.username = req.body.username
         req.session.uid = data.uid
@@ -71,11 +67,12 @@ app.post(types.userLogin, async (req, res) => {
 })
 
 /**
- * 登出
+ * 注销
  */
 app.post(types.userLogout, async (req, res) => {
     req.session.isLogin = null;
     req.session.uid = null;
+    req.session.username = null;
     res.clearCookie('username')
     res.send({
         status: AJ_STATUS.success,
@@ -88,10 +85,12 @@ app.post(types.userLogout, async (req, res) => {
  */
 app.get(types.getUserInfo, async (req, res) => {
     if (req.session.isLogin) {
+        const collection = dbHandel.getModel('user')
+        const data = await collection.findOne({}, ['username', 'uid'])
         res.send({
             status: AJ_STATUS.success,
             message: '获取成功',
-            result: req.session.username
+            result: data
         })
     } else {
         res.send({

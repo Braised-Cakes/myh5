@@ -44,7 +44,7 @@ import myHeader from "./header";
 import myTool from "./tool";
 import myPage from "./page";
 import * as types from "@/tpl/types";
-import config from "@/config";
+
 export default {
     components: {
         "my-header": myHeader,
@@ -133,7 +133,6 @@ export default {
                 fillColorList: []
             },
             types: types,
-            config: config,
             cropData: {}
         };
     }

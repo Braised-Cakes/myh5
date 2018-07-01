@@ -20,12 +20,9 @@ app.get('/aj/scene/list', async (req, res) => {
     const page = Number(req.query.page) || DEFAULT_PAGE.page
     const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
     let status = req.query.status
-    if (!status) {
-        status = {
-            $in: [0, 1, 2]
-        }
-    } else {
-        status = Number(status)
+    status = status ? status.split(',') : [0, 1, 2]
+    status = {
+        $in: status
     }
     const total = await collection.count({
         uid: req.session.uid,

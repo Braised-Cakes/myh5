@@ -11,13 +11,7 @@ const state = {
     }
 };
 const getters = {};
-const actions = {
-    setUser({
-        commit
-    }, payload) {
-        commit('bbb', payload)
-    }
-};
+const actions = {};
 const mutations = {
     ['RESET'](state) {
         for (let attr in state) {
@@ -26,12 +20,12 @@ const mutations = {
             }
         }
     },
-    bbb(state, {
+    UPDATE_USER_INFO(state, {
         username,
-        request
+        uid
     }) {
         state.auth.username = username;
-        state.auth.request = request;
+        state.auth.uid = uid;
     }
 }
 export default new Vuex.Store({

@@ -9,19 +9,19 @@
                     <a>我的场景</a>
                 </li>
             </ul>
-            <div class="logout" @click="logout">登出</div>
+            <a class="logout" @click="logout">登出</a>
         </div>
     </header>
 </template>
 <script>
 import * as api from "@/api";
+
 export default {
     methods: {
-        logout() {
-            api.userLogout().then(() => {
-                this.$router.push({
-                    name: "login"
-                });
+        async logout() {
+            await api.userLogout();
+            this.$router.push({
+                name: "login"
             });
         }
     }
@@ -29,6 +29,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/css/mixin";
+
+header {
+    height: 60px;
+    background: #fff;
+    border-bottom: 1px solid #e6ebed;
+    font-size: 14px;
+}
 .same-content {
     width: 1180px;
     margin: 0 auto;
@@ -47,8 +55,7 @@ export default {
                 padding: 0 11px;
                 &::before {
                     position: absolute;
-                    width: 100%;
-                    height: 0;
+                    @include wh(100%, 0);
                     left: 0;
                     bottom: -1px;
                     content: "";
@@ -66,9 +73,6 @@ export default {
                 }
             }
         }
-    }
-    .logout {
-        cursor: pointer;
     }
 }
 </style>

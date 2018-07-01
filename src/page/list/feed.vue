@@ -164,6 +164,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/css/mixin";
+
 .scene-list {
     display: flex;
     flex-wrap: wrap;

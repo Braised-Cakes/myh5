@@ -43,14 +43,13 @@
     </div>
 </template>
 <script>
+import draggable from "vuedraggable";
 import { mapActions, mapGetters } from "vuex";
 import EditDom from "./edit-dom";
 import PageDom from "./page-dom";
-import vHeader from "./header";
-import draggable from "vuedraggable";
+
 export default {
     components: {
-        "v-header": vHeader,
         "edit-dom": EditDom,
         "page-dom": PageDom,
         draggable
@@ -62,7 +61,6 @@ export default {
     },
     computed: {
         ...mapGetters([
-            "phoneData",
             "currentPage",
             "hasSelectedItems",
             "hasSelectedOneItem"
@@ -105,6 +103,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
+@import "~@/css/mixin";
+
 $panelNavHeight: 50px;
 $bottomHeight: 36px;
 $bottomBottom: 10px;
@@ -118,8 +118,7 @@ $bottomBottom: 10px;
             text-align: center;
             flex: 1;
             background: #e0e0e0;
-            font-size: 14px;
-            color: #000;
+            @include sc(14px, #000);
             height: $panelNavHeight;
             line-height: $panelNavHeight;
             transition: 0.3s;
@@ -154,9 +153,8 @@ $bottomBottom: 10px;
     .page_ul {
         li {
             height: 70px;
-            color: #76838f;
             cursor: pointer;
-            font-size: 12px;
+            @include sc(12px, #76838f);
             position: relative;
             border-bottom: 1px solid #e6ebed;
             &:first-child {
@@ -185,8 +183,7 @@ $bottomBottom: 10px;
                 span {
                     em {
                         display: inline-block;
-                        width: 24px;
-                        height: 24px;
+                        @include wh(24px, 24px);
                         line-height: 24px;
                         text-align: center;
                         border-radius: 12px;
@@ -202,9 +199,8 @@ $bottomBottom: 10px;
     }
     .bottom {
         position: absolute;
-        width: 100%;
         bottom: $bottomBottom;
-        height: $bottomHeight;
+        @include wh(100%, $bottomHeight);
         ul {
             display: flex;
             justify-content: center;

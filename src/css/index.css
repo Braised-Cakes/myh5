@@ -144,6 +144,19 @@ div {
     }
 }
 
+@keyframes rotating {
+    0% {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+.rotate {
+    animation: rotating 1.2s linear infinite;
+}
+
 #wrapAll {
     width: 318px;
     height: 486px;

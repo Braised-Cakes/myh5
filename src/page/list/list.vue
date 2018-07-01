@@ -51,12 +51,6 @@ export default {
 .list-page {
     min-height: 100vh;
     background: #f1f4f5;
-    .my-header {
-        height: 60px;
-        background: #fff;
-        border-bottom: 1px solid #e6ebed;
-        font-size: 14px;
-    }
     .entrance {
         background: #fff;
         border-bottom: 1px solid #e6ebed;

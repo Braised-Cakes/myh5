@@ -1,36 +1,27 @@
 <template>
-	<div id="app">
-		<router-view v-if="btn"></router-view>
-	</div>
+    <div id="app">
+        <router-view></router-view>
+    </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapMutations } from "vuex";
 import * as api from "@/api";
+
 export default {
-    data() {
-        return {
-            btn: true
-        };
-    },
     methods: {
-        ...mapActions(["setUser"])
+        ...mapMutations(["UPDATE_USER_INFO"])
     },
     created() {
-        // alert(1)
         api.getUserInfo().then(({ result }) => {
             if (result) {
-                this.setUser({
-                    username: result
+                this.UPDATE_USER_INFO({
+                    username: result.username,
+                    uid: result.uid
                 });
             }
         });
-    },
-    mounted() {
-        // setTimeout(() => {
-        //   this.btn = true;
-        // }, 2000);
     }
 };
 </script>
-<style>
+<style lang="scss" scoped>
 </style>
