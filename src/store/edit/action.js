@@ -44,7 +44,7 @@ export default {
                             if (data[i].data[j].type != 'shape') {
                                 continue;
                             }
-                            let dom = $(`<embed src="store/${data[i].data[j].path}"></embed>`);
+                            let dom = $(`<embed src="/store/${data[i].data[j].path}"></embed>`);
                             $("#svg_cache").append(dom);
                             $(dom).on("load", () => {
                                 let docs = dom[0].getSVGDocument();

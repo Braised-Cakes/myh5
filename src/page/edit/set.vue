@@ -129,7 +129,6 @@ export default {
             let realIndex = this.swiper && this.swiper.realIndex;
             this.swiper && this.swiper.destroy();
             this.html = "";
-            console.log(this.phoneData)
             this.$nextTick(() => {
                 this.html = dataTpl({
                     data: this.phoneData.data
@@ -177,6 +176,7 @@ export default {
         this.$nextTick(() => {
             this.resetSwiper();
         });
+        //音乐控制按钮， 默认自动播放
         let music = true;
         $("#musicBtn").on("click", function() {
             if (music) {
