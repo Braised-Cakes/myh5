@@ -216,11 +216,6 @@ export default {
                 background-repeat: no-repeat;
                 background-size: 100%;
             }
-            // .front2 {
-            //     background: url(~@/img/show.svg) center 0px no-repeat !important;
-            //     background-size: 240px !important;
-            //     animation: zoomIn 0.5s ease-in-out 0s 1 both;
-            // }
             .overlay {
                 @include wh(100%, 280px);
                 display: none;
@@ -363,8 +358,7 @@ export default {
         color: #526069;
     }
     a {
-        color: #59c7f9;
-        font-size: 14px;
+        @include sc(14px, #59c7f9);
         display: block;
         margin-bottom: 20px;
     }

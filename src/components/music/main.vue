@@ -109,7 +109,7 @@ export default {
                 this.playMusicId = null;
                 return;
             }
-            this.audio.src = `http://p7d4z759a.bkt.clouddn.com/${item.path}`;
+            this.audio.src = item.src;
             this.audio.play();
             this.playMusicId = item.id;
             this.audio.onended = function() {
@@ -130,6 +130,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
+
 .img-list {
     height: 300px;
     margin-bottom: 20px;

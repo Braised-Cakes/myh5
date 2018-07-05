@@ -4,6 +4,13 @@
         <div class="left">
             <div class="phone">
                 <div id="wrapAll">
+                    <div id="loading" class="loading">
+                        <div class="loadbox">
+                            <div class="loadlogo"></div>
+                            <div class="loadbg"></div>
+                        </div>
+                        <div class="loading-tip">欢迎制作易企秀</div>
+                    </div>
                     <div style="100%;height:100%;" v-html="html"></div>
                     <div id="musicBtn" class="rotate" style="z-index:999;position:absolute;right:50px;width:30px;height:30px;top:50px;">
                         <img src="@/img/music_btn.svg" />
@@ -119,6 +126,7 @@ export default {
                         },
                         hasRight: false,
                         callback: ({ src }) => {
+                            console.log(src)
                             this.formData.portrait = src;
                         }
                     });
@@ -176,22 +184,67 @@ export default {
         this.$nextTick(() => {
             this.resetSwiper();
         });
+
+        setTimeout(()=>{
+            $('#loading').remove();
+        }, 500)
+        //对于音乐， 默认自动播放， 点击切换逻辑
         //音乐控制按钮， 默认自动播放
-        let music = true;
-        $("#musicBtn").on("click", function() {
-            if (music) {
-                $(this).css("animation-play-state", "paused");
-            } else {
-                $(this).css("animation-play-state", "running");
-            }
-            music = !music;
-        });
+        // let musicBtn = true;
+        // let { musics } = this.phoneData.music;
+        // $("#musicBtn").on("click", function() {
+        //     if (musicBtn) {
+        //         $(this).css("animation-play-state", "paused");
+        //     } else {
+        //         $(this).css("animation-play-state", "running");
+        //     }
+        //     musicBtn = !musicBtn;
+        // });
     }
 };
 </script>
 <style lang="scss" scoped>
 @import "~@/css/mixin";
+.loading {
+    @include wh(100%, 100%);
+    background: #48424f;
+    position: absolute;
+    z-index: 9999;
+    top: 0;
+}
 
+.loadbox {
+    position: relative;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 50%;
+}
+
+.loadbg,
+.loadbox {
+    display: block;
+    width: 70px;
+}
+
+.loadbg {
+    position: absolute;
+    z-index: 1000;
+    height: 42px;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjQwIj48cmVjdCBmaWxsPSIjMDhhMWVmIiB4PSI0IiB5PSI0IiB3aWR0aD0iMzkyIiBoZWlnaHQ9IjIzMiIvPjxjaXJjbGUgaWQ9ImFjdG9yXzMiIGN4PSIwIiBjeT0iMCIgcj0iMzAiIGZpbGw9IiM5QUQ2NEIiPjxhbmltYXRlTW90aW9uIHBhdGg9Ik0zOSwxMjBMNzgsNTBIMTYxTDIzOSwxOTBIMzIyTDM2MSwxMjBMMzIyLDUwSDIzOUwxNjEsMTkwSDc4TDM5LDEyMCIgZHVyPSIxcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiLz48L2NpcmNsZT48cGF0aCBkPSJNMCwyNDBWMGg0MDB2MjQwSDB6IE0zMzAuNzY5LDM0aC05OC40NjJsLTgxLjUzOCwxNDEuMzQ1SDg2LjE1NEw1My44NDYsMTE5LjVsMzIuMzA4LTU1Ljg0NWg2NC42MTVsMjMuODQ2LDQwLjgyNGwxNi45MjMtMjkuMjdMMTY3LjY5MiwzNEg2OS4yMzFMMjAsMTE5LjVMNjkuMjMxLDIwNWg5OC40NjFsODEuNTM4LTE0MS4zNDVoNjQuNjE1bDMyLjMwOCw1NS44NDVsLTMyLjMwOCw1NS44NDVoLTY0LjYxNWwtMjMuODQ2LTQwLjgyNGwtMTYuOTIzLDI5LjI3TDIzMi4zMDgsMjA1aDk4LjQ2MkwzODAsMTE5LjVMMzMwLjc2OSwzNHoiIGZpbGw9IiM0ODQyNEYiLz48L3N2Zz4=);
+}
+
+.loading-tip {
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    font-size: 16px;
+    z-index: 9999;
+    width: 200px;
+    left: 50%;
+    margin-left: -100px;
+    text-align: center;
+    color: #7986cb;
+}
 .setting-bg {
     position: fixed;
     left: 0;

@@ -38,7 +38,12 @@ export default {
         ...mapGetters(["phoneData"])
     },
     methods: {
-        ...mapActions(["addItem", "updateMain"]),
+        ...mapActions([
+            "addItem",
+            "updateMain",
+            "updateSomePageMain",
+            "cropBgImage"
+        ]),
         ...mapMutations(["OPEN_PANEL"]),
         //保存场景
         async save() {
@@ -72,18 +77,22 @@ export default {
         },
         //创建元素前
         beforeCreate(type) {
-            if (type == types.IMAGE) {
+            if (type == types.IMAGE || type == "beijing") {
                 this.$image({
                     callback: ({ path }) => {
                         let img = new Image();
                         img.src = path;
                         img.onload = () => {
-                            this.addItem({
-                                type: types.IMAGE,
-                                path: path,
-                                width: img.width,
-                                height: img.height
-                            });
+                            if (type == "beijing") {
+                                this.cropBgImage({ path });
+                            } else {
+                                this.addItem({
+                                    type: types.IMAGE,
+                                    path: path,
+                                    width: img.width,
+                                    height: img.height
+                                });
+                            }
                         };
                     }
                 });
@@ -130,6 +139,10 @@ export default {
                 {
                     label: "图片",
                     type: types.IMAGE
+                },
+                {
+                    label: "背景",
+                    type: "beijing"
                 },
                 {
                     label: "形状",

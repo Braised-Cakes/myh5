@@ -2,7 +2,7 @@ import $ from 'jquery'
 import * as types from '@/tpl/types'
 export const BASE_BLANK = {
     main: {
-        background: '#ffffff'
+        'background-color': '#ffffff'
     },
     data: []
 };

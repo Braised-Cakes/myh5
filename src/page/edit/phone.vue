@@ -2,7 +2,7 @@
     <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
         <div class="container">
             <div class="phone-bg"></div>
-            <div class="phone-area" v-if="currentPhone" :style="{ 'background' : currentPhone.main.background }">
+            <div class="phone-area" v-if="currentPhone" :style="{ 'background-color' : currentPhone.main['background-color'], 'background-image' : `url(${currentPhone.main['background-image']})`, 'opacity' : currentPhone.main['opacity'] }">
                 <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                     <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
                     <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
@@ -85,7 +85,7 @@ export default {
                             arr.push({
                                 fill: $(item).attr("fill"),
                                 css: $(item).css("fill")
-                             });
+                            });
                         }
                     });
                 console.log(arr);
@@ -126,7 +126,12 @@ export default {
             @include wh(320px, 486px);
             top: 37px;
             left: 4px;
-            background: #fff;
+            /** public **/
+            background-color: #fff;
+            background-size: cover;
+            background-position: 50% 50%;
+            background-origin: content-box;
+            /** end public **/
             .phone-item {
                 $size: 12px;
                 $halfSize: 6px;

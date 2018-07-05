@@ -234,6 +234,10 @@ module.exports = {
             required: false,
             default: 'http://p7d4z759a.bkt.clouddn.com/'
         },
+        'src': {
+            type: String,
+            required: false
+        },
         'path': {
             type: String,
             required: true

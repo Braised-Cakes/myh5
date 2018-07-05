@@ -1,6 +1,6 @@
 {
     "name": "myh5",
-    "version": "0.2.9",
+    "version": "0.3.0",
     "private": true,
     "scripts": {
         "dev": "vue-cli-service serve --open",
@@ -21,6 +21,7 @@
         "jquery": "^3.3.1",
         "jquery.cookie": "^1.4.1",
         "js-cookie": "^2.2.0",
+        "lodash": "^4.17.10",
         "md5": "^2.2.1",
         "moment": "^2.22.1",
         "mongoose": "^5.0.14",

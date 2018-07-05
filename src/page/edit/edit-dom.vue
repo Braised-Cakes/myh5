@@ -250,9 +250,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/css/mixin";
+
 .tab-setting-line {
-    width: 220px;
-    height: 1px;
+    @include wh(220px, 1px);
     background: #ccd5db;
     display: flex;
     justify-content: center;
@@ -270,8 +271,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     li {
-        width: 14px;
-        height: 14px;
+        @include wh(14px, 14px);
         padding: 1px;
         border: 1px solid #ccd5db;
         border-radius: 3px;

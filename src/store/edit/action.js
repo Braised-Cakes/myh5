@@ -134,8 +134,7 @@ export default {
      */
     updateSomePageMain({
         commit,
-        getters,
-        dispatch
+        getters
     }, {
         key,
         val
@@ -145,11 +144,11 @@ export default {
             key: key,
             val: val
         });
-        dispatch('record', {
-            type: 'item',
-            data: getters.currentPhone,
-            page: getters.currentPage
-        })
+        // dispatch('record', {
+        //     type: 'item',
+        //     data: getters.currentPhone,
+        //     page: getters.currentPage
+        // })
     },
 
     /**
@@ -313,5 +312,41 @@ export default {
             console.log('没有可重做的了')
         }
 
+    },
+
+    cropBgImage({
+        dispatch
+    }, {
+        path,
+        data
+    }) {
+        app.$crop({
+            src: path,
+            data: data ? data : {
+                width: 320,
+                height: 486,
+                type: "screen"
+            },
+            hasRight: false,
+            callback: ({
+                src,
+                data,
+                action
+            }) => {
+                console.log(src);
+                console.log(data);
+                console.log(action);
+                if (action == "confirm") {
+                    dispatch('updateSomePageMain', {
+                        key: "background-image",
+                        val: src
+                    });
+                    dispatch('updateSomePageMain', {
+                        key: "background-crop",
+                        val: data
+                    });
+                }
+            }
+        });
     }
 }

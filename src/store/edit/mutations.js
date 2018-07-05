@@ -104,7 +104,6 @@ export default {
         val,
         fill
     }) {
-        console.log(val)
         if (key == 'style') {
             if (typeof val == 'string') {
                 Vue.set(item, key, val);
