@@ -23,31 +23,48 @@
 
 <template>
     <div class="login-page">
-        <div class="particles-js" id="particles-js"></div>
+        <div class="particles-js"
+            id="particles-js"></div>
         <div class="container">
             <h3>登录</h3>
             <div>
-                <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="60px">
-                    <el-form-item label="账号" prop="username">
-                        <el-input v-model="loginForm.username" placeholder="请输入账号"></el-input>
+                <el-form ref="loginForm"
+                    :model="loginForm"
+                    :rules="rules"
+                    label-width="60px">
+                    <el-form-item label="账号"
+                        prop="username">
+                        <el-input v-model="loginForm.username"
+                            placeholder="请输入账号"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="password">
-                        <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
+                    <el-form-item label="密码"
+                        prop="password">
+                        <el-input v-model="loginForm.password"
+                            placeholder="请输入密码"></el-input>
                     </el-form-item>
                 </el-form>
-                <el-button @click="login" type="primary">登录</el-button>
+                <el-button @click="login"
+                    type="primary">登录</el-button>
             </div>
             <h3>注册</h3>
             <div>
-                <el-form ref="registerForm" :model="registerForm" :rules="rules" label-width="60px">
-                    <el-form-item label="账号" prop="username">
-                        <el-input v-model="registerForm.username" placeholder="请输入账号"></el-input>
+                <el-form ref="registerForm"
+                    :model="registerForm"
+                    :rules="rules"
+                    label-width="60px">
+                    <el-form-item label="账号"
+                        prop="username">
+                        <el-input v-model="registerForm.username"
+                            placeholder="请输入账号"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="password">
-                        <el-input v-model="registerForm.password" placeholder="请输入密码"></el-input>
+                    <el-form-item label="密码"
+                        prop="password">
+                        <el-input v-model="registerForm.password"
+                            placeholder="请输入密码"></el-input>
                     </el-form-item>
                 </el-form>
-                <el-button @click="register" type="primary">注册</el-button>
+                <el-button @click="register"
+                    type="primary">注册</el-button>
             </div>
         </div>
     </div>

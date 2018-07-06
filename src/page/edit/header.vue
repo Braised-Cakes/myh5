@@ -6,8 +6,11 @@
             </router-link>
         </div>
         <ul class="create-panel">
-            <li :key="item.label" v-for="item in panelList" @click="beforeCreate(item.type)">
-                <i class="icon iconfont" :class="{['icon-' + item.type]: true}"></i>
+            <li :key="item.label"
+                v-for="item in panelList"
+                @click="beforeCreate(item.type)">
+                <i class="icon iconfont"
+                    :class="{['icon-' + item.type]: true}"></i>
                 <span>{{item.label}}</span>
             </li>
         </ul>
@@ -21,7 +24,9 @@
             <li @click="publish">
                 <span>发布</span>
             </li>
-            <router-link class="quit" tag="li" :to="'/list'">
+            <router-link class="quit"
+                tag="li"
+                :to="'/list'">
                 <span>退出</span>
             </router-link>
         </ul>

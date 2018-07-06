@@ -1,9 +1,15 @@
 <template>
     <ul class="tool-list">
-        <li class="tool-item" @click="action(item.action, item.args)" v-for="(item, index) in list" :key="index">
-            <el-tooltip class="item" :content="item.name" placement="right">
+        <li class="tool-item"
+            @click="action(item.action, item.args)"
+            v-for="(item, index) in list"
+            :key="index">
+            <el-tooltip class="item"
+                :content="item.name"
+                placement="right">
                 <el-button type="text">
-                    <i class="icon iconfont" :class="{['icon-' + item.icon]: true}"></i>
+                    <i class="icon iconfont"
+                        :class="{['icon-' + item.icon]: true}"></i>
                 </el-button>
             </el-tooltip>
         </li>

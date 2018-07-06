@@ -1,7 +1,8 @@
 <template>
     <header>
         <div class="same-content">
-            <router-link style="height:60px;" to="/list">
+            <router-link class="logo"
+                to="/list">
                 <img src="@/img/logo_header.png" />
             </router-link>
             <ul class="nav-list">
@@ -9,7 +10,7 @@
                     <a>我的场景</a>
                 </li>
             </ul>
-            <a class="logout" @click="logout">登出</a>
+            <a @click="logout">登出</a>
         </div>
     </header>
 </template>
@@ -30,9 +31,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/css/mixin";
+$height: 60px;
 
 header {
-    height: 60px;
+    height: $height;
     background: #fff;
     border-bottom: 1px solid #e6ebed;
     font-size: 14px;
@@ -43,15 +45,18 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .logo {
+        height: $height;
+    }
     .nav-list {
         display: flex;
         li {
             position: relative;
-            line-height: 60px;
+            line-height: $height;
             cursor: pointer;
             a {
                 display: block;
-                height: 60px;
+                height: $height;
                 padding: 0 11px;
                 &::before {
                     position: absolute;

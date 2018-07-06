@@ -43,6 +43,10 @@ import "@/directive/changesize";
 import '@/keycode/index'
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production';
+Vue.prototype.$ELEMENT = {
+    size: 'mini',
+    // zIndex: 3000
+};
 Vue.use(Pagination);
 Vue.use(Scrollbar);
 Vue.use(Form);

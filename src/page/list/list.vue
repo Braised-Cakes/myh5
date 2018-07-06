@@ -4,9 +4,19 @@
         <my-create></my-create>
         <section class="entrance">
             <div class="same-content">
-                <el-button size="small" type="primary" @click="createScene" icon="el-icon-plus">创建场景</el-button>
-                <el-button size="small" type="primary" @click="goTrash" v-if="trash">我的场景</el-button>
-                <el-button size="small" type="danger" @click="goTrash" v-else icon="el-icon-delete">回收站</el-button>
+                <el-button size="small"
+                    type="primary"
+                    @click="createScene"
+                    icon="el-icon-plus">创建场景</el-button>
+                <el-button size="small"
+                    type="primary"
+                    @click="goTrash"
+                    v-if="trash">我的场景</el-button>
+                <el-button size="small"
+                    type="danger"
+                    @click="goTrash"
+                    v-else
+                    icon="el-icon-delete">回收站</el-button>
             </div>
         </section>
         <my-feed class="my-feed"></my-feed>

@@ -1,47 +1,90 @@
 <template>
-    <el-dialog :before-close="handleClose" width="970px" class="panel-dialog" :visible="visible" :show-close="false">
-        <div class="header" slot="title">
+    <el-dialog :before-close="handleClose"
+        width="970px"
+        class="panel-dialog"
+        :visible="visible"
+        :show-close="false">
+        <div class="header"
+            slot="title">
             <h4>{{title}}
                 <span v-if="desc">{{desc}}</span>
             </h4>
-            <span @click="$emit('close')" class="close">x</span>
+            <span @click="$emit('close')"
+                class="close">x</span>
         </div>
         <div class="main">
             <div class="left">
                 <ul>
-                    <li @click="changeLeftIndex(index)" :class="{active : leftIndex == index}" :key="item.name" v-for="(item, index) in leftNav">{{item.name}}</li>
+                    <li @click="changeLeftIndex(index)"
+                        :class="{active : leftIndex == index}"
+                        :key="item.name"
+                        v-for="(item, index) in leftNav">{{item.name}}</li>
                 </ul>
                 <div class="operation">
                     <div class="item">
                         <div class="progress-area"></div>
-                        <el-upload :on-error="uploadError" ref="upload" :drag="true" accept="accept" :multiple="true" :limit="uploadInfo.limit" :on-exceed="uploadExceed" style="width:100%;" :on-success="uploadSuccess" :on-progress="uploadProgress" class="upload-demo" :data="uploadInfo.form" action="//up-z2.qiniup.com" :before-upload="beforeUpload" :show-file-list="false">
-                            <el-tooltip effect="dark" :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadInfo.limit}张`" placement="right">
-                                <span class="uploadInfo.txt" style="width:100%;position:absolute;left:0;top:0;">{{uploadInfo.txt}}</span>
+                        <el-upload :on-error="uploadError"
+                            ref="upload"
+                            :drag="true"
+                            accept="accept"
+                            :multiple="true"
+                            :limit="uploadInfo.limit"
+                            :on-exceed="uploadExceed"
+                            style="width:100%;"
+                            :on-success="uploadSuccess"
+                            :on-progress="uploadProgress"
+                            class="upload-demo"
+                            :data="uploadInfo.form"
+                            action="//up-z2.qiniup.com"
+                            :before-upload="beforeUpload"
+                            :show-file-list="false">
+                            <el-tooltip effect="dark"
+                                :content="`支持格式：JPG,PNG,GIF, 一次最多上传${uploadInfo.limit}张`"
+                                placement="right">
+                                <span class="uploadInfo.txt"
+                                    style="width:100%;position:absolute;left:0;top:0;">{{uploadInfo.txt}}</span>
                             </el-tooltip>
                         </el-upload>
                     </div>
                 </div>
             </div>
             <div class="right">
-                <div class="nav" v-if="leftIndex == 0 && navOption.length != 0">
+                <div class="nav"
+                    v-if="leftIndex == 0 && navOption.length != 0">
                     <ul class="nav-list">
-                        <li :key="item.typeId" @click="changeNav(index);" :class="{ active : navIndex == index}" v-for="(item, index) in navOption">{{ item.name }}</li>
+                        <li :key="item.typeId"
+                            @click="changeNav(index);"
+                            :class="{ active : navIndex == index}"
+                            v-for="(item, index) in navOption">{{ item.name }}</li>
                     </ul>
                     <ul class="tag-list">
-                        <li @click="changeTag(index)" :class="{'active' : tagIndex == index}" :key="item.tagId" v-for="(item, index) in navOption[navIndex].children">{{item.name}}</li>
+                        <li @click="changeTag(index)"
+                            :class="{'active' : tagIndex == index}"
+                            :key="item.tagId"
+                            v-for="(item, index) in navOption[navIndex].children">{{item.name}}</li>
                     </ul>
                 </div>
                 <div class="right-content">
                     <slot name="content"></slot>
                     <!-- 列表为空 -->
-                    <div class="no-list" v-if="list.length == 0">
-                        <img style="width:300px;" src="@/img/default.svg" />
+                    <div class="no-list"
+                        v-if="list.length == 0">
+                        <img style="width:300px;"
+                            src="@/img/default.svg" />
                     </div>
                     <div class="footer">
-                        <el-pagination style="float:left;" v-show="pageInfo.total != 0" :current-page.sync="pageInfo.currentPage" background @current-change="get" :page-size="pageSize" layout="prev, pager, next" :total="pageInfo.total"></el-pagination>
+                        <el-pagination style="float:left;"
+                            v-show="pageInfo.total != 0"
+                            :current-page.sync="pageInfo.currentPage"
+                            background
+                            @current-change="get"
+                            :page-size="pageSize"
+                            layout="prev, pager, next"
+                            :total="pageInfo.total"></el-pagination>
                         <div style="float:right;">
-                            <el-button @click="close" size="mini">取消</el-button>
-                            <el-button @click="confirm" size="mini" type="success">确定</el-button>
+                            <el-button @click="close">取消</el-button>
+                            <el-button @click="confirm"
+                                type="success">确定</el-button>
                         </div>
                     </div>
                 </div>

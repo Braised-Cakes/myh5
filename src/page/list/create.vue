@@ -1,16 +1,26 @@
 <template>
-    <el-dialog width="500px" :visible.sync="visible" :title="copyId ? '复制场景' : '创建场景'">
-        <el-form :model="ruleForm" ref="ruleForm" label-width="60px">
-            <el-form-item :rules="{required: true, message: '场景标题不能为空'}" prop="title" label="标题">
+    <el-dialog width="500px"
+        :visible.sync="visible"
+        :title="copyId ? '复制场景' : '创建场景'">
+        <el-form :model="ruleForm"
+            ref="ruleForm"
+            label-width="60px">
+            <el-form-item prop="title"
+                label="标题"
+                :rules="{required: true, message: '场景标题不能为空'}">
                 <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
-            <el-form-item prop="desc" label="描述">
-                <el-input type="textarea" resize="none" v-model="ruleForm.desc"></el-input>
+            <el-form-item prop="desc"
+                label="描述">
+                <el-input type="textarea"
+                    resize="none"
+                    v-model="ruleForm.desc"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer">
             <el-button @click="close">取消</el-button>
-            <el-button @click="create" type="primary">确定</el-button>
+            <el-button @click="create"
+                type="primary">确定</el-button>
         </div>
     </el-dialog>
 </template>

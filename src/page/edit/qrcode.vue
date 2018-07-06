@@ -1,29 +1,38 @@
 
 
 <template>
-    <div class="qrcode-section" title="二维码">
+    <div class="qrcode-section"
+        title="二维码">
         <section class="main">
             <div class="left">
                 <div class="item">
                     <label>链接</label>
-                    <el-input v-model="url" size="mini" placeholder="http://www.baidu.com"></el-input>
+                    <el-input v-model="url"
+                        placeholder="http://www.baidu.com"></el-input>
                 </div>
                 <div class="item">
-                     <label>边距</label>
-                    <el-input-number v-model="margin" size="mini" :max="4" :step="1" :min="0"></el-input-number>
+                    <label>边距</label>
+                    <el-input-number v-model="margin"
+                        :max="4"
+                        :step="1"
+                        :min="0"></el-input-number>
                 </div>
                 <div class="item">
                     <label></label>
-                    <el-button @click="create" size="mini" type="success">生成</el-button>
+                    <el-button @click="create"
+                        type="success">生成</el-button>
                 </div>
             </div>
             <div class="right">
                 <div v-loading="loading">
-                    <img class="qr-image" :src="src" />
+                    <img class="qr-image"
+                        :src="src" />
                 </div>
                 <footer>
-                    <el-button @click="CLOSE_PANEL(types.QRCODE)" size="mini">取消</el-button>
-                    <el-button @click="confirm" size="mini" type="success" :disabled="loading">确定</el-button>
+                    <el-button @click="CLOSE_PANEL(types.QRCODE)">取消</el-button>
+                    <el-button @click="confirm"
+                        type="success"
+                        :disabled="loading">确定</el-button>
                 </footer>
             </div>
         </section>

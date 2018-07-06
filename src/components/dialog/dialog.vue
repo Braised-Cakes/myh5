@@ -1,5 +1,9 @@
 <template>
-    <el-dialog :before-close="handleClose" width="470px" class="panel-dialog" :visible="visible" :show-close="false">
+    <el-dialog :before-close="handleClose"
+        width="470px"
+        class="panel-dialog"
+        :visible="visible"
+        :show-close="false">
         <slot name="aaa"></slot>
     </el-dialog>
 </template>

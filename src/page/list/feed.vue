@@ -1,20 +1,26 @@
 <template>
     <section v-if="list.length != 0">
         <ul class="scene-list">
-            <li :class="{'qrcode' : item.qrcode}" :style="{'animation-delay': 50 * index + 'ms'}" :key="item.id" v-for="(item, index) in list">
+            <li :class="{'qrcode' : item.qrcode}"
+                :style="{'animation-delay': 50 * index + 'ms'}"
+                :key="item.id"
+                v-for="(item, index) in list">
                 <div class="publish-status">
                     <span :class="sceneStatus[item.status].ename">{{sceneStatus[item.status].name}}</span>
                 </div>
                 <div class="image">
-                    <div class="front" :style="{'background-image': `url(${item.portrait})`}"></div>
+                    <div class="front"
+                        :style="{'background-image': `url(${item.portrait})`}"></div>
                     <div class="overlay">
-                        <router-link class="edit" :to="{ name: 'detail', params: { id: item.id }}">
+                        <router-link class="edit"
+                            :to="{ name: 'detail', params: { id: item.id }}">
                             <div>
                                 <i class="icon iconfont icon-yulan"></i>
                             </div>
                             <span>详情</span>
                         </router-link>
-                        <router-link class="edit" :to="{ name: 'edit', params: { id: item.id }}">
+                        <router-link class="edit"
+                            :to="{ name: 'edit', params: { id: item.id }}">
                             <div>
                                 <i class="icon iconfont icon-bianji"></i>
                             </div>
@@ -29,19 +35,25 @@
                         <span>0</span>
                     </a>
                     <div class="button-list">
-                        <a @mouseenter="$set(item, 'qrcode', true);" @mouseleave="$set(item, 'qrcode', false);" class="erweima">
+                        <a @mouseenter="$set(item, 'qrcode', true);"
+                            @mouseleave="$set(item, 'qrcode', false);"
+                            class="erweima">
                             <i class="icon iconfont icon-erweima"></i>
                         </a>
                         <div>
-                            <a class="button button-delete" @click="del(item)">
+                            <a class="button button-delete"
+                                @click="del(item)">
                                 <i class="icon iconfont icon-shanchu"></i>
                                 <span>删除</span>
                             </a>
-                            <a class="button button-publish" @click="publish(item)" v-if="item.status != 1">
+                            <a class="button button-publish"
+                                @click="publish(item)"
+                                v-if="item.status != 1">
                                 <i class="icon iconfont icon-fabu"></i>
                                 <span>发布</span>
                             </a>
-                            <a class="button button-copy" @click="copy(item)">
+                            <a class="button button-copy"
+                                @click="copy(item)">
                                 <i class="icon iconfont icon-fuzhi"></i>
                                 <span>复制</span>
                             </a>
@@ -50,9 +62,16 @@
                 </div>
             </li>
         </ul>
-        <el-pagination style="text-align:center;" :current-page.sync="currentPage" @current-change="get({page:$event})" :page-size="limit" background layout="prev, pager, next" :total="total"></el-pagination>
+        <el-pagination style="text-align:center;"
+            :current-page.sync="currentPage"
+            @current-change="get({page:$event})"
+            :page-size="limit"
+            background
+            layout="prev, pager, next"
+            :total="total"></el-pagination>
     </section>
-    <section v-else class="no-list">
+    <section v-else
+        class="no-list">
         <h2>暂无场景</h2>
         <a @click="createScene">创建场景</a>
         <img src="@/img/notfound.svg" />

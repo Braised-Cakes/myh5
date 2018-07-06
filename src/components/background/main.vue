@@ -1,8 +1,25 @@
 <template>
     <transition>
-        <v-dialog type="image" :visible="visible" @close="visible=false" @changeData="toshow" judgeUpload="userUpload" accept="image/jpeg,image/jpg,image/png,image/gif" func="getImage" :pageSize="18" title="图片库" :list="list" :leftNav="leftNav" :navOption="navOption">
-            <ul slot="content" class="img-list" v-if="list.length > 0">
-                <li class="img-item" @click="choiceImage(item)" :style="item.style || {}" :key="item.id" v-for="(item) in list"></li>
+        <v-dialog type="image"
+            :visible="visible"
+            @close="visible=false"
+            @changeData="toshow"
+            judgeUpload="userUpload"
+            accept="image/jpeg,image/jpg,image/png,image/gif"
+            func="getImage"
+            :pageSize="18"
+            title="图片库"
+            :list="list"
+            :leftNav="leftNav"
+            :navOption="navOption">
+            <ul slot="content"
+                class="img-list"
+                v-if="list.length > 0">
+                <li class="img-item"
+                    @click="choiceImage(item)"
+                    :style="item.style || {}"
+                    :key="item.id"
+                    v-for="(item) in list"></li>
             </ul>
         </v-dialog>
     </transition>

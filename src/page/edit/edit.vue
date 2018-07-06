@@ -1,15 +1,18 @@
 <template>
     <div style="height:100%;width:100%;position:absolute;">
         <my-header></my-header>
-        <div id="svg_cache" style="width:0px;height:0px;overflow:hidden;"></div>
-        <el-scrollbar class="page-component__nav" style="height:100%;">
+        <div id="svg_cache"
+            style="width:0px;height:0px;overflow:hidden;"></div>
+        <el-scrollbar class="page-component__nav"
+            style="height:100%;">
             <div class="main">
                 <my-page :data="panel"></my-page>
                 <!-- <my-qrcode v-if="modulePanel[types.QRCODE]"></my-qrcode> -->
                 <my-phone></my-phone>
                 <my-tool class="my-tool"></my-tool>
             </div>
-            <my-set v-if="modulePanel['SET']" class="set-area"></my-set>
+            <my-set v-if="modulePanel['SET']"
+                class="set-area"></my-set>
         </el-scrollbar>
     </div>
 </template>

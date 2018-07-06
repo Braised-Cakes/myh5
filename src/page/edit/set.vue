@@ -4,15 +4,19 @@
         <div class="left">
             <div class="phone">
                 <div id="wrapAll">
-                    <div id="loading" class="loading">
+                    <div id="loading"
+                        class="loading">
                         <div class="loadbox">
                             <div class="loadlogo"></div>
                             <div class="loadbg"></div>
                         </div>
                         <div class="loading-tip">欢迎制作易企秀</div>
                     </div>
-                    <div style="100%;height:100%;" v-html="html"></div>
-                    <div id="musicBtn" class="rotate" style="z-index:999;position:absolute;right:50px;width:30px;height:30px;top:50px;">
+                    <div style="100%;height:100%;"
+                        v-html="html"></div>
+                    <div id="musicBtn"
+                        class="rotate"
+                        style="z-index:999;position:absolute;right:50px;width:30px;height:30px;top:50px;">
                         <img src="@/img/music_btn.svg" />
                     </div>
                 </div>
@@ -126,7 +130,7 @@ export default {
                         },
                         hasRight: false,
                         callback: ({ src }) => {
-                            console.log(src)
+                            console.log(src);
                             this.formData.portrait = src;
                         }
                     });
@@ -185,9 +189,9 @@ export default {
             this.resetSwiper();
         });
 
-        setTimeout(()=>{
-            $('#loading').remove();
-        }, 500)
+        setTimeout(() => {
+            $("#loading").remove();
+        }, 500);
         //对于音乐， 默认自动播放， 点击切换逻辑
         //音乐控制按钮， 默认自动播放
         // let musicBtn = true;

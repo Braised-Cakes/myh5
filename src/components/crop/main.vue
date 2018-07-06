@@ -1,29 +1,53 @@
 <template>
     <transition>
-        <el-dialog @close="close" :width="width" class="my-el-dialog" :visible.sync="visible" :show-close="false">
+        <el-dialog @close="close"
+            :width="width"
+            class="my-el-dialog"
+            :visible.sync="visible"
+            :show-close="false">
             <div class="wrapper">
                 <div class="header">
                     <h4>图片裁切</h4>
-                    <span class="close" @click="close">x</span>
+                    <span class="close"
+                        @click="close">x</span>
                 </div>
-                <div class="main" :class="{'main1' : !hasRight, 'main2' : hasRight}">
-                    <div class="left" v-loading="loading" style="overflow:hidden;" element-loading-background="rgba(0, 0, 0, 0.8)">
-                        <img id="image" :src="src" />
+                <div class="main"
+                    :class="{'main1' : !hasRight, 'main2' : hasRight}">
+                    <div class="left"
+                        v-loading="loading"
+                        style="overflow:hidden;"
+                        element-loading-background="rgba(0, 0, 0, 0.8)">
+                        <img id="image"
+                            :src="src" />
                     </div>
-                    <div v-if="!hasRight" class="operation" style="margin-top:28px;align-self:flex-end;">
-                        <el-button @click="close" style="width:96px;" size="medium">取消</el-button>
-                        <el-button @click="confirm" style="width:96px;" size="medium" type="primary">确定</el-button>
+                    <div v-if="!hasRight"
+                        class="operation"
+                        style="margin-top:28px;align-self:flex-end;">
+                        <el-button @click="close"
+                            style="width:96px;"
+                            size="medium">取消</el-button>
+                        <el-button @click="confirm"
+                            style="width:96px;"
+                            size="medium"
+                            type="primary">确定</el-button>
                     </div>
-                    <div class="right" v-if="hasRight">
+                    <div class="right"
+                        v-if="hasRight">
                         <h3>裁切比例</h3>
                         <ul class="ul">
-                            <li :key="item.type" v-for="item in list">
-                                <el-radio @change="change(item)" :value="type" :label="item.type">{{item.name}}</el-radio>
+                            <li :key="item.type"
+                                v-for="item in list">
+                                <el-radio @change="change(item)"
+                                    :value="type"
+                                    :label="item.type">{{item.name}}</el-radio>
                             </li>
                         </ul>
                         <div class="operation">
-                            <el-button @click="close" size="medium">取消</el-button>
-                            <el-button @click="confirm" size="medium" type="primary">确定</el-button>
+                            <el-button @click="close"
+                                size="medium">取消</el-button>
+                            <el-button @click="confirm"
+                                size="medium"
+                                type="primary">确定</el-button>
                         </div>
                     </div>
                 </div>

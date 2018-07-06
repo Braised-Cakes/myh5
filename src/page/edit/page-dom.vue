@@ -1,33 +1,43 @@
 <template>
     <section class="wrap-page">
-        <div ng-if="ability.advanceStyle.borderColor" class="tab-setting-line">
+        <div class="tab-setting-line">
             <div class="tab-setting-line-title">背景</div>
         </div>
         <div>
             <p style="line-height:26px;">图片背景</p>
-            <div class="bg-preview">
+            <div class="bg-preview"
+                @click="change">
                 <img :src="currentPhone.main['background-image']" />
                 <i class="icon iconfont icon-tianjia"></i>
             </div>
-            <ul class="cut" style="display:flex;justify-content:space-between;">
+            <ul class="cut">
                 <li>
-                    <el-button size="mini" @click="crop">裁切</el-button>
+                    <el-button @click="crop">裁切</el-button>
                 </li>
                 <li>
-                    <el-button size="mini" @click="updateSomePageMain({key: 'background-image',val: ''})">删除</el-button>
+                    <el-button @click="updateSomePageMain({key: 'background-image',val: ''})">删除</el-button>
                 </li>
                 <li>
-                    <el-button size="mini" @click="change" type="primary">更换</el-button>
+                    <el-button @click="change"
+                        type="primary">更换</el-button>
                 </li>
             </ul>
         </div>
         <div class="style-item">
             <label>纯色背景</label>
-            <el-color-picker @active-change="updateSomePageMain({key: 'background-color',val: $event}); updateSomePageMain({key: 'background-image',val: ''})" :value="currentPhone.main['background-color'] || '#fff'" show-alpha></el-color-picker>
+            <el-color-picker @active-change="updateSomePageMain({key: 'background-color',val: $event}); updateSomePageMain({key: 'background-image',val: ''})"
+                :value="currentPhone.main['background-color'] || '#fff'"
+                show-alpha>
+            </el-color-picker>
         </div>
         <div class="style-item">
             <label>透明度</label>
-            <el-input-number size="mini" :step="1" @change="updateSomePageMain({key: 'opacity', val: ($event / 100).toFixed(2)})" :value="Math.round((currentPhone.main['opacity'] || 1) * 100)" :min="0" :max="100"></el-input-number>
+            <el-input-number :min="0"
+                :max="100"
+                :step="1"
+                @change="updateSomePageMain({key: 'opacity', val: ($event / 100).toFixed(2)})"
+                :value="Math.round((currentPhone.main['opacity'] || 1) * 100)">
+            </el-input-number>
         </div>
     </section>
 </template>
@@ -93,8 +103,7 @@ export default {
     text-align: center;
     cursor: pointer;
     position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0;
     background: #fff;
     img {
         display: block;
@@ -109,16 +118,17 @@ export default {
 }
 
 .cut {
+    display: flex;
+    justify-content: space-between;
     li {
         a {
             border: 1px solid #1593ff;
             color: #1593ff;
             background-color: #fff;
             border-radius: 3px;
-            height: 30px;
             line-height: 30px;
             padding: 0;
-            width: 60px;
+            @include wh(60px, 30px);
             text-align: center;
             margin: 0 auto;
             display: block;

@@ -2,17 +2,28 @@
     <div class="create_right">
         <div class="top">
             <ul>
-                <li v-if="!hasSelectedItems" @click="nav = 1" :class="{ active: nav == 1 }">页面属性</li>
-                <li v-else @click="nav = 1" :class="{ active: nav == 1 }">元素属性</li>
-                <li @click="nav = 0" :class="{ active: nav == 0 }">页面管理</li>
+                <li v-if="!hasSelectedItems"
+                    @click="nav = 1"
+                    :class="{ active: nav == 1 }">页面属性</li>
+                <li v-else
+                    @click="nav = 1"
+                    :class="{ active: nav == 1 }">元素属性</li>
+                <li @click="nav = 0"
+                    :class="{ active: nav == 0 }">页面管理</li>
             </ul>
         </div>
         <section v-if="nav == 0">
             <el-scrollbar class="page-component__nav">
                 <ul class="page_ul">
-                    <draggable v-model="myList" :move="move" @start="start" @end="end">
+                    <draggable v-model="myList"
+                        :move="move"
+                        @start="start"
+                        @end="end">
                         <transition-group>
-                            <li @click.stop="selectPage({ page: index })" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList" :key="index">
+                            <li @click.stop="selectPage({ page: index })"
+                                :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}"
+                                v-for="(item, index) in myList"
+                                :key="index">
                                 <div v-if="!(drag && index == oldIndex)">
                                     <span>
                                         <em>{{index + 1}}</em>
@@ -36,7 +47,8 @@
             </div>
         </section>
         <section v-else>
-            <edit-dom v-if="hasSelectedOneItem" :data="data"></edit-dom>
+            <edit-dom v-if="hasSelectedOneItem"
+                :data="data"></edit-dom>
             <page-dom v-else></page-dom>
         </section>
 

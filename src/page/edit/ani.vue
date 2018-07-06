@@ -11,33 +11,52 @@
             </li>
         </ul>
         <ul class="ani-list">
-            <li class="ani-item" :key="index" v-for="(item, index) in curItem.animation">
+            <li class="ani-item"
+                :key="index"
+                v-for="(item, index) in curItem.animation">
                 <div class="title">
                     <div class="left">
                         <span>动画{{index + 1}}</span>
                         <span class="ani-name">{{item | getLabel}}</span>
                     </div>
                     <div class="right">
-                        <span @click="delAni(index)" class="close">x</span>
+                        <span @click="delAni(index)"
+                            class="close">x</span>
                     </div>
                 </div>
-                <div class="item-contain" style="padding:12px 20px;">
+                <div class="item-contain"
+                    style="padding:12px 20px;">
                     <div class="style-item">
                         <label>方式</label>
-                        <el-select size="mini" @change="change('animation-name', index, $event)" :value="item['animation-name']" placeholder="请选择">
-                            <el-option-group v-for="group in aniList" :key="group.label" :label="group.label">
-                                <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
+                        <el-select @change="change('animation-name', index, $event)"
+                            :value="item['animation-name']"
+                            placeholder="请选择">
+                            <el-option-group v-for="group in aniList"
+                                :key="group.label"
+                                :label="group.label">
+                                <el-option v-for="item in group.options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
                                 </el-option>
                             </el-option-group>
                         </el-select>
                     </div>
                     <div class="style-item">
                         <label>动画时间</label>
-                        <el-input-number @change="change('animation-duration', index, $event)" size="mini" :value="item['animation-duration']" :step="0.1" :min="1" :max="20"></el-input-number>
+                        <el-input-number @change="change('animation-duration', index, $event)"
+                            :value="item['animation-duration']"
+                            :step="0.1"
+                            :min="1"
+                            :max="20"></el-input-number>
                     </div>
                     <div class="style-item">
                         <label>延迟时间</label>
-                        <el-input-number @change="change('animation-delay', index, $event)" size="mini" :value="item['animation-delay']" :step="0.1" :min="0" :max="20"></el-input-number>
+                        <el-input-number @change="change('animation-delay', index, $event)"
+                            :value="item['animation-delay']"
+                            :step="0.1"
+                            :min="0"
+                            :max="20"></el-input-number>
                     </div>
                 </div>
             </li>

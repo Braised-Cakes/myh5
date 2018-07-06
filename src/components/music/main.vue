@@ -1,18 +1,38 @@
 <template>
-    <v-dialog :visible="visible" type="music" @close="close" judgeUpload="userUploadMusic" @confirm="confirm" @changeData="list = $event" func="getMusic" :pageSize="10" accept="audio/*" title="音乐库" :list="list" :leftNav="leftNav" :navOption="navOption">
+    <v-dialog :visible="visible"
+        type="music"
+        @close="close"
+        judgeUpload="userUploadMusic"
+        @confirm="confirm"
+        @changeData="list = $event"
+        func="getMusic"
+        :pageSize="10"
+        accept="audio/*"
+        title="音乐库"
+        :list="list"
+        :leftNav="leftNav"
+        :navOption="navOption">
         <div slot="content">
-            <ul v-if="list.length > 0" class="img-list">
-                <li @click="choiceMusic(item)" :class="{'active':item.id == curMusic.id}" :key="item.id" v-for="item in list">
+            <ul v-if="list.length > 0"
+                class="img-list">
+                <li @click="choiceMusic(item)"
+                    :class="{'active':item.id == curMusic.id}"
+                    :key="item.id"
+                    v-for="item in list">
                     <p>{{item.name}}</p>
-                    <div @click="play(item)" class="button">
-                        <i v-if="playMusicId != item.id" class="icon iconfont icon-bofang"></i>
-                        <i v-if="playMusicId == item.id" class="icon iconfont icon-zanting"></i>
+                    <div @click="play(item)"
+                        class="button">
+                        <i v-if="playMusicId != item.id"
+                            class="icon iconfont icon-bofang"></i>
+                        <i v-if="playMusicId == item.id"
+                            class="icon iconfont icon-zanting"></i>
                     </div>
                 </li>
             </ul>
             <div v-if="curMusic.id">
                 <span>已选择:{{curMusic.name}}</span>
-                <span @click="cancelChoiceMusic" style="margin-left:15px;cursor:pointer;">
+                <span @click="cancelChoiceMusic"
+                    style="margin-left:15px;cursor:pointer;">
                     <i class="icon iconfont icon-qingchu"></i>
                 </span>
             </div>
