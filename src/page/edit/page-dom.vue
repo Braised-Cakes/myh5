@@ -4,30 +4,23 @@
             <div class="tab-setting-line-title">背景</div>
         </div>
         <div>
-            <p style="line-height:26px;">图片背景</p>
+            <p>图片背景</p>
             <div class="bg-preview"
                 @click="change">
                 <img :src="currentPhone.main['background-image']" />
                 <i class="icon iconfont icon-tianjia"></i>
             </div>
-            <ul class="cut">
-                <li>
-                    <el-button @click="crop">裁切</el-button>
-                </li>
-                <li>
-                    <el-button @click="updateSomePageMain({key: 'background-image',val: ''})">删除</el-button>
-                </li>
-                <li>
-                    <el-button @click="change"
-                        type="primary">更换</el-button>
-                </li>
-            </ul>
+            <div class="bg-operation">
+                <el-button @click="crop">裁切</el-button>
+                <el-button @click="updateSomePageMain({key: 'background-image',val: ''})">删除</el-button>
+                <el-button @click="change"
+                    type="primary">更换</el-button>
+            </div>
         </div>
         <div class="style-item">
             <label>纯色背景</label>
             <el-color-picker @active-change="updateSomePageMain({key: 'background-color',val: $event}); updateSomePageMain({key: 'background-image',val: ''})"
-                :value="currentPhone.main['background-color'] || '#fff'"
-                show-alpha>
+                :value="currentPhone.main['background-color'] || '#fff'">
             </el-color-picker>
         </div>
         <div class="style-item">
@@ -117,22 +110,8 @@ export default {
     }
 }
 
-.cut {
+.bg-operation {
     display: flex;
     justify-content: space-between;
-    li {
-        a {
-            border: 1px solid #1593ff;
-            color: #1593ff;
-            background-color: #fff;
-            border-radius: 3px;
-            line-height: 30px;
-            padding: 0;
-            @include wh(60px, 30px);
-            text-align: center;
-            margin: 0 auto;
-            display: block;
-        }
-    }
 }
 </style>

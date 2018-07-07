@@ -1,8 +1,7 @@
 <template>
     <header>
         <div class="same-content">
-            <router-link class="logo"
-                to="/list">
+            <router-link class="logo" to="/list">
                 <img src="@/img/logo_header.png" />
             </router-link>
             <ul class="nav-list">
@@ -42,14 +41,13 @@ header {
 .same-content {
     width: 1180px;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+    @include fj;
     align-items: center;
     .logo {
         height: $height;
     }
     .nav-list {
-        display: flex;
+        @include fj;
         li {
             position: relative;
             line-height: $height;
@@ -65,7 +63,6 @@ header {
                     bottom: -1px;
                     content: "";
                     border-bottom: 2px solid #59c7f9;
-                    -webkit-transform: scaleX(0);
                     transform: scaleX(0);
                     transition: transform 0.25s ease;
                 }

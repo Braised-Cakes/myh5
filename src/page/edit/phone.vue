@@ -1,43 +1,21 @@
 <template>
-    <div class="workspace"
-        v-my-select
-        @mousedown.stop="cancelSelect">
+    <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
         <div class="container">
             <div class="phone-bg"></div>
-            <div class="phone-area"
-                v-if="currentPhone"
-                :style="{ 'background-color' : currentPhone.main['background-color'], 'background-image' : `url(${currentPhone.main['background-image']})`, 'opacity' : currentPhone.main['opacity'] }">
-                <div :id="item.id"
-                    :key="item.id"
-                    v-my-drag
-                    @mousedown.stop="select(index)"
-                    class="phone-item"
-                    :style="item.style | filterItemWrap"
-                    v-for="(item, index) in currentPhone.data">
+            <div class="phone-area" v-if="currentPhone" :style="{ 'background-color' : currentPhone.main['background-color'], 'background-image' : `url(${currentPhone.main['background-image']})`, 'opacity' : currentPhone.main['opacity'] }">
+                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
                     <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
-                    <div class="item-body"
-                        style="width:100%;height:100%"
-                        :style="item.style | filterItem"
-                        v-html="item.content"></div>
+                    <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
                     <!-- <div v-if="item.type == 'shape'" class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="highlight(item)"></div> -->
-                    <div v-if="curItemId == index || curItemIds.indexOf(index) != -1"
-                        style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
-                        <div v-my-changesize="{type : 'nw'}"
-                            class="circle circle-nw"></div>
-                        <div v-my-changesize="{type : 'n'}"
-                            class="circle circle-n"></div>
-                        <div v-my-changesize="{type : 'ne'}"
-                            class="circle circle-ne"></div>
-                        <div v-my-changesize="{type : 's'}"
-                            class="circle circle-s"></div>
-                        <div v-my-changesize="{type : 'sw'}"
-                            class="circle circle-sw"></div>
-                        <div v-my-changesize="{type : 'w'}"
-                            class="circle circle-w"></div>
-                        <div v-my-changesize="{type : 'se'}"
-                            class="circle circle-se"></div>
-                        <div v-my-changesize="{type : 'e'}"
-                            class="circle circle-e"></div>
+                    <div v-if="curItemId == index || curItemIds.indexOf(index) != -1" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+                        <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
+                        <div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
+                        <div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
+                        <div v-my-changesize="{type : 's'}" class="circle circle-s"></div>
+                        <div v-my-changesize="{type : 'sw'}" class="circle circle-sw"></div>
+                        <div v-my-changesize="{type : 'w'}" class="circle circle-w"></div>
+                        <div v-my-changesize="{type : 'se'}" class="circle circle-se"></div>
+                        <div v-my-changesize="{type : 'e'}" class="circle circle-e"></div>
                     </div>
                 </div>
             </div>
@@ -140,8 +118,7 @@ export default {
             background: url(~@/img/phonewhite.svg);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             border-radius: 40px;
-            width: 328px;
-            height: 560px;
+            @include wh(328px, 560px);
         }
         .phone-area {
             position: absolute;

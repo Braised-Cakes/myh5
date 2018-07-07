@@ -4,19 +4,9 @@
         <my-create></my-create>
         <section class="entrance">
             <div class="same-content">
-                <el-button size="small"
-                    type="primary"
-                    @click="createScene"
-                    icon="el-icon-plus">创建场景</el-button>
-                <el-button size="small"
-                    type="primary"
-                    @click="goTrash"
-                    v-if="trash">我的场景</el-button>
-                <el-button size="small"
-                    type="danger"
-                    @click="goTrash"
-                    v-else
-                    icon="el-icon-delete">回收站</el-button>
+                <el-button type="primary" @click="createScene" icon="el-icon-plus">创建场景</el-button>
+                <el-button type="primary" @click="goTrash" v-if="trash">我的场景</el-button>
+                <el-button type="danger" @click="goTrash" v-else icon="el-icon-delete">回收站</el-button>
             </div>
         </section>
         <my-feed class="my-feed"></my-feed>
@@ -40,7 +30,7 @@ export default {
             Bus.$emit("createScene");
         },
         goTrash() {
-            this.trash = this.trash ? false : true;
+            this.trash = !this.trash;
             Bus.$emit("updateData", {
                 status: this.trash ? 3 : "",
                 page: 1
@@ -67,10 +57,12 @@ export default {
         margin-bottom: 20px;
         .same-content {
             @include wh(1180px, 60px);
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
+            @include fj;
             align-items: center;
+            margin: 0 auto;
+            .el-button {
+                height: 36px;
+            }
         }
     }
     .my-feed {

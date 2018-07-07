@@ -17,13 +17,10 @@
             </ul>
         </div>
         <div class="container">
-            <div class="area-left">
-
-            </div>
+            <div class="area-left"></div>
             <div class="area-right">
                 <div class="base-info">
-                    <img class="left"
-                        :src="data.portrait" />
+                    <img class="left" :src="data.portrait" />
                     <div class="right">
                         <p class="title">{{data.title}}</p>
                         <p class="description">{{data.desc || '我用易企秀做了一个超酷炫的H5，快来看看吧。'}}</p>
@@ -32,8 +29,7 @@
                 </div>
                 <div class="share-area">
                     <div class="qrcode-wrap">
-                        <div><img style="width:160px;height:160px;"
-                                src="http://p7d4z759a.bkt.clouddn.com/24a1edff606cf7866ad9d2bf0886288a.svg" /></div>
+                        <div><img style="width:160px;height:160px;" src="http://p7d4z759a.bkt.clouddn.com/24a1edff606cf7866ad9d2bf0886288a.svg" /></div>
                         <p class="share-wx">扫一扫分享到微信</p>
                     </div>
                     <div>
@@ -61,8 +57,7 @@
                         <p class="hot-share">链接分享</p>
                         <div class="share-url">
                             <p>https://myh5.com/xxxxxx</p>
-                            <el-button data-clipboard-text="https://myh5.com/xxxxxx"
-                                class="copy-btn">复制链接</el-button>
+                            <el-button data-clipboard-text="https://myh5.com/xxxxxx" class="copy-btn">复制链接</el-button>
                         </div>
                     </div>
                 </div>
@@ -140,6 +135,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/css/mixin";
+
 .nav {
     background: #fff;
     border-bottom: 1px solid #e6ebed;
@@ -188,8 +185,7 @@ export default {
 .container {
     position: relative;
     margin: 30px auto;
-    width: 1120px;
-    height: 486px;
+    @include wh(1120px, 486px);
     padding: 30px;
     background: #fff;
 }
@@ -200,8 +196,7 @@ export default {
     display: flex;
     margin-bottom: 30px;
     img {
-        width: 100px;
-        height: 100px;
+        @include wh(100px, 100px);
     }
     .right {
         margin-left: 20px;
@@ -221,8 +216,7 @@ export default {
 .share-area {
     display: flex;
     .qrcode-wrap {
-        width: 240px;
-        height: 250px;
+        @include wh(240px, 250px);
         padding-top: 40px;
         text-align: center;
         border: 1px solid #e6ebed;
@@ -244,9 +238,8 @@ export default {
                 display: inline-block;
                 text-align: center;
                 border-radius: 3px;
-                height: 40px;
                 line-height: 40px;
-                width: 120px;
+                @include wh(120px, 40px);
                 padding: 0;
                 margin-right: 15px;
                 font-size: 14px;

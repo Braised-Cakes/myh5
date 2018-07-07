@@ -53,11 +53,6 @@ module.exports = {
             default: 0,
             description: `状态  0:未发布，1:已发布且无修改，2:已发布且有修改, 3:回收站, 4:彻底删除`
         },
-        // "publishStatus": {
-        //     type: Number,
-        //     default: 0,
-        //     description: '发布状态，0:未发布，1:已发布且无修改，2:已发布且有修改'
-        // },
         "uid": {
             type: Number,
             required: true,

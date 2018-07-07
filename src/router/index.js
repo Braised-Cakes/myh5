@@ -15,7 +15,7 @@ let routes = new Router({
             requiresAuth: true
         },
         component: () =>
-            import ('@/page/list/list.vue')
+            import ( /* webpackChunkName: "list" */ '@/page/list/list.vue')
     }, {
         path: '/edit/:id',
         name: 'edit',
@@ -23,7 +23,7 @@ let routes = new Router({
             requiresAuth: true
         },
         component: () =>
-            import ('@/page/edit/edit.vue')
+            import ( /* webpackChunkName: "edit" */ '@/page/edit/edit.vue')
     }, {
         path: '/detail/:id',
         name: 'detail',
@@ -31,12 +31,12 @@ let routes = new Router({
             requiresAuth: true
         },
         component: () =>
-            import ('@/page/detail/detail.vue')
+            import ( /* webpackChunkName: "detail" */ '@/page/detail/detail.vue')
     }, {
         path: '/login',
         name: 'login',
         component: () =>
-            import ('@/page/login/login.vue')
+            import ( /* webpackChunkName: "login" */ '@/page/login/login.vue')
     }]
 });
 

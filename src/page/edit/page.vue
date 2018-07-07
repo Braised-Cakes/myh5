@@ -1,29 +1,16 @@
 <template>
     <div class="create_right">
-        <div class="top">
-            <ul>
-                <li v-if="!hasSelectedItems"
-                    @click="nav = 1"
-                    :class="{ active: nav == 1 }">页面属性</li>
-                <li v-else
-                    @click="nav = 1"
-                    :class="{ active: nav == 1 }">元素属性</li>
-                <li @click="nav = 0"
-                    :class="{ active: nav == 0 }">页面管理</li>
-            </ul>
-        </div>
+        <ul class="top">
+            <li v-if="!hasSelectedItems" @click="nav = 1" :class="{ active: nav == 1 }">页面属性</li>
+            <li v-else @click="nav = 1" :class="{ active: nav == 1 }">元素属性</li>
+            <li @click="nav = 0" :class="{ active: nav == 0 }">页面管理</li>
+        </ul>
         <section v-if="nav == 0">
             <el-scrollbar class="page-component__nav">
                 <ul class="page_ul">
-                    <draggable v-model="myList"
-                        :move="move"
-                        @start="start"
-                        @end="end">
+                    <draggable v-model="myList" :move="move" @start="start" @end="end">
                         <transition-group>
-                            <li @click.stop="selectPage({ page: index })"
-                                :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}"
-                                v-for="(item, index) in myList"
-                                :key="index">
+                            <li @click.stop="selectPage({ page: index })" :class="{'active': index == currentPage, 'drag' : drag && index == oldIndex}" v-for="(item, index) in myList" :key="index">
                                 <div v-if="!(drag && index == oldIndex)">
                                     <span>
                                         <em>{{index + 1}}</em>
@@ -38,17 +25,11 @@
                 </ul>
             </el-scrollbar>
             <div class="bottom">
-                <ul>
-                    <li @click="addPage">
-                        <i>+</i>
-                        <span>常规页</span>
-                    </li>
-                </ul>
+                <el-button type="primary" icon="el-icon-plus" @click="addPage">新增一页</el-button>
             </div>
         </section>
         <section v-else>
-            <edit-dom v-if="hasSelectedOneItem"
-                :data="data"></edit-dom>
+            <edit-dom v-if="hasSelectedOneItem" :data="data"></edit-dom>
             <page-dom v-else></page-dom>
         </section>
 
@@ -67,9 +48,7 @@ export default {
         draggable
     },
     props: {
-        data: {
-            type: Object
-        }
+        data: Object
     },
     computed: {
         ...mapGetters([
@@ -120,12 +99,25 @@ export default {
 $panelNavHeight: 50px;
 $bottomHeight: 36px;
 $bottomBottom: 10px;
-.top {
-    ul {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
+
+.create_right {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 260px;
+    z-index: $pageZIndex;
+    background-color: #fff;
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.16);
+    .page-component__nav {
+        height: calc(
+            100vh - #{$headerHeight + $panelNavHeight + $bottomHeight +
+                $bottomBottom}
+        );
+    }
+    .top {
+        @include fj;
         li {
             text-align: center;
             flex: 1;
@@ -143,24 +135,6 @@ $bottomBottom: 10px;
                 font-weight: 700;
             }
         }
-    }
-}
-
-.create_right {
-    position: absolute;
-    overflow: hidden;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 260px;
-    z-index: $pageZIndex;
-    background-color: #fff;
-    box-shadow: 0 0 0px rgba(0, 0, 0, 0.16);
-    .page-component__nav {
-        height: calc(
-            100vh - #{$headerHeight + $panelNavHeight + $bottomHeight +
-                $bottomBottom}
-        );
     }
     .page_ul {
         li {
@@ -188,9 +162,8 @@ $bottomBottom: 10px;
                 background: #fff996;
             }
             div {
-                display: flex;
+                @include fj(space-around);
                 align-items: center;
-                justify-content: space-around;
                 height: 100%;
                 span {
                     em {
@@ -210,26 +183,9 @@ $bottomBottom: 10px;
         }
     }
     .bottom {
-        position: absolute;
-        bottom: $bottomBottom;
-        @include wh(100%, $bottomHeight);
-        ul {
-            display: flex;
-            justify-content: center;
-            li {
-                height: $bottomHeight;
-                width: 106px;
-                text-align: center;
-                border-radius: 3px;
-                top: 0;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s;
-                background-color: #1593ff;
-                color: #fff;
-            }
+        text-align: center;
+        .el-button {
+            @include wh(106px, 36px);
         }
     }
 }

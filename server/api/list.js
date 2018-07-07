@@ -7,10 +7,10 @@ const {
 } = require('../const/index')
 const utils = require('../utils')
 
-
 /**
  * 列表页， 获取
  */
+
 app.get('/aj/scene/list', async (req, res) => {
     /**
      * page,limit,uid,status
@@ -19,15 +19,15 @@ app.get('/aj/scene/list', async (req, res) => {
     const collection = dbHandel.getModel('myh5')
     const page = Number(req.query.page) || DEFAULT_PAGE.page
     const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
-    let status = req.query.status
-    status = status ? status.split(',') : [0, 1, 2]
-    status = {
-        $in: status
+    const status = {
+        $in: req.query.status ? req.query.status.split(',') : [0, 1, 2]
     }
+
     const total = await collection.count({
         uid: req.session.uid,
         status: status
     })
+
     const data = await collection.find({
             uid: req.session.uid,
             status: status
@@ -37,17 +37,19 @@ app.get('/aj/scene/list', async (req, res) => {
             updateTime: -1
         })
         .limit(limit)
+
     data.forEach((item) => {
         item.portrait = item.domain + item.portrait
     })
+
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
         result: {
             info: {
-                page: Number(req.query.page || DEFAULT_PAGE.page),
+                page: page,
                 total: total,
-                limit: Number(req.query.limit || DEFAULT_PAGE.limit),
+                limit: limit
             },
             data: data
         }
@@ -80,10 +82,10 @@ app.post('/aj/scene/add', async (req, res) => {
         desc: req.body.desc,
         uid: req.session.uid,
         portrait: copyItem.portrait,
-        data: (copyItem && copyItem.data) || {},
+        data: copyItem.data,
         createTime: utils.getTime(),
         updateTime: utils.getTime()
-    }).save((err, docs) => {
+    }).save((err) => {
         if (err) throw err
         res.send({
             status: AJ_STATUS.success,
@@ -96,6 +98,7 @@ app.post('/aj/scene/add', async (req, res) => {
 /**
  * 列表页， 删除
  */
+
 app.get('/aj/scene/del', async (req, res) => {
     const collection = dbHandel.getModel('myh5')
     const data = await collection.findOne({
@@ -104,7 +107,7 @@ app.get('/aj/scene/del', async (req, res) => {
     if (!data) {
         res.send({
             status: AJ_STATUS.error,
-            message: 'id不存在',
+            message: '场景不存在',
             result: {}
         })
     } else {
@@ -132,7 +135,7 @@ app.post('/aj/scene/publish', async (req, res) => {
     if (!scene) {
         res.send({
             status: AJ_STATUS.error,
-            message: 'id不存在',
+            message: '场景不存在',
             result: {}
         })
     } else {

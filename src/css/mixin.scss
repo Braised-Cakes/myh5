@@ -27,7 +27,13 @@
 }
 
 //字体大小，颜色
-@mixin sc($size, $color){
-	font-size: $size;
-	color: $color;
+@mixin sc($size, $color) {
+    font-size: $size;
+    color: $color;
+}
+
+//flex 布局和 子元素 对其方式
+@mixin fj($type: space-between) {
+    display: flex;
+    justify-content: $type;
 }
