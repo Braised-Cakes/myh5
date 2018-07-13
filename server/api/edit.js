@@ -7,7 +7,7 @@ let QRCode = require('qrcode')
 let md5 = require('md5')
 const rimraf = require('rimraf')
 const sha1 = require('sha1')
-const uuid = require('uuid/v1');
+const uuid = require('uuid/v1')
 const utils = require('../utils')
 const {
     AccessKey,
@@ -29,7 +29,7 @@ const {
 
 
 /**
- * 列表页， 获取
+ * 获取某个场景
  */
 app.get('/aj/scene/get', async (req, res) => {
     const collection = dbHandel.getModel('myh5')
@@ -114,7 +114,7 @@ app.get('/aj/shape/nav', async (req, res) => {
     const collection = dbHandel.getModel('desc')
     let {
         shape
-    } = await collection.findOne();
+    } = await collection.findOne()
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
@@ -138,7 +138,7 @@ app.get('/aj/shape/get', async (req, res) => {
     let find = {}
     req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
     req.query.tagId && (find.tagId = new RegExp(req.query.tagId))
-    let total, data;
+    let total, data
     if (req.query.used) {
         let total = await usedCollection.count({
             uid: req.session.uid
@@ -156,8 +156,8 @@ app.get('/aj/shape/get', async (req, res) => {
                 id: item.shapeId
             }
         })
-        var arrx = [];
-        for (let i = 0; i < ddd.length; i++) {
+        var arrx = []
+        for (let i = 0 i < ddd.length i++) {
             arrx.push(await collection.findOne(ddd[i], {
                 content: 0
             }))
@@ -213,7 +213,7 @@ app.get('/aj/shape/getContent', async (req, res) => {
     let docs = await usedCollection.findOne({
         uid: req.session.uid,
         shapeId: Number(req.query.id)
-    });
+    })
     if (docs) {
         await usedCollection.update({
             uid: req.session.uid,
@@ -226,7 +226,7 @@ app.get('/aj/shape/getContent', async (req, res) => {
             uid: req.session.uid,
             shapeId: Number(req.query.id),
             usedTime: utils.getTime()
-        }).save();
+        }).save()
     }
 
     /* end 添加到最近使用 */
@@ -247,7 +247,7 @@ app.get('/aj/music/nav', async (req, res) => {
     const collection = dbHandel.getModel('desc')
     let {
         music = []
-    } = await collection.findOne();
+    } = await collection.findOne()
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
@@ -264,7 +264,7 @@ app.get('/aj/music/get', async (req, res) => {
     const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
     let find = {}
     req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
-    let data, total;
+    let data, total
     if (req.query.used) {
         total = await usedCollection.count({
             uid: req.session.uid
@@ -282,8 +282,8 @@ app.get('/aj/music/get', async (req, res) => {
                 id: item.musicId
             }
         })
-        var arrx = [];
-        for (let i = 0; i < ddd.length; i++) {
+        var arrx = []
+        for (let i = 0 i < ddd.length i++) {
             arrx.push(await collection.findOne(ddd[i]))
         }
         res.send({
@@ -355,13 +355,13 @@ app.get('/aj/music/choice', async (req, res) => {
             message: '音乐id不存在',
             result: {}
         })
-        return;
+        return
     }
     const usedCollection = dbHandel.getModel('used_musics')
     let docs = await usedCollection.findOne({
         uid: req.session.uid,
         musicId: Number(req.query.id)
-    });
+    })
     if (docs) {
         await usedCollection.update({
             uid: req.session.uid,
@@ -374,7 +374,7 @@ app.get('/aj/music/choice', async (req, res) => {
             uid: req.session.uid,
             musicId: Number(req.query.id),
             usedTime: utils.getTime()
-        }).save();
+        }).save()
     }
     res.send({
         status: AJ_STATUS.success,
@@ -382,12 +382,6 @@ app.get('/aj/music/choice', async (req, res) => {
         result: {}
     })
 })
-
-
-
-
-
-
 /**
  * 获取音乐的导航信息
  */
@@ -395,7 +389,7 @@ app.get('/aj/image/nav', async (req, res) => {
     const collection = dbHandel.getModel('desc')
     let {
         image = []
-    } = await collection.findOne();
+    } = await collection.findOne()
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
@@ -414,7 +408,7 @@ app.get('/aj/image/get', async (req, res) => {
     const limit = Number(req.query.limit) || DEFAULT_PAGE.limit
     let find = {}
     req.query.typeId && (find.typeId = new RegExp(req.query.typeId))
-    let data, total;
+    let data, total
     if (req.query.used) {
         total = await usedCollection.count({
             uid: req.session.uid
@@ -432,8 +426,8 @@ app.get('/aj/image/get', async (req, res) => {
                 id: item.imageId
             }
         })
-        var arrx = [];
-        for (let i = 0; i < ddd.length; i++) {
+        var arrx = []
+        for (let i = 0 i < ddd.length i++) {
             arrx.push(await collection.findOne(ddd[i]))
         }
         res.send({
@@ -496,8 +490,6 @@ app.get('/aj/image/get', async (req, res) => {
 
 
 })
-
-
 /**
  * 获取音乐的接口
  */
@@ -508,13 +500,13 @@ app.get('/aj/image/choice', async (req, res) => {
             message: 'imageId不存在',
             result: {}
         })
-        return;
+        return
     }
     const usedCollection = dbHandel.getModel('used_images')
     let docs = await usedCollection.findOne({
         uid: req.session.uid,
         imageId: Number(req.query.id)
-    });
+    })
     if (docs) {
         await usedCollection.update({
             uid: req.session.uid,
@@ -527,7 +519,7 @@ app.get('/aj/image/choice', async (req, res) => {
             uid: req.session.uid,
             imageId: Number(req.query.id),
             usedTime: utils.getTime()
-        }).save();
+        }).save()
     }
     res.send({
         status: AJ_STATUS.success,
@@ -535,8 +527,6 @@ app.get('/aj/image/choice', async (req, res) => {
         result: {}
     })
 })
-
-
 /**
  * 二维码
  */
@@ -555,229 +545,53 @@ app.get('/aj/qrcode/create', async (req, res) => {
         return
     }
     url = decodeURIComponent(url)
-    let fileName = `${md5(`url=${url};time:${utils.getTime()};margin:${margin}`)}.svg`
-    toFileSync = promisify(QRCode.toFile);
-    let toFilePath = path.resolve(process.cwd(), 'cache', fileName);
+    let fileName = `${md5(`url=${url}time:${utils.getTime()}margin:${margin}`)}.svg`
+    toFileSync = promisify(QRCode.toFile)
+    let toFilePath = path.resolve(process.cwd(), 'cache', fileName)
     await toFileSync(toFilePath, url, {
         type: 'svg',
         margin: Number(margin)
-    });
-    await upload('store', toFilePath, fileName);
+    })
+    await upload('store', toFilePath, fileName)
     rimraf.sync(toFilePath)
     res.send({
         status: AJ_STATUS.success,
         message: AJ_MESSAGE.success,
         result: `http://p7d4z759a.bkt.clouddn.com/${fileName}`
     })
-});
-
-/**
- * 
- */
-
-// app.get('/aj/shape/gggg', async (req, res) => {
-//   const collection = dbHandel.getModel('desc')
-//   const shapeCollection = dbHandel.getModel('shape')
-//   let {
-//     shape
-//   } = await collection.findOne();
-
-//   for (let i = 0; i < shape.type.length; i++) {
-//     // let docs = glob.sync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/${shape.type[i].name}/*.json`);
-//     // console.log(docs);
-//     // for (let j = 0; j < docs.length; j++) {
-//     //   let json = JSON.parse(fs.readFileSync(docs[j], 'utf-8'));
-//     //   // console.log(json)
-
-//     //   for(let z = 0; z < json.length; z++){
-//     //     console.log(path.basename(json[z].path))
-//     //   }
-//     // }
-//     let typeId = shape.type[i].typeId;
-//     for (let j = 0; j < shape.type[i].children.length; j++) {
-//       // console.log(j)
-//       let child = shape.type[i].children[j];
-//       let json = JSON.parse(fs.readFileSync(`/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/${shape.type[i].name}/${child.name}.json`, 'utf-8'));
-//       // console.log(docs)
-//       for (let z = 0; z < json.length; z++) {
-//         let paths = path.basename(json[z].path);
-//         await shapeCollection.update({
-//           path: paths
-//         }, {
-//           typeId: typeId,
-//           tagId: child.tagId
-//         })
-//       }
-//     }
-
-//   }
-//   res.send({
-//     data: shape
-//   })
-// })
-
-
-
-
-
-
-
-/**
- * 列表页， 添加
- */
-// app.get('/aj/shape/del', async (req, res) => {
-//     const collection = dbHandel.getModel('shape')
-//     await collection.remove({});
-//     res.send({
-//         status: AJ_STATUS.success,
-//         message: AJ_MESSAGE.success,
-//         result: '成功'
-//     })
-// });
-// app.get('/aj/shape/add', async (req, res) => {
-//     const collection = dbHandel.getModel('shape')
-//     const count = await collection.count()
-//     let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
-//     let index = 400000000
-//     for (let i = 0; i < docs.length; i++) {
-//         let file = JSON.parse(fs.readFileSync(docs[i], 'utf-8'));
-//         for (let j = 0; j < file.length; j++) {
-//             new collection({
-//                 path: path.basename(file[j].path),
-//                 id: index++
-//             }).save((err, docs) => {
-
-//             })
-//         }
-//     }
-//     res.send({
-//         status: AJ_STATUS.success,
-//         message: AJ_MESSAGE.success,
-//         result: {}
-//     })
-// })
-
-
-
-/**
- * typeId 400 +
- * tagId  4000 + 
- */
-// app.get('/aj/shape/nav/get', async (req, res) => {
-//     const collection = dbHandel.getModel('shape')
-//     let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
-//     // console.log(docs)
-//     let typeId;
-//     let tagId = 40000;
-//     for (let i = 0; i < docs.length; i++) {
-//         let file = JSON.parse(fs.readFileSync(docs[i], 'utf-8'));
-//         switch (path.basename(path.dirname(docs[i]))) {
-//             case '图形':
-//                 typeId = 400;
-//                 break;
-//             case '图标':
-//                 typeId = 401;
-//                 break;
-//             case '文字':
-//                 typeId = 402;
-//                 break;
-//         }
-//         tagId++;
-//         for (let j = 0; j < file.length; j++) {
-//             await collection.update({
-//                 path: file[j].path
-//             }, {
-//                 typeId: typeId,
-//                 tagId: tagId
-//             })
-//         }
-//     }
-//     let data = await collection.find();
-//     console.log(data)
-
-
-//     res.send({
-//         status: AJ_STATUS.success,
-//         message: AJ_MESSAGE.success,
-//         result: 111
-//     })
-// })
-
-
-
-// app.get('/aj/shape/nav/set', async (req, res) => {
-//     const collection = dbHandel.getModel('desc')
-//     let docs = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*')
-//     let docs2 = glob.sync('/Users/BraisedCakes/Desktop/2018/myh5-store/svg-json/*/*.json')
-//     const {
-//         shape = {}
-//     } = await collection.findOne({
-//         id : 1
-//     })
-//     shape.typeId = shape.typeId || [];
-//     let typeId;
-//     if (shape.typeId.length > 0) {
-//         typeId = shape.typeId[shape.typeId.length - 1].id + 1
-//     } else {
-//         typeId = 400
-//     }
-//     for (let i = 0; i < docs.length; i++) {
-//         let btn = shape.typeId.some((item)=>{
-//             return item.name == path.basename(docs[i])
-//         })
-//         if(btn){
-//             continue;
-//         }
-//         shape.typeId.push({
-//             id: typeId,
-//             name: path.basename(docs[i])
-//         })
-//         typeId++;
-//     }
-//     await collection.update({
-//         id: 1
-//     }, {
-//         shape: shape
-//     })
-//     console.log(shape)
-//     res.send({
-//         status: AJ_STATUS.success,
-//         message: AJ_MESSAGE.success,
-//         result: 111
-//     })
-// })
+})
 
 app.get('/aj/upload/token', async (req, res) => {
     var accessKey = AccessKey
     var secretKey = SecretKey
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-    let id = uuid();
+    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
+    let id = uuid()
     const fileName = `${sha1(id)}.${req.query.fileName.split('.').pop()}`
     let bucketName = 'store'
     let returnBody
     switch (req.query.type) {
         case 'image':
             returnBody = '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(fname)", "imageInfo":$(imageInfo)}'
-            break;
+            break
         case 'music':
             returnBody = '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(fname)", "avinfo":$(avinfo)}'
-            break;
+            break
     }
     var options = {
         scope: bucketName,
         // expires: 60 * 60 * 10,
         returnBody: returnBody
-    };
-    var putPolicy = new qiniu.rs.PutPolicy(options);
-    var uploadToken = putPolicy.uploadToken(mac);
+    }
+    var putPolicy = new qiniu.rs.PutPolicy(options)
+    var uploadToken = putPolicy.uploadToken(mac)
     // http://up-z2.qiniup.com
     res.send({
         token: uploadToken,
         key: fileName
     })
-});
+})
 app.post('/aj/image/user_upload', async (req, res) => {
-    let id = uuid();
+    let id = uuid()
     const collection = dbHandel.getModel('images')
     let lastData = await collection.find().sort({
         id: -1
@@ -792,7 +606,7 @@ app.post('/aj/image/user_upload', async (req, res) => {
                 size: req.body.imageInfo.size,
                 createTime: utils.getTime(),
                 id: lastData[0].id + 1
-            }).save();
+            }).save()
         res.send({
             status: AJ_STATUS.success,
             message: AJ_MESSAGE.success,
@@ -811,7 +625,7 @@ app.post('/aj/image/user_upload', async (req, res) => {
 })
 
 app.post('/aj/music/user_upload', async (req, res) => {
-    let id = uuid();
+    let id = uuid()
     const collection = dbHandel.getModel('musics')
     let lastData = await collection.find().sort({
         id: -1
@@ -824,7 +638,7 @@ app.post('/aj/music/user_upload', async (req, res) => {
                 createTime: utils.getTime(),
                 id: lastData[0].id + 1,
                 name: req.body.name
-            }).save();
+            }).save()
         res.send({
             status: AJ_STATUS.success,
             message: AJ_MESSAGE.success,
@@ -842,6 +656,9 @@ app.post('/aj/music/user_upload', async (req, res) => {
     }
 })
 
+/**
+ * 
+ */
 app.post('/aj/scene/update', async (req, res) => {
     const collection = dbHandel.getModel('myh5')
     let item = await collection.findOne({
@@ -850,7 +667,7 @@ app.post('/aj/scene/update', async (req, res) => {
     let title = req.body.title || item.title
     let desc = req.body.desc || item.desc
     let portrait = req.body.portrait || item.portrait
-    portrait = portrait.match(/.com\/(.+)/)[1];
+    portrait = portrait.match(/.com\/(.+)/)[1]
     await collection.update({
         id: req.body.id
     }, {
@@ -864,19 +681,3 @@ app.post('/aj/scene/update', async (req, res) => {
         result: {}
     })
 })
-// app.get('/aj/bbb', async (req, res) => {
-//   const collection = dbHandel.getModel('musics')
-//   let count = await collection.count();
-//   let time = 1525441262338;
-//   for (let i = 0; i < count; i++) {
-//     await collection.update({
-//       id: 300000000 + i
-//     }, {
-//       createTime: time--
-//     })
-//   }
-//   console.log('完事了');
-//   res.send({
-//     a: 10
-//   })
-// })

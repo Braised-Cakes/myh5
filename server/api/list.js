@@ -1,4 +1,4 @@
-let app = require('../app.js')
+const app = require('../app.js')
 const dbHandel = require('../db/handel.js')
 const {
     DEFAULT_PAGE,
@@ -64,7 +64,7 @@ app.post('/aj/scene/add', async (req, res) => {
     if (!req.body.title) {
         res.send({
             status: AJ_STATUS.error,
-            message: '场景title为空'
+            message: '场景名不能为空'
         })
         return
     }

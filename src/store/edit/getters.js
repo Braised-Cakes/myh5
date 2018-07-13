@@ -1,95 +1,102 @@
-export default {
+const getters = {
+
     /**
-     * @return {Number} 一共有几页
+     * 总页码
+     * @return {Number} 
      */
-    pageLength(state) {
-        return state.phone.data.length;
-    },
+
+    pageLength: state => state.phone.data.length,
+
     /**
-     * @return {Number} 当前页码， 从0开始
+     * 当前页码， 从0开始
+     * @return {Number} 
      */
-    currentPage(state) {
-        return state.currentPage
-    },
+
+    currentPage: state => state.currentPage,
+
     /**
      * phone数据
-     * @return {Object}
+     * @return {Object} 
      */
-    phoneData(state) {
-        return state.phone
-    },
+
+    phoneData: state => state.phone,
+
     /**
      * 当前页数据
-     * @return {Object}
+     * @return {Object} 
      */
-    currentPhone(state) {
-        return state.phone.data[state.currentPage];
-    },
+
+    currentPhone: (state, getters) => state.phone.data[getters.currentPage],
+
     /**
-     * 当前页数据
-     * @return {Object}
+     * 当前页元素个数
+     * @return {Object} 
      */
-    curPageItemLen(state) {
-        return state.phone.data[state.currentPage].data.length;
-    },
+
+    curPageItemLen: state => state.phone.data[state.currentPage].data.length,
+
     /**
-     * 当前元素
-     * @return {Object}
+     * 当前被选中元素
+     * @return {Object} 
      */
-    curItem(state, getters) {
-        return getters.currentPhone.data[state.curItemId] || false;
-    },
+
+    curItem: (state, getters) => getters.currentPhone.data[state.curItemId] || false,
 
     /**
      * 是否有被选中元素
+     * @return {Boolean} 
      */
-    hasSelectedItems(state) {
-        return (state.curItemId >= 0 || state.curItemIds.length > 0) ? true : false;
-    },
+
+    hasSelectedItems: state => (state.curItemId >= 0 || state.curItemIds.length > 0) ? true : false,
+
     /**
      * 是否是单选
+     * @return {Boolean} 
      */
-    hasSelectedOneItem(state) {
-        return state.curItemId >= 0 ? true : false;
-    },
-    /**
-     * 以数组格式返回
-     */
-    selectedItemsForArray(state) {
-        if (state.curItemId >= 0) {
-            return [state.curItemId]
-        } else {
-            return state.curItemIds;
-        }
-    },
+
+    hasSelectedOneItem: state => state.curItemId >= 0 ? true : false,
+
     /**
      * 是否是多选
+     * @return {Boolean} 
      */
-    hasSelectedMultiItems(state) {
-        return state.curItemIds.length > 0 ? true : false;
-    },
+
+    hasSelectedMultiItems: state => state.curItemIds.length > 0 ? true : false,
+
+    /**
+     * 被选中元素的id(以数组形式返回，即使是单选)
+     * @return {Array}
+     */
+
+    selectedItemsForArray: state => state.curItemId >= 0 ? [state.curItemId] : state.curItemIds,
+
     /**
      * 被选中元素的id
+     * @return {Number} 
      */
-    curItemId(state) {
-        return state.curItemId;
-    },
+
+    curItemId: state => state.curItemId,
+
     /**
-     * 被选中元素的id
+     * 被选中元素的id集合
+     * @return {Array} 
      */
-    curItemIds(state) {
-        return state.curItemIds;
-    },
+
+    curItemIds: state => state.curItemIds,
+
     /**
      * 当前页的cache数据
+     * @return {Object}
      */
-    curCache(state) {
-        return state.cacheData[state.currentPage];
-    },
+
+    curCache: state => state.cacheData[state.currentPage],
+
     /**
-     * otherInfo
+     * 其他信息
+     * @return {Object}
      */
-    otherInfo(state) {
-        return state.otherInfo;
-    }
-}
+
+    otherInfo: state => state.otherInfo,
+};
+
+export default getters;

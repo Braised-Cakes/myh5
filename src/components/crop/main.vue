@@ -1,53 +1,29 @@
 <template>
     <transition>
-        <el-dialog @close="close"
-            :width="width"
-            class="my-el-dialog"
-            :visible.sync="visible"
-            :show-close="false">
+        <el-dialog @close="close" :width="width" class="my-el-dialog" :visible.sync="visible" :show-close="false">
             <div class="wrapper">
                 <div class="header">
                     <h4>图片裁切</h4>
-                    <span class="close"
-                        @click="close">x</span>
+                    <span class="close" @click="close">x</span>
                 </div>
-                <div class="main"
-                    :class="{'main1' : !hasRight, 'main2' : hasRight}">
-                    <div class="left"
-                        v-loading="loading"
-                        style="overflow:hidden;"
-                        element-loading-background="rgba(0, 0, 0, 0.8)">
-                        <img id="image"
-                            :src="src" />
+                <div class="main" :class="{'main1' : !hasRight, 'main2' : hasRight}">
+                    <div class="left" v-loading="loading" style="overflow:hidden;" element-loading-background="rgba(0, 0, 0, 0.8)">
+                        <img v-show="!loading" id="image" :src="src" />
                     </div>
-                    <div v-if="!hasRight"
-                        class="operation"
-                        style="margin-top:28px;align-self:flex-end;">
-                        <el-button @click="close"
-                            style="width:96px;"
-                            size="medium">取消</el-button>
-                        <el-button @click="confirm"
-                            style="width:96px;"
-                            size="medium"
-                            type="primary">确定</el-button>
+                    <div v-if="!hasRight" class="operation" style="margin-top:28px;align-self:flex-end;">
+                        <el-button @click="close" style="width:96px;" size="medium">取消</el-button>
+                        <el-button @click="confirm" style="width:96px;" size="medium" type="primary">确定</el-button>
                     </div>
-                    <div class="right"
-                        v-if="hasRight">
+                    <div class="right" v-if="hasRight">
                         <h3>裁切比例</h3>
                         <ul class="ul">
-                            <li :key="item.type"
-                                v-for="item in list">
-                                <el-radio @change="change(item)"
-                                    :value="type"
-                                    :label="item.type">{{item.name}}</el-radio>
+                            <li :key="item.type" v-for="item in list">
+                                <el-radio @change="change(item)" :value="type" :label="item.type">{{item.name}}</el-radio>
                             </li>
                         </ul>
                         <div class="operation">
-                            <el-button @click="close"
-                                size="medium">取消</el-button>
-                            <el-button @click="confirm"
-                                size="medium"
-                                type="primary">确定</el-button>
+                            <el-button @click="close" size="medium">取消</el-button>
+                            <el-button @click="confirm" size="medium" type="primary">确定</el-button>
                         </div>
                     </div>
                 </div>
@@ -59,36 +35,9 @@
 
 <script>
 import $ from "jquery";
-// http://p7d4z759a.bkt.clouddn.com/03tf72538229.jpg?imageMogr2/crop/!400x300a0a100
-
-/**
-
-
-对外api
-
-
-this.$crop({
-    src : 'http://p7d4z759a.bkt.clouddn.com/03tf72538229.jpg',
-    data : {
-        tpye : 'original',
-        x : 0,
-        y : 0,
-        width : 100,
-        height : 100
-    },
-    callback:()=>{
-
-    }
-})
-
-传参，  固定1比1
-
-
-传参 1:1
-
- */
 import "cropper";
 import vDialog from "@/components/dialog/dialog.vue";
+
 export default {
     components: {
         vDialog
@@ -215,6 +164,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/css/variables.scss";
+@import "~@/css/mixin";
+
 img {
     max-width: 100%; /* This rule is very important, please do not ignore this! */
 }
@@ -234,17 +185,14 @@ img {
             font-weight: bold;
             span {
                 color: #a3afb7;
-                font-size: 12px;
                 padding-left: 10px;
             }
         }
         .close {
             display: block;
-            width: 14px;
-            height: 14px;
-            color: #a3afb7;
+            @include wh(14px, 14px);
+            @include sc(21px, #a3afb7);
             line-height: 14px;
-            font-size: 21px;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
@@ -262,8 +210,7 @@ img {
             position: relative;
             h3 {
                 font-weight: bold;
-                font-size: 14px;
-                color: #111;
+                @include sc(14px, #111);
                 line-height: 48px;
             }
             .ul {
@@ -288,15 +235,13 @@ img {
     .main1 {
         flex-direction: column;
         .left {
-            width: 940px;
-            height: 448px;
+            @include wh(940px, 448px);
         }
     }
     .main2 {
         flex-direction: row;
         .left {
-            width: 574px;
-            height: 492px;
+            @include wh(574px, 492px);
         }
     }
 }

@@ -333,9 +333,6 @@ export default {
                 data,
                 action
             }) => {
-                console.log(src);
-                console.log(data);
-                console.log(action);
                 if (action == "confirm") {
                     dispatch('updateSomePageMain', {
                         key: "background-image",

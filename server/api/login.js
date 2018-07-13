@@ -86,10 +86,12 @@ app.post(types.userLogout, async (req, res) => {
 app.get(types.getUserInfo, async (req, res) => {
     if (req.session.isLogin) {
         const collection = dbHandel.getModel('user')
-        const data = await collection.findOne({}, ['username', 'uid'])
+        const data = await collection.findOne({
+            uid: req.session.uid
+        }, ['username', 'uid'])
         res.send({
             status: AJ_STATUS.success,
-            message: '获取成功',
+            message: '获取成1功',
             result: data
         })
     } else {
