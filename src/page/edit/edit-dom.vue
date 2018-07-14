@@ -13,8 +13,8 @@
             style="height:calc(100vh - 60px - 60px - 50px);"
             class="page-component__nav">
             <div style="padding:12px 20px;">
-                <!-- <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
-                </el-input> -->
+                <el-input resize='none' @input="updateItem({key:'content', val: $event})" type="textarea" placeholder="请输入内容" :rows="2" :value="curItem.content">
+                </el-input>
                 <div class="style-item"
                     v-if="rules('line-height')">
                     <label>行高</label>

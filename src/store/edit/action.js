@@ -172,8 +172,7 @@ export default {
         commit,
         getters
     }, index) {
-
-        if (typeof index == 'number' && getters.hasSelectedMultiItems) {
+        if (getters.selectedItemsForArray.indexOf(index) != -1) {
             return;
         }
         if (typeof index == 'number') {

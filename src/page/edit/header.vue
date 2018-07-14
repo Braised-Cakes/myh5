@@ -1,10 +1,8 @@
 <template>
     <header>
-        <div class="logo">
-            <router-link to="/list">
-                <img src="@/img/logo.png" />
-            </router-link>
-        </div>
+        <router-link class="logo" to="/list">
+            <img src="@/img/logo.png" />
+        </router-link>
         <ul class="create-panel">
             <li :key="item.label" v-for="item in panelList" @click="beforeCreate(item.type)">
                 <i class="icon iconfont" :class="{['icon-' + item.type]: true}"></i>
@@ -38,17 +36,12 @@ export default {
         ...mapGetters(["phoneData"])
     },
     methods: {
-        ...mapActions([
-            "addItem",
-            "updateMain",
-            "updateSomePageMain",
-            "cropBgImage"
-        ]),
+        ...mapActions(["addItem", "updateMain", "cropBgImage"]),
         ...mapMutations(["OPEN_PANEL"]),
         //保存场景
         async save() {
             let data = $.extend(true, {}, this.phoneData);
-            //干掉形状的content
+            //移除形状的content
             data.data.forEach(item => {
                 item.data.forEach(item => {
                     if (item.type == types.SHAPE) {
@@ -166,8 +159,7 @@ export default {
 @import "~@/css/variables.scss";
 
 header {
-    display: flex;
-    justify-content: space-between;
+    @include fj;
     align-items: center;
     height: $headerHeight;
     position: fixed;
@@ -180,22 +172,14 @@ header {
 .logo {
     @include wh(72px, 100%);
     border-right: 1px solid #e6ebed;
-    a {
-        font-size: 45px;
-        display: block;
-        @include wh(100%, 100%);
-        text-align: center;
-        color: #1593ff;
-    }
 }
 .create-panel {
     display: flex;
     li {
         @include wh(60px, $headerHeight);
         @include sc(13px, #333);
-        display: flex;
+        @include fj(center);
         flex-direction: column;
-        justify-content: center;
         align-items: center;
         cursor: pointer;
         .icon {

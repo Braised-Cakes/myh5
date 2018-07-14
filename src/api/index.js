@@ -42,18 +42,57 @@ export const getScene = data => fetch('/aj/scene/get', data);
 
 export const saveScene = data => fetch('/aj/scene/save', data, 'POST');
 
+/**
+ * 获取形状nav
+ */
+
 export const getShapeNav = () => fetch('/aj/shape/nav');
+
+/**
+ * 获取形状list
+ */
+
 export const getShape = data => fetch('/aj/shape/get', data);
+
+/**
+ * 获取指定形状的content
+ */
 export const getShapeContent = data => fetch('/aj/shape/getContent', data);
 
+/**
+ * 获取音乐nav
+ */
 
 export const getMusicNav = () => fetch('/aj/music/nav');
+
+/**
+ * 获取音乐list
+ */
+
 export const getMusic = data => fetch('/aj/music/get', data);
+
+/**
+ * 选择音乐
+ */
+
 export const choiceMusic = data => fetch('/aj/music/choice', data);
 
+/**
+ * 获取图片nav
+ */
 
 export const getImageNav = () => fetch('/aj/image/nav');
+
+/**
+ * 获取图片list
+ */
+
 export const getImage = data => fetch('/aj/image/get', data);
+
+/**
+ * 选择图片
+ */
+
 export const choiceImage = data => fetch('/aj/image/choice', data);
 
 /**
@@ -92,5 +131,14 @@ export const getUserInfo = data => fetch('/aj/user/info', data);
 
 export const getToken = data => fetch('/aj/upload/token', data);
 
+/**
+ * 上传图片
+ */
+
 export const userUpload = data => fetch('/aj/image/user_upload', data, 'POST');
+
+/**
+ * 上传音乐
+ */
+
 export const userUploadMusic = data => fetch('/aj/music/user_upload', data, 'POST');

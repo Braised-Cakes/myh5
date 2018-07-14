@@ -212,6 +212,7 @@ export default {
             }
         },
         uploadSuccess(response, file) {
+            console.log(response)
             api[this.judgeUpload](response).then(({ status }) => {
                 //异常情况， 后缀为png,jpg等等，但是实际并不是图片
                 if (status != 0) {

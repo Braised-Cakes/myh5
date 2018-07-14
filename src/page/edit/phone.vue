@@ -2,12 +2,10 @@
     <div class="workspace" v-my-select @mousedown.stop="cancelSelect">
         <div class="container">
             <div class="phone-bg"></div>
-            <div class="phone-area" v-if="currentPhone" :style="{ 'background-color' : currentPhone.main['background-color'], 'background-image' : `url(${currentPhone.main['background-image']})`, 'opacity' : currentPhone.main['opacity'] }">
-                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemWrap" v-for="(item, index) in currentPhone.data">
-                    <!-- <div class="item-body" :style="item.style | filterItem" v-html="item.content.replace(/\n/g, '<br>')"></div> -->
-                    <div class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="item.content"></div>
-                    <!-- <div v-if="item.type == 'shape'" class="item-body" style="width:100%;height:100%" :style="item.style | filterItem" v-html="highlight(item)"></div> -->
-                    <div v-if="curItemId == index || curItemIds.indexOf(index) != -1" style="position:absolute;border:1px solid #1ea3ec;width:100%;height:100%;top:0;left:0;">
+            <div class="phone-area" v-if="currentPhone" :style="areaStyle">
+                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemStyle(true)" v-for="(item, index) in currentPhone.data">
+                    <div class="item-body" :style="item.style | filterItemStyle" v-html="$options.filters.filterItemContent(item)"></div>
+                    <div class="item-drag-wrap" v-if="curItemId == index || curItemIds.indexOf(index) != -1">
                         <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
                         <div v-my-changesize="{type : 'n'}" class="circle circle-n"></div>
                         <div v-my-changesize="{type : 'ne'}" class="circle circle-ne"></div>
@@ -29,43 +27,42 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
     filters: {
-        filterItemWrap(res) {
-            var json = {};
-            for (let attr in res) {
-                if (
-                    attr == "position" ||
-                    attr == "left" ||
-                    attr == "width" ||
-                    attr == "height" ||
-                    attr == "top" ||
-                    attr == "z-index"
-                ) {
-                    json[attr] = res[attr];
-                }
-            }
-            return json;
-        },
-        filterItem(res) {
-            var json = {};
-            for (let attr in res) {
-                if (
-                    attr == "position" ||
-                    attr == "left" ||
-                    attr == "top" ||
-                    attr == "width" ||
-                    attr == "height" ||
-                    attr == "z-index"
-                ) {
-                    //console.log(2)
+        /**
+         * 当前页的cache数据
+         * @param {Object} style 当前元素样式
+         * @param {Number} outer true: 挂载到元素根dom, false: 挂载到元素内层
+         */
+        filterItemStyle(style, outer) {
+            let outerJson = {};
+            let innerJson = {};
+            for (let attr in style) {
+                if (/^position|left|width|height|top|z-index$/.test(attr)) {
+                    outerJson[attr] = style[attr];
                 } else {
-                    json[attr] = res[attr];
+                    innerJson[attr] = style[attr];
                 }
             }
-            return json;
+            return outer ? outerJson : innerJson;
+        },
+        filterItemContent({ type, content }) {
+            if (type == "txt") {
+                return content.replace(/\n/g, "<br>");
+            } else {
+                return content;
+            }
         }
     },
     computed: {
-        ...mapGetters(["currentPhone", "curItem", "curItemId", "curItemIds"])
+        ...mapGetters(["currentPhone", "curItem", "curItemId", "curItemIds"]),
+        areaStyle: function() {
+            return {
+                "background-color": this.currentPhone.main["background-color"],
+                "background-image": `url(${
+                    this.currentPhone.main["background-image"]
+                })`,
+                opacity: this.currentPhone.main["opacity"]
+            };
+        }
     },
     methods: {
         ...mapActions(["selectItem", "cancelSelect", "updateItem"]),
@@ -115,14 +112,14 @@ export default {
         top: 5%;
         left: 20%;
         .phone-bg {
+            @include wh(328px, 560px);
             background: url(~@/img/phonewhite.svg);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             border-radius: 40px;
-            @include wh(328px, 560px);
         }
         .phone-area {
-            position: absolute;
             @include wh(320px, 486px);
+            position: absolute;
             top: 37px;
             left: 4px;
             /** public **/
@@ -131,13 +128,21 @@ export default {
             background-position: 50% 50%;
             background-origin: content-box;
             /** end public **/
+            .item-body {
+                @include wh(100%, 100%);
+            }
+            .item-drag-wrap {
+                position: absolute;
+                border: 1px solid #1ea3ec;
+                @include wh(100%, 100%);
+                top: 0;
+                left: 0;
+            }
             .phone-item {
-                $size: 12px;
-                $halfSize: 6px;
+                $size: 12px; /* 小圆圈的尺寸 */
                 $position: -6px;
                 .circle {
-                    width: $size;
-                    height: $size;
+                    @include wh($size, $size);
                     background-color: #fff;
                     border: 1px solid #59c7f9;
                     border-radius: 12px;
@@ -148,8 +153,7 @@ export default {
                         cursor: nw-resize;
                     }
                     &.circle-n {
-                        left: 50%;
-                        margin-left: -$halfSize;
+                        @include cl;
                         top: $position;
                         cursor: n-resize;
                     }
@@ -159,8 +163,7 @@ export default {
                         cursor: ne-resize;
                     }
                     &.circle-s {
-                        left: 50%;
-                        margin-left: -$halfSize;
+                        @include cl;
                         bottom: $position;
                         cursor: s-resize;
                     }
@@ -169,21 +172,20 @@ export default {
                         bottom: $position;
                         cursor: sw-resize;
                     }
-                    &.circle-w {
-                        left: $position;
-                        top: 50%;
-                        margin-top: -$halfSize;
-                        cursor: w-resize;
-                    }
                     &.circle-se {
                         right: $position;
                         bottom: $position;
                         cursor: se-resize;
                     }
+                    &.circle-w {
+                        left: $position;
+                        @include ct;
+                        cursor: w-resize;
+                    }
+
                     &.circle-e {
                         right: $position;
-                        top: 50%;
-                        margin-top: -$halfSize;
+                        @include ct;
                         cursor: e-resize;
                     }
                 }
