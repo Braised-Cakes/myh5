@@ -81,8 +81,8 @@ export default {
     },
     addItem({
         commit,
-        getters
-
+        getters,
+        dispatch
     }, payload) {
         let itemTpl;
         if (typeof payload == 'string') {
@@ -99,6 +99,32 @@ export default {
             item: itemTpl
         });
         commit(types.SELECT_ITEM, getters.curPageItemLen - 1)
+
+        if (itemTpl.type == "shape") {
+            var arr = [];
+            $(itemTpl.content)
+                .find("*")
+                .each((index, item) => {
+                    if (
+                        $(item).attr("fill") &&
+                        arr.every(item2 => {
+                            return item2.fill != $(item).attr("fill");
+                        })
+                    ) {
+                        arr.push({
+                            fill: $(item).attr("fill"),
+                            css: $(item).css("fill")
+                        });
+                    }
+                });
+            for (let i = 0; i < arr.length; i++) {
+                dispatch('updateItem', {
+                    key: "content",
+                    val: arr[i].css,
+                    fill: arr[i].fill
+                });
+            }
+        }
 
     },
     updateItem({

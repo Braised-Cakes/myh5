@@ -3,7 +3,7 @@
         <div class="container">
             <div class="phone-bg"></div>
             <div class="phone-area" v-if="currentPhone" :style="areaStyle">
-                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="select(index)" class="phone-item" :style="item.style | filterItemStyle(true)" v-for="(item, index) in currentPhone.data">
+                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemStyle(true)" v-for="(item, index) in currentPhone.data">
                     <div class="item-body" :style="item.style | filterItemStyle" v-html="$options.filters.filterItemContent(item)"></div>
                     <div class="item-drag-wrap" v-if="curItemId == index || curItemIds.indexOf(index) != -1">
                         <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
@@ -65,31 +65,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["selectItem", "cancelSelect", "updateItem"]),
-        select(index) {
-            this.selectItem(index);
-            if (this.curItem.type == "shape") {
-                var arr = [];
-                $(this.curItem.content)
-                    .find("*")
-                    .each((index, item) => {
-                        if (
-                            $(item).attr("fill") &&
-                            arr.every(item2 => {
-                                return item2.fill != $(item).attr("fill");
-                            })
-                        ) {
-                            arr.push({
-                                fill: $(item).attr("fill"),
-                                css: $(item).css("fill")
-                            });
-                        }
-                    });
-                console.log(arr);
-                // this.updateItem
-                // this.panel.fillColorList = arr;
-            }
-        }
+        ...mapActions(["selectItem", "cancelSelect", "updateItem"])
     }
 };
 </script>

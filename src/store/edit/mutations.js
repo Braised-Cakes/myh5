@@ -104,6 +104,10 @@ export default {
         val,
         fill
     }) {
+        console.log(1239);
+        console.log(key);
+        console.log(fill);
+        console.log(val);
         if (key == 'style') {
             if (typeof val == 'string') {
                 Vue.set(item, key, val);
@@ -116,7 +120,7 @@ export default {
             Vue.set(item, key, val);
         } else {
             if (fill) {
-
+                console.log(item);
                 Vue.set(item['fill'], fill, val);
                 Vue.set(item, key, $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
             } else {
