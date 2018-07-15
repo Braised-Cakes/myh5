@@ -81,16 +81,10 @@ export default {
     },
     addItem({
         commit,
-        getters,
-        dispatch
+        getters
     }, payload) {
-        let itemTpl;
-        if (typeof payload == 'string') {
-            itemTpl = tpl[payload]();
-        } else {
-            itemTpl = tpl[payload.type](payload);
-        }
-        commit(types.ADD_CREATED_ID)
+        let itemTpl = tpl[payload.type].create(payload);
+        commit(types.ADD_CREATED_ID);
         itemTpl.style['z-index'] = getters.curPageItemLen + 1;
         itemTpl.id = 'item_' + getters.phoneData.main.createdDomId;
         itemTpl.event = {};
@@ -98,34 +92,8 @@ export default {
             currentPhone: getters.currentPhone,
             item: itemTpl
         });
-        commit(types.SELECT_ITEM, getters.curPageItemLen - 1)
-
-        if (itemTpl.type == "shape") {
-            var arr = [];
-            $(itemTpl.content)
-                .find("*")
-                .each((index, item) => {
-                    if (
-                        $(item).attr("fill") &&
-                        arr.every(item2 => {
-                            return item2.fill != $(item).attr("fill");
-                        })
-                    ) {
-                        arr.push({
-                            fill: $(item).attr("fill"),
-                            css: $(item).css("fill")
-                        });
-                    }
-                });
-            for (let i = 0; i < arr.length; i++) {
-                dispatch('updateItem', {
-                    key: "content",
-                    val: arr[i].css,
-                    fill: arr[i].fill
-                });
-            }
-        }
-
+        commit(types.SELECT_ITEM, getters.curPageItemLen - 1);
+        tpl[payload.type].afterCreate && tpl[payload.type].afterCreate(itemTpl);
     },
     updateItem({
         commit,
@@ -254,19 +222,11 @@ export default {
     },
     /**
      * 更新phone的main
-     * @param {String} key 
-     * @param {String} val 
      */
     updateMain({
         commit
-    }, {
-        key,
-        val
-    }) {
-        commit(types.UPDATE_MAIN, {
-            key: key,
-            val: val
-        })
+    }, json) {
+        commit(types.UPDATE_MAIN, json)
     },
     /**
      * 记录

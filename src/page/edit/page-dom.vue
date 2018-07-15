@@ -9,7 +9,7 @@
                 <img :src="currentPhone.main['background-image']" />
                 <i class="icon iconfont icon-tianjia"></i>
             </div>
-            <div class="bg-operation">
+            <div class="bg-operation" v-if="currentPhone.main['background-image']">
                 <el-button @click="crop">裁切</el-button>
                 <el-button @click="updateSomePageMain({key: 'background-image',val: ''})">删除</el-button>
                 <el-button @click="change" type="primary">更换</el-button>
@@ -17,12 +17,14 @@
         </div>
         <div class="style-item">
             <label>纯色背景</label>
-            <el-color-picker @active-change="updateSomePageMain({key: 'background-color',val: $event}); updateSomePageMain({key: 'background-image',val: ''})" :value="currentPhone.main['background-color'] || '#fff'">
+            <el-color-picker @active-change="updateSomePageMain({key: 'background-color', val: $event}); updateSomePageMain({key: 'background-image', val: ''})"
+                :value="currentPhone.main['background-color'] || '#fff'">
             </el-color-picker>
         </div>
         <div class="style-item">
             <label>透明度</label>
-            <el-input-number :min="0" :max="100" :step="1" @change="updateSomePageMain({key: 'opacity', val: ($event / 100).toFixed(2)})" :value="Math.round((currentPhone.main['opacity'] || 1) * 100)">
+            <el-input-number :min="0" :max="100" :step="1" @change="updateSomePageMain({key: 'opacity', val: ($event / 100).toFixed(2)})"
+                :value="Math.round((currentPhone.main['opacity'] || 1) * 100)">
             </el-input-number>
         </div>
     </section>
@@ -103,6 +105,7 @@ export default {
 }
 
 .bg-operation {
-    @include fj;
+    display: flex;
+    justify-content: space-between;
 }
 </style>

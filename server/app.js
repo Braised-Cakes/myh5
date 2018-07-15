@@ -74,7 +74,7 @@ app.all('/aj/*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:8082');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials', 'true');
-    if (req.session.username || req.path == '/app.js' || req.path == types.getScene || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
+    if (req.session.username || req.path == '/app.js' || req.path == types.getPublishScene || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
         next()
     } else {
         res.send({

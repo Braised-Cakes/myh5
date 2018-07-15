@@ -104,10 +104,6 @@ export default {
         val,
         fill
     }) {
-        console.log(1239);
-        console.log(key);
-        console.log(fill);
-        console.log(val);
         if (key == 'style') {
             if (typeof val == 'string') {
                 Vue.set(item, key, val);
@@ -120,7 +116,6 @@ export default {
             Vue.set(item, key, val);
         } else {
             if (fill) {
-                console.log(item);
                 Vue.set(item['fill'], fill, val);
                 Vue.set(item, key, $(item.content).find(`*[fill="${fill}"]`).css('fill', val).parents('svg').prop('outerHTML'));
             } else {
@@ -188,11 +183,10 @@ export default {
     /**
      * 更新phone的main字段
      */
-    [types.UPDATE_MAIN](state, {
-        key,
-        val
-    }) {
-        Vue.set(state.phone.main, key, val);
+    [types.UPDATE_MAIN](state, json) {
+        for (let attr in json) {
+            Vue.set(state.phone.main, attr, json[attr]);
+        }
     },
     /**
      * 记录 记录某一步操作， 记录某一页， 记录整个

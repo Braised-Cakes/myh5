@@ -28,84 +28,6 @@ const {
 } = require('../const/index')
 
 
-/**
- * 获取某个场景
- */
-app.get('/aj/scene/get', async (req, res) => {
-    const collection = dbHandel.getModel('myh5')
-    const id = Number(req.query.id)
-    const errorMessage = '场景不存在'
-    if (isNaN(id)) {
-        res.send({
-            status: AJ_STATUS.error,
-            message: errorMessage
-        })
-    } else {
-        const data = await collection.findOne({
-            id: id
-        })
-        if (data) {
-            data.portrait = data.domain + data.portrait
-            res.send({
-                status: AJ_STATUS.success,
-                message: AJ_MESSAGE.success,
-                result: {
-                    data: data
-                }
-            })
-        } else {
-            res.send({
-                status: AJ_STATUS.error,
-                message: errorMessage
-            })
-        }
-    }
-
-
-
-})
-
-/**
- * 列表页， 获取发布后的数据
- */
-app.get('/aj/scene/getPublishData', async (req, res) => {
-    const collection = dbHandel.getModel('myh5')
-    const data = await collection.findOne({
-        id: req.query.id
-    })
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: {
-            data: data
-        }
-    })
-})
-
-/**
- * 列表页， 保存
- */
-app.post('/aj/scene/save', async (req, res) => {
-    const collection = dbHandel.getModel('myh5')
-    let data = await collection.findOne({
-        id: req.body.id
-    })
-    //如果还是未发布状态， 修改数据，发布状态还是0 ， 如果是已发布状态， 就改成已修改
-    await collection.update({
-        id: req.body.id
-    }, {
-        data: req.body.data,
-        updateTime: utils.getTime(),
-        status: data.status != 0 ? 2 : 0
-    })
-
-    res.send({
-        status: AJ_STATUS.success,
-        message: AJ_MESSAGE.success,
-        result: {}
-    })
-})
-
 
 /**
  * 获取形状的导航信息
@@ -157,7 +79,7 @@ app.get('/aj/shape/get', async (req, res) => {
             }
         })
         var arrx = []
-        for (let i = 0 i < ddd.length i++) {
+        for (let i = 0; i < ddd.length; i++) {
             arrx.push(await collection.findOne(ddd[i], {
                 content: 0
             }))
@@ -283,7 +205,7 @@ app.get('/aj/music/get', async (req, res) => {
             }
         })
         var arrx = []
-        for (let i = 0 i < ddd.length i++) {
+        for (let i = 0; i < ddd.length; i++) {
             arrx.push(await collection.findOne(ddd[i]))
         }
         res.send({
@@ -427,7 +349,7 @@ app.get('/aj/image/get', async (req, res) => {
             }
         })
         var arrx = []
-        for (let i = 0 i < ddd.length i++) {
+        for (let i = 0; i < ddd.length; i++) {
             arrx.push(await collection.findOne(ddd[i]))
         }
         res.send({
@@ -654,30 +576,4 @@ app.post('/aj/music/user_upload', async (req, res) => {
             result: {}
         })
     }
-})
-
-/**
- * 
- */
-app.post('/aj/scene/update', async (req, res) => {
-    const collection = dbHandel.getModel('myh5')
-    let item = await collection.findOne({
-        id: req.body.id
-    })
-    let title = req.body.title || item.title
-    let desc = req.body.desc || item.desc
-    let portrait = req.body.portrait || item.portrait
-    portrait = portrait.match(/.com\/(.+)/)[1]
-    await collection.update({
-        id: req.body.id
-    }, {
-        title: title,
-        desc: desc,
-        portrait: portrait
-    })
-    res.send({
-        status: AJ_STATUS.success,
-        message: '更新成功',
-        result: {}
-    })
 })

@@ -112,13 +112,14 @@ export default {
                 this.$music({
                     callback: ({ music }) => {
                         this.updateMain({
-                            key: "music",
-                            val: music
+                            music: music
                         });
                     }
                 });
             } else if (type == types.TXT) {
-                this.addItem(type);
+                this.addItem({
+                    type: types.TXT
+                });
             }
         }
     },

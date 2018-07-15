@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import $ from "jquery";
 import { mapActions, mapGetters } from "vuex";
 
 export default {

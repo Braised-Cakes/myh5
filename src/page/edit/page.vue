@@ -29,7 +29,7 @@
             </div>
         </section>
         <section v-else>
-            <edit-dom v-if="hasSelectedOneItem" :data="data"></edit-dom>
+            <edit-dom v-if="hasSelectedOneItem"></edit-dom>
             <page-dom v-else></page-dom>
         </section>
 
@@ -46,9 +46,6 @@ export default {
         "edit-dom": EditDom,
         "page-dom": PageDom,
         draggable
-    },
-    props: {
-        data: Object
     },
     computed: {
         ...mapGetters([
