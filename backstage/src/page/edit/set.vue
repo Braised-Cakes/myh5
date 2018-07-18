@@ -16,7 +16,7 @@
                         v-html="html"></div>
                     <div id="musicBtn"
                         class="rotate"
-                        style="z-index:999;position:absolute;right:50px;width:30px;height:30px;top:50px;">
+                        style="z-index:999;position:absolute;right:20px;width:30px;height:30px;top:20px;">
                         <img src="@/img/music_btn.svg" />
                     </div>
                 </div>

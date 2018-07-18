@@ -3,7 +3,8 @@
         <div class="container">
             <div class="phone-bg"></div>
             <div class="phone-area" v-if="currentPhone" :style="areaStyle">
-                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemStyle(true)" v-for="(item, index) in currentPhone.data">
+                <div :id="item.id" :key="item.id" v-my-drag @mousedown.stop="selectItem(index)" class="phone-item" :style="item.style | filterItemStyle(true)"
+                    v-for="(item, index) in currentPhone.data">
                     <div class="item-body" :style="item.style | filterItemStyle" v-html="$options.filters.filterItemContent(item)"></div>
                     <div class="item-drag-wrap" v-if="curItemId == index || curItemIds.indexOf(index) != -1">
                         <div v-my-changesize="{type : 'nw'}" class="circle circle-nw"></div>
@@ -35,7 +36,7 @@ export default {
             let outerJson = {};
             let innerJson = {};
             for (let attr in style) {
-                if (/^position|left|width|height|top|z-index$/.test(attr)) {
+                if (/^(position|left|width|height|top|z-index)$/.test(attr)) {
                     outerJson[attr] = style[attr];
                 } else {
                     innerJson[attr] = style[attr];

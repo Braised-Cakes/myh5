@@ -1,0 +1,63 @@
+{
+    "name": "backstage",
+    "version": "0.3.0",
+    "scripts": {
+        "dev": "vue-cli-service serve --open",
+        "server": "node ./server/bin/www",
+        "build": "vue-cli-service build",
+        "start": "concurrently \"yarn dev\" \"yarn server\"",
+        "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+        "animate.css": "^3.6.1",
+        "art-template": "^4.12.2",
+        "clipboard": "^2.0.1",
+        "cropper": "^4.0.0",
+        "element-ui": "^2.4.1",
+        "jquery": "^3.3.1",
+        "js-cookie": "^2.2.0",
+        "lodash": "^4.17.10",
+        "swiper": "^4.3.0",
+        "vue": "^2.5.16",
+        "vue-resource": "^1.5.0",
+        "vue-router": "^3.0.1",
+        "vuedraggable": "^2.16.0",
+        "vuex": "^3.0.1"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "^3.0.0-rc.5",
+        "@vue/cli-plugin-eslint": "^3.0.0-rc.5",
+        "@vue/cli-service": "^3.0.0-rc.5",
+        "art-template-loader": "^1.4.3",
+        "babel-plugin-component": "^1.1.0",
+        "babel-plugin-syntax-dynamic-import": "^6.18.0",
+        "node-sass": "^4.8.3",
+        "sass-loader": "^6.0.7"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "rules": {
+            "no-console": "off"
+        },
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not ie <= 8"
+    ]
+}
