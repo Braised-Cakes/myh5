@@ -19,7 +19,7 @@ let dbHandel = require('./db/handel.js')
 
 var app = express();
 app.use(history({
-    index: '/Users/BraisedCakes/Desktop/2018/myh5-project/public/index.html'
+    index: '/Users/BraisedCakes/Desktop/2018/myh5-project/backstage/public/index.html'
 }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
