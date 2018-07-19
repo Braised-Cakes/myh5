@@ -18,6 +18,7 @@
         "element-ui": "^2.4.1",
         "express-art-template": "^1.0.1",
         "express-session": "^1.15.6",
+        "jade": "^1.11.0",
         "jquery": "^3.3.1",
         "jquery.cookie": "^1.4.1",
         "js-cookie": "^2.2.0",

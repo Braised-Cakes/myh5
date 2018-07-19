@@ -1,0 +1,15 @@
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        {{ each data }}
+        <div class="swiper-slide" style="position:position;width:100%;height:100%;background:{{ $value.main.background }};">
+            <div style="width:320px;height:486px;position:absolute;margin-top:41px;">
+                {{each $value.data}}
+                <div id="{{$value.id}}" class='items {{ $value.id }}' data-ani='{{@ $imports.JSON.stringify($value.animation) }}' style="{{$value.style | parseStyle}}">
+                    {{@ $value.content }}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

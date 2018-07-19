@@ -18,11 +18,11 @@ let dbHandel = require('./db/handel.js')
 
 
 var app = express();
-app.use(history({
-    index: '/Users/BraisedCakes/Desktop/2018/myh5-project/backstage/public/index.html'
-}));
+// app.use(history({
+//     index: '/Users/BraisedCakes/Desktop/2018/myh5-project/backstage/public/index.html'
+// }));
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// app.set('views', path.resolve(process.cwd(), 'server/views'));
 // app.set('view engine', 'jade');
 app.engine('art', require('express-art-template'));
 var runtime = require('art-template/lib/runtime');
@@ -60,6 +60,7 @@ app.use('/store', express.static('/Users/BraisedCakes/Desktop/2018/myh5-store/sv
 app.get('/show', function (req, res) {
     let myh5 = dbHandel.getModel('myh5')
     let id = url.parse(req.url, true).query['id']
+    console.log(id)
     myh5.findOne({
         id: id
     }, (err, docs) => {
@@ -67,13 +68,12 @@ app.get('/show', function (req, res) {
             info: docs.data
         });
     });
-
 });
 
 app.all('/aj/*', function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8082');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    res.header('Access-Control-Allow-Credentials', 'true');
+    // res.header('Access-Control-Allow-Origin', 'http://localhost:8082');
+    // res.header('Access-Control-Allow-Headers', 'Content-Type');
+    // res.header('Access-Control-Allow-Credentials', 'true');
     if (req.session.username || req.path == '/app.js' || req.path == types.getPublishScene || req.path == types.getUserInfo || req.path == types.userLogin || req.path == types.userRegister) {
         next()
     } else {
