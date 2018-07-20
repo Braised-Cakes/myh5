@@ -1,103 +1,67 @@
-let app = require('../app.js')
-const dbHandel = require('../db/handel.js')
-const {
-    DEFAULT_PAGE,
-    AJ_STATUS,
-    AJ_MESSAGE
-} = require('../const/index')
-const types = require('./types')
+let uuid = require('uuid/v1')
+let router = require('../app.js')
+let userModel = require('../models/login')
+let { AJ_STATUS, AJ_MESSAGE } = require('../const/index')
+let types = require('./types')
 
-/**
- * 注册
- */
-app.post(types.userRegister, async (req, res) => {
-    const collection = dbHandel.getModel('user')
-    const data = await collection.findOne({
-        username: req.body.username
-    })
-    //没有找到,可以注册
+// 用户注册
+router.post(types.userRegister, async (req, res) => {
+  let user = req.body.username
+  let pass = req.body.password
+  try {
+    let data = await userModel.getUser(req.body.username)
     if (!data) {
-        const count = await collection.count()
-        await new collection({
-            username: req.body.username,
-            password: req.body.password,
-            uid: count + 1
-        }).save()
-        res.send({
-            status: AJ_STATUS.success,
-            message: '注册成功',
-            result: {}
-        })
+      await userModel.login({ user: user, pass: pass, uid: uuid() })
+      res.send({ status: AJ_STATUS.success, message: '注册成功' })
     } else {
-        res.send({
-            status: AJ_STATUS.error,
-            message: '用户已经存在',
-            result: {}
-        })
+      throw new Error('用户已经存在')
     }
+  } catch (e) {
+    res.send({ status: AJ_STATUS.error, message: e.message })
+  }
 })
 
-
-/**
- * 登录
- */
-app.post(types.userLogin, async (req, res) => {
-    const collection = dbHandel.getModel('user')
-    const data = await collection.findOne({
-        username: req.body.username,
-        password: req.body.password
-    })
+// 用户登陆
+router.post(types.userLogin, async (req, res) => {
+  let user = req.body.username;
+  let pass = req.body.password;
+  try {
+    let data = userModel.goLogin(user, pass)
     if (!data) {
-        res.send({
-            status: AJ_STATUS.error,
-            message: '用户名或密码不正确'
-        })
+      throw new Error('用户名或密码不正确')
     } else {
-        req.session.isLogin = true
-        req.session.username = req.body.username
-        req.session.uid = data.uid
-        res.cookie('username', req.body.username, {
-            expires: new Date(Date.now() + 10000 * 60 * 60 * 24 * 7)
-        })
-        res.send({
-            status: AJ_STATUS.success,
-            message: '登录成功'
-        })
+      req.session.isLogin = true
+      req.session.username = req.body.username
+      req.session.uid = data.uid
+      res.cookie('username', req.body.username, {
+        expires: new Date(Date.now() + 10000 * 60 * 60 * 24 * 7)
+      })
+      res.send({ status: AJ_STATUS.success, message: '登录成功' })
     }
+  } catch (e) {
+    res.send({ status: AJ_STATUS.error, message: e.message })
+  }
 })
 
-/**
- * 注销
- */
-app.post(types.userLogout, async (req, res) => {
-    req.session.isLogin = null;
-    req.session.uid = null;
-    req.session.username = null;
-    res.clearCookie('username')
-    res.send({
-        status: AJ_STATUS.success,
-        message: '登出成功'
-    })
+// 注销
+router.post(types.userLogout, (req, res) => {
+  req.session.isLogin = null
+  req.session.uid = null
+  req.session.username = null
+  res.clearCookie('username')
+  res.send({ status: AJ_STATUS.success, message: '注销成功' })
 })
 
-/**
- * 获取用户信息
- */
-app.get(types.getUserInfo, async (req, res) => {
+// 获取用户信息
+router.get(types.getUserInfo, async (req, res) => {
+  try {
     if (req.session.isLogin) {
-        const collection = dbHandel.getModel('user')
-        const data = await collection.findOne({
-            uid: req.session.uid
-        }, ['username', 'uid'])
-        res.send({
-            status: AJ_STATUS.success,
-            message: '获取成1功',
-            result: data
-        })
+      let data = await userModel.getUser(req.session.uid)
+      res.send({ status: AJ_STATUS.success, message: '获取成功', result: data })
     } else {
-        res.send({
-            status: AJ_STATUS.error,
-            message: '没有拿到用户信息'
-        })
+      throw new Error('没有拿到用户信息')
     }
+  } catch (e) {
+    res.send({ status: AJ_STATUS.error, message: e.message })
+  }
 })

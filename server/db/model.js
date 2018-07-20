@@ -129,7 +129,7 @@ module.exports = {
             required: true
         },
         'uid': {
-            type: Number,
+            type: String,
             required: true
         }
     },
