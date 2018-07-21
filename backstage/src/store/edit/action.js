@@ -30,15 +30,15 @@ export default {
                     }
                 });
             } else {
-                commit(types.SET_PHONE, result.data.data);
-                commit(types.OTHERINFO, result.data)
+                commit(types.SET_PHONE, result.data);
+                commit(types.OTHERINFO, result)
                 //记录
-                if (result.data.data) {
+                if (result.data) {
                     dispatch('record', {
                         type: 'phone',
-                        data: result.data.data.data
+                        data: result.data.data
                     })
-                    let data = result.data.data.data;
+                    let data = result.data.data;
                     for (let i = 0; i < data.length; i++) {
                         for (let j = 0; j < data[i].data.length; j++) {
                             if (data[i].data[j].type != 'shape') {

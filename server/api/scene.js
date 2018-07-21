@@ -9,6 +9,7 @@ let {
 
 // 获取指定场景
 router.get(api.getSceneData, async (req, res) => {
+  let id = req.query.id
   try {
     let data = await sceneModel.getSceneById(id)
     if (!data) {
