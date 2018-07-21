@@ -26,7 +26,7 @@ router.post(types.userLogin, async (req, res) => {
   let user = req.body.username;
   let pass = req.body.password;
   try {
-    let data = userModel.goLogin(user, pass)
+    let data = await userModel.goLogin(user, pass)
     if (!data) {
       throw new Error('用户名或密码不正确')
     } else {

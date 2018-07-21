@@ -1,5 +1,5 @@
-const dbHandel = require('../db/handel.js')
-const collection = dbHandel.getModel('myh5')
+let dbHandel = require('../db/handel.js')
+let collection = dbHandel.getModel('myh5')
 
 module.exports = {
   // 获取场景数量
