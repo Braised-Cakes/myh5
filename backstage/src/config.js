@@ -1,3 +1,3 @@
 export default {
-    revoke: false
+    revoke: true
 }

@@ -74,11 +74,6 @@ export default {
             }
         });
     },
-    reset({
-        commit
-    }) {
-        commit(types.RESET);
-    },
     addItem({
         commit,
         getters
@@ -147,6 +142,7 @@ export default {
 
     /**
      * 取消选中
+     * promise: 
      */
     cancelSelect({
         commit
@@ -159,45 +155,41 @@ export default {
         });
     },
     /**
-     * 选择元素
-     * @param {Number} index
+     * 选中元素
+     * @param {Number|Array} ids
      */
     selectItem({
         commit,
         getters
-    }, index) {
-        if (getters.selectedItemsForArray.indexOf(index) != -1) {
+    }, ids) {
+        if (getters.selectedItemsForArray.indexOf(ids) != -1) {
+            // 元素已被选中
             return;
         }
-        if (typeof index == 'number') {
-            commit(types.SELECT_ITEM, index);
-        } else if (typeof index == 'object' && index.length == 1) {
-            commit(types.SELECT_ITEM, index[0]);
+        if (typeof ids == 'object' && ids.length == 1) {
+            commit(types.SELECT_ITEM, ids[0]);
         } else {
-            commit(types.SELECT_ITEM, index);
+            commit(types.SELECT_ITEM, ids);
         }
     },
     /**
      * 删除指定元素
-     * @param {Number} id 被删除元素的id
+     * @param {Number} id 被删除元素的id, 默认删除所有选中元素
      */
-    async delItem({
-        commit,
-        dispatch,
-        getters
-    }, id) {
-        let d = $.extend(true, [], getters.selectedItemsForArray)
+    async delItem({ commit, dispatch, getters }, id) {
+        const selectedItems = $.extend(true, [], getters.selectedItemsForArray)
         await dispatch('cancelSelect');
         if (!id) {
-            for (let i = d.length - 1; i >= 0; i--) {
+            for (let i = selectedItems.length - 1; i >= 0; i--) {
                 commit(types.DEL_ITEM, {
-                    id: d[i],
+                    id: selectedItems[i],
                     page: getters.currentPage
                 });
             }
         }
         /**
          * 调整z-index,  z-index从1开始，依次递增
+         * 对当前页所有元素的z-index进行修复
          */
         let list = $.extend(true, [], getters.currentPhone.data);
         list.sort((a, b) => {
@@ -248,6 +240,7 @@ export default {
                 page: page
             })
         }
+        console.log('记录啦')
         commit(types.RECORD, {
             type,
             data,
@@ -298,13 +291,8 @@ export default {
         }
 
     },
-
-    cropBgImage({
-        dispatch
-    }, {
-        path,
-        data
-    }) {
+    // 裁切图片
+    cropBgImage({ dispatch }, { path, data }) {
         app.$crop({
             src: path,
             data: data ? data : {

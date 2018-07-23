@@ -13,13 +13,6 @@ const state = {
 const getters = {};
 const actions = {};
 const mutations = {
-    ['RESET'](state) {
-        for (let attr in state) {
-            if (attr == 'edit') {
-                state[attr] = $.extend(true, {}, constant.initState)
-            }
-        }
-    },
     UPDATE_USER_INFO(state, {
         username,
         uid

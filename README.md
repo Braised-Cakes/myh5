@@ -1,10 +1,10 @@
-# my_h5
+# myh5
 
-> myh5页面制作工具,微信营销推广专业场景制作平台,企业宣传、音乐相册、电子贺卡、邀请函、微杂志等一键生成H5酷炫页面,易企秀为您助力移动自主营销!
+> myh5页面制作工具, 一键生成H5酷炫页面, 类似于易企秀!
 
 ## 技术栈
 
-vue, node, sass, mongoose
+vue, node, sass, express, mongoose
 
 
 ## Build Setup

@@ -134,15 +134,13 @@ export default {
         }
 
     },
-    /**
-     * 选择元素
-     */
-    [types.SELECT_ITEM](state, index) {
-        if (typeof index == 'number') {
-            state.curItemId = index;
+    // 选择元素
+    [types.SELECT_ITEM](state, ids) {
+        if (typeof ids == 'number') {
+            state.curItemId = ids;
             state.curItemIds = [];
         } else {
-            state.curItemIds = $.extend(true, [], index);
+            state.curItemIds = $.extend(true, [], ids);
             state.curItemId = -1;
         }
     },

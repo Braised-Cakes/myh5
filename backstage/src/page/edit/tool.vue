@@ -7,7 +7,6 @@
                 </el-button>
             </el-tooltip>
         </li>
-        <!-- TODO: 撤销, 重做 -->
     </ul>
 </template>
 <script>
@@ -55,12 +54,24 @@ export default {
                     action: "updateZIndex",
                     args: "--",
                     icon: "12_zhidi"
+                },
+                {
+                    name: "撤销",
+                    action: "revoke",
+                    args: "--",
+                    icon: "chexiao"
+                },
+                {
+                    name: "重做",
+                    action: "redo",
+                    args: "--",
+                    icon: "zhongzuo"
                 }
             ]
         };
     },
     methods: {
-        ...mapActions(["copyPage", "updateItem"]),
+        ...mapActions(["copyPage", "updateItem", "revoke", "redo"]),
         action(action, args) {
             switch (action) {
                 case "copy":
@@ -72,8 +83,18 @@ export default {
                 case "updateZIndex":
                     this.updateZIndex(args);
                     break;
+                case "revoke":
+                    this.revoke();
+                    break;
+                case "redo":
+                    this.redo();
+                    break;
             }
         },
+        /**
+         * 调整元素层级
+         * @param {String} type --: 置底部 -: 下移一层, +: 上移一层, ++: 置顶
+         */
         updateZIndex(type) {
             if (!this.curItem) return;
             const minZIndex = 1;

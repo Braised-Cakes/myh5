@@ -100,6 +100,7 @@ export default {
             ani: false
         });
         let arr = [];
+        console.log(data)
         data.value.forEach((item) => {
             for (let i = 0; i < getters.phoneData.data.length; i++) {
                 if (getters.phoneData.data[i] == item) {

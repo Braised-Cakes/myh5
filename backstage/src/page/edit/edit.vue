@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import myQrcode from "./qrcode";
 import mySet from "./set";
 import myHeader from "./header";
@@ -33,6 +33,7 @@ export default {
         "my-phone": myPhone
     },
     computed: {
+        ...mapGetters(["currentPhone"]),
         ...mapState({
             modulePanel: state => state.edit.panel
         })
